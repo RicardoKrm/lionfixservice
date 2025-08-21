@@ -10,7 +10,13 @@ import type { CalendarEvent } from '@/types';
 const WORKSTATIONS = [1, 2, 3];
 const TIME_SLOTS = Array.from({ length: 11 }, (_, i) => `${i + 8}:00`); // 8:00 to 18:00
 
-export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
+type WorkshopCalendarProps = {
+  events: CalendarEvent[];
+  onEventClick: (event: CalendarEvent) => void;
+};
+
+
+export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps) {
   const eventsByWorkstation = useMemo(() => {
     const grouped = new Map<number, typeof events>();
     events.forEach(event => {
@@ -36,7 +42,7 @@ export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
     <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
       <CardHeader>
         <CardTitle>Agenda del Taller</CardTitle>
-        <CardDescription>Vista de la planificación diaria por puesto de trabajo.</CardDescription>
+        <CardDescription>Vista de la planificación diaria por puesto de trabajo. Haga clic en una cita para editarla.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="relative grid grid-cols-[auto_repeat(3,1fr)] gap-x-4">
@@ -68,11 +74,12 @@ export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
                     <div
                       key={event.id}
                       className={cn(
-                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer shadow-md",
+                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer shadow-md transition-all hover:ring-2 hover:ring-primary",
                         ws % 2 === 0 ? "bg-accent/90 text-accent-foreground" : "bg-primary/90 text-primary-foreground"
                       )}
                       style={{ top, height }}
                       title={`${event.title} - ${event.vehicle}`}
+                      onClick={() => onEventClick(event)}
                     >
                       <p className="font-bold truncate">{event.title}</p>
                       <p className="truncate font-mono">{event.vehicle}</p>

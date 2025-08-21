@@ -1,5 +1,5 @@
 
-import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent } from '@/types';
+import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part } from '@/types';
 
 export const vehicles: Vehicle[] = [
   { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG' },
@@ -16,6 +16,14 @@ export const clients: Client[] = [
   { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@example.com', phone: '+56955667788', vehicleIds: ['V004'] },
 ];
 
+export const parts: Part[] = [
+  { sku: "OIL-SYN-5W30", name: "Aceite Sintético 5W-30 (Litro)", stock: 50, location: "Estante A-1", alertThreshold: 10 },
+  { sku: "FIL-TOY-COR-01", name: "Filtro de Aceite Toyota Corolla '19+", stock: 12, location: "Cajón B-3", alertThreshold: 5 },
+  { sku: "PAD-HON-CIV-F", name: "Pastillas de Freno Delanteras Honda Civic", stock: 8, location: "Estante C-2", alertThreshold: 5 },
+  { sku: "AC-FOR-FOC-03", name: "Compresor A/C Ford Focus", stock: 2, location: "Bodega", alertThreshold: 2 },
+  { sku: "BULB-H4", name: "Ampolleta Halógena H4", stock: 25, location: "Cajón D-1", alertThreshold: 10 },
+];
+
 export const workOrders: WorkOrder[] = [
   {
     id: 'OT-2024-001',
@@ -29,7 +37,7 @@ export const workOrders: WorkOrder[] = [
     notes: 'Cambio de aceite y filtro completado. Se revisaron los niveles de fluidos y la presión de los neumáticos.',
     parts: [
       { name: 'Aceite Sintético 5W-30', sku: 'OIL-SYN-5W30', quantity: 5 },
-      { name: 'Filtro de Aceite', sku: 'FIL-TOY-COR-01', quantity: 1 },
+      { name: 'Filtro de Aceite Toyota Corolla \'19+', sku: 'FIL-TOY-COR-01', quantity: 1 },
     ]
   },
   {
@@ -42,7 +50,7 @@ export const workOrders: WorkOrder[] = [
     entryDate: '2024-07-20T11:00:00Z',
     notes: 'Cliente reporta ruido al frenar. Inspección inicial sugiere pastillas de freno desgastadas.',
     parts: [
-        { name: 'Pastillas de Freno Delanteras', sku: 'PAD-HON-CIV-F', quantity: 2 }
+        { name: 'Pastillas de Freno Delanteras Honda Civic', sku: 'PAD-HON-CIV-F', quantity: 2 }
     ]
   },
   {
@@ -55,7 +63,7 @@ export const workOrders: WorkOrder[] = [
     entryDate: '2024-07-22T14:00:00Z',
     notes: 'A/C no enfría. Se detectó fuga en el compresor. Se ordenó compresor nuevo.',
     parts: [
-        { name: 'Compresor A/C', sku: 'AC-FOR-FOC-03', quantity: 1 }
+        { name: 'Compresor A/C Ford Focus', sku: 'AC-FOR-FOC-03', quantity: 1 }
     ]
   },
   {

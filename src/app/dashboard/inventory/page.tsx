@@ -40,15 +40,8 @@ import {
 import { PartFormDialog } from "@/components/part-form-dialog";
 import type { Part } from "@/types";
 import { useToast } from "@/hooks/use-toast";
+import { parts as initialInventory } from "@/lib/data";
 
-
-const initialInventory: Part[] = [
-  { sku: "OIL-SYN-5W30", name: "Aceite Sintético 5W-30 (Litro)", stock: 50, location: "Estante A-1", alertThreshold: 10 },
-  { sku: "FIL-TOY-COR-01", name: "Filtro de Aceite Toyota Corolla '19+", stock: 12, location: "Cajón B-3", alertThreshold: 5 },
-  { sku: "PAD-HON-CIV-F", name: "Pastillas de Freno Delanteras Honda Civic", stock: 4, location: "Estante C-2", alertThreshold: 5 },
-  { sku: "AC-FOR-FOC-03", name: "Compresor A/C Ford Focus", stock: 1, location: "Bodega", alertThreshold: 2 },
-  { sku: "BULB-H4", name: "Ampolleta Halógena H4", stock: 25, location: "Cajón D-1", alertThreshold: 10 },
-];
 
 export default function InventoryPage() {
   const [inventory, setInventory] = useState<Part[]>(initialInventory);

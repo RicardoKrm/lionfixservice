@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import type { CalendarEvent } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Trash2 } from "lucide-react";
 
 const appointmentSchema = z.object({
     title: z.string().min(3, "El título es requerido."),
@@ -37,12 +38,13 @@ type AppointmentFormDialogProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: AppointmentFormData) => void;
+  onDelete?: (eventId: string) => void;
   event?: CalendarEvent | null;
 };
 
 const today = new Date().toISOString().split('T')[0];
 
-export function AppointmentFormDialog({ isOpen, onOpenChange, onSubmit, event }: AppointmentFormDialogProps) {
+export function AppointmentFormDialog({ isOpen, onOpenChange, onSubmit, onDelete, event }: AppointmentFormDialogProps) {
   
   const form = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentSchema),
@@ -121,7 +123,7 @@ export function AppointmentFormDialog({ isOpen, onOpenChange, onSubmit, event }:
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Técnico</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar técnico..." />
@@ -143,7 +145,7 @@ export function AppointmentFormDialog({ isOpen, onOpenChange, onSubmit, event }:
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Puesto</FormLabel>
-                             <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={String(field.value)}>
+                             <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar puesto..." />
@@ -190,9 +192,19 @@ export function AppointmentFormDialog({ isOpen, onOpenChange, onSubmit, event }:
                     />
                  </div>
                
-                 <DialogFooter>
-                    <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
-                    <Button type="submit">Guardar Cita</Button>
+                 <DialogFooter className="justify-between sm:justify-between">
+                    <div>
+                        {event && onDelete && (
+                             <Button type="button" variant="destructive" onClick={() => onDelete(event.id)}>
+                                <Trash2 className="mr-2 h-4 w-4"/>
+                                Eliminar
+                            </Button>
+                        )}
+                    </div>
+                    <div className="flex gap-2">
+                        <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+                        <Button type="submit">{event ? "Guardar Cambios" : "Crear Cita"}</Button>
+                    </div>
                 </DialogFooter>
             </form>
         </Form>

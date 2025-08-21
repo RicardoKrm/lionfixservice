@@ -1,5 +1,8 @@
-import { notFound } from "next/navigation";
-import { clients, vehicles, workOrders } from "@/lib/data";
+
+"use client";
+
+import { notFound, useRouter } from "next/navigation";
+import { workOrders as initialWorkOrders, clients, vehicles, parts as inventory } from "@/lib/data";
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
@@ -10,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Wrench, Calendar, StickyNote, Package } from "lucide-react";
+import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil } from "lucide-react";
 import { getStatusVariant } from "@/lib/utils";
 import { ServiceNotificationTool } from "@/components/service-notification-tool";
 import { LicensePlateLookup } from "@/components/license-plate-lookup";
@@ -22,17 +25,68 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { WorkOrderFormDialog } from "@/components/work-order-form-dialog";
+import { useToast } from "@/hooks/use-toast";
+import type { WorkOrder, WorkOrderStatus } from "@/types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 
 export default function WorkOrderDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
+  // NOTE: In a real app, you'd fetch this data. Here we're simulating state.
+  // This state won't persist across navigation. A global state manager (like Zustand or Redux)
+  // or a server-based data management would be needed for that.
+  const [workOrders, setWorkOrders] = useState(initialWorkOrders);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
+
   const workOrder = workOrders.find((wo) => wo.id === params.id);
 
   if (!workOrder) {
     notFound();
   }
+  
+  const handleUpdateStatus = (newStatus: WorkOrderStatus) => {
+    const updatedWorkOrders = workOrders.map(wo => 
+      wo.id === workOrder.id ? { ...wo, status: newStatus } : wo
+    );
+    setWorkOrders(updatedWorkOrders);
+    toast({
+      title: "Estado Actualizado",
+      description: `La orden de trabajo ahora está en estado: ${newStatus}.`
+    })
+  }
+
+  const handleFormSubmit = (data: Omit<WorkOrder, 'id' | 'entryDate' | 'status'>) => {
+    const updatedWorkOrder = {
+        ...workOrder,
+        ...data,
+        completionDate: data.status === 'Completado' || data.status === 'Entregado' ? new Date().toISOString() : workOrder.completionDate,
+    };
+    
+    setWorkOrders(workOrders.map(wo => wo.id === workOrder.id ? updatedWorkOrder : wo));
+
+    // Here you would also handle inventory deduction in a real application
+    // This is simulated in the parent page for now.
+
+    toast({
+      title: "Orden de Trabajo Actualizada",
+      description: `Se ha actualizado la orden ${workOrder.id}.`,
+    });
+    setIsFormOpen(false);
+  };
+
 
   const client = clients.find((c) => c.id === workOrder.clientId);
   const vehicle = vehicles.find((v) => v.id === workOrder.vehicleId);
@@ -43,13 +97,36 @@ export default function WorkOrderDetailPage({
   }
 
   return (
+    <>
     <div className="flex flex-col h-full">
-      <DashboardHeader title={`Orden de Trabajo: ${workOrder.id}`} />
+      <DashboardHeader title={`Orden de Trabajo: ${workOrder.id}`}>
+        <Button onClick={() => setIsFormOpen(true)}>
+            <Edit className="mr-2 h-4 w-4" />
+            Editar Orden
+        </Button>
+      </DashboardHeader>
       <main className="flex-1 p-6 grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Detalles del Servicio</CardTitle>
+               <div className="flex justify-between items-start">
+                 <CardTitle>Detalles del Servicio</CardTitle>
+                 <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                       <Pencil className="mr-2 h-3 w-3" />
+                       Cambiar Estado
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleUpdateStatus('Recibido')}>Recibido</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleUpdateStatus('En Reparación')}>En Reparación</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleUpdateStatus('Esperando Repuestos')}>Esperando Repuestos</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleUpdateStatus('Completado')}>Completado</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleUpdateStatus('Entregado')}>Entregado</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center">
@@ -163,5 +240,12 @@ export default function WorkOrderDetailPage({
         </div>
       </main>
     </div>
+    <WorkOrderFormDialog
+        isOpen={isFormOpen}
+        onOpenChange={setIsFormOpen}
+        onSubmit={handleFormSubmit}
+        workOrder={workOrder}
+      />
+    </>
   );
 }

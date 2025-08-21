@@ -25,12 +25,14 @@ export type Part = {
   alertThreshold: number;
 };
 
+export type WorkOrderStatus = 'Recibido' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
+
 export type WorkOrder = {
   id: string;
   clientId: string;
   vehicleId: string;
   service: string;
-  status: 'Recibido' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
+  status: WorkOrderStatus;
   technician: string;
   entryDate: string;
   completionDate?: string;

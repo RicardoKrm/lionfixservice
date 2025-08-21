@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import type { WorkOrder, Vehicle } from "@/types";
+import type { WorkOrder, Vehicle, WorkOrderStatus } from "@/types";
 import {
   Select,
   SelectContent,
@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { clients, vehicles } from "@/lib/data";
+import { clients, vehicles, parts as inventoryParts } from "@/lib/data";
 import { Trash2, PlusCircle } from "lucide-react";
 import { Separator } from "./ui/separator";
 
@@ -47,6 +47,7 @@ const workOrderSchema = z.object({
   vehicleId: z.string().min(1, "Debe seleccionar un vehículo."),
   service: z.string().min(3, "La descripción del servicio es requerida."),
   technician: z.string().min(1, "Debe seleccionar un técnico."),
+  status: z.custom<WorkOrderStatus>().optional(),
   notes: z.string().optional(),
   parts: z.array(partItemSchema).optional(),
 });
@@ -56,7 +57,7 @@ type WorkOrderFormData = z.infer<typeof workOrderSchema>;
 type WorkOrderFormDialogProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: Omit<WorkOrder, "id" | "date" | "status" | "entryDate">) => void;
+  onSubmit: (data: Omit<WorkOrder, "id" | "date" | "entryDate">) => void;
   workOrder?: WorkOrder | null;
 };
 
@@ -112,16 +113,27 @@ export function WorkOrderFormDialog({
   }, [workOrder, form, isOpen]);
 
   useEffect(() => {
-      form.setValue('vehicleId', '');
-  }, [selectedClientId, form]);
+      if(!workOrder) {
+         form.setValue('vehicleId', '');
+      }
+  }, [selectedClientId, form, workOrder]);
 
   const handleFormSubmit = (data: WorkOrderFormData) => {
     const finalData = {
       ...data,
+      status: workOrder?.status || 'Recibido',
       parts: data.parts || [],
     };
     onSubmit(finalData);
   };
+
+  const handlePartSelection = (sku: string, index: number) => {
+      const part = inventoryParts.find(p => p.sku === sku);
+      if (part) {
+          form.setValue(`parts.${index}.sku`, part.sku);
+          form.setValue(`parts.${index}.name`, part.name);
+      }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -145,7 +157,7 @@ export function WorkOrderFormDialog({
                     <FormLabel>Cliente</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -215,7 +227,7 @@ export function WorkOrderFormDialog({
                   <FormLabel>Técnico Asignado</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -239,31 +251,30 @@ export function WorkOrderFormDialog({
               <FormLabel>Repuestos y Materiales</FormLabel>
               {fields.map((field, index) => (
                 <div key={field.id} className="flex items-start gap-2">
-                  {/* Future implementation: Select with inventory parts */}
-                  <FormField
-                    control={form.control}
-                    name={`parts.${index}.name`}
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <Input placeholder="Nombre del repuesto" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
+                   <FormField
                     control={form.control}
                     name={`parts.${index}.sku`}
                     render={({ field }) => (
-                      <FormItem className="w-40">
-                        <FormControl>
-                          <Input placeholder="SKU" {...field} />
-                        </FormControl>
+                      <FormItem className="flex-1">
+                        <Select onValueChange={(value) => {field.onChange(value); handlePartSelection(value, index)}} value={field.value}>
+                           <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar repuesto..." />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {inventoryParts.map((part) => (
+                                    <SelectItem key={part.sku} value={part.sku}>
+                                        {part.name} ({part.sku})
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  
                   <FormField
                     control={form.control}
                     name={`parts.${index}.quantity`}
@@ -321,7 +332,7 @@ export function WorkOrderFormDialog({
               >
                 Cancelar
               </Button>
-              <Button type="submit">Guardar Orden</Button>
+              <Button type="submit">{workOrder ? "Guardar Cambios" : "Crear Orden"}</Button>
             </DialogFooter>
           </form>
         </Form>
