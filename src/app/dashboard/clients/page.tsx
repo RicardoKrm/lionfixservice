@@ -22,13 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-const sampleClients = [
-  { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@example.com', phone: '+56912345678', vehicle: 'Toyota Corolla (ABCD-12)' },
-  { id: 'C002', name: 'María Rodríguez', email: 'maria.r@example.com', phone: '+56987654321', vehicle: 'Honda Civic (EFGH-34)' },
-  { id: 'C003', name: 'Carlos Gómez', email: 'carlos.gomez@example.com', phone: '+56911223344', vehicle: 'Ford Focus (IJKL-56)' },
-  { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@example.com', phone: '+56955667788', vehicle: 'Chevrolet Cruze (MNOP-78)' },
-];
+import { clients, vehicles } from "@/lib/data";
 
 export default function ClientsPage() {
   return (
@@ -59,34 +53,39 @@ export default function ClientsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sampleClients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell className="font-medium">{client.name}</TableCell>
-                    <TableCell>{client.email}</TableCell>
-                    <TableCell>{client.phone}</TableCell>
-                    <TableCell>{client.vehicle}</TableCell>
-                    <TableCell className="text-right">
-                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Acciones</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Editar
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
-                             <Trash2 className="mr-2 h-4 w-4" />
-                            Eliminar
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {clients.map((client) => {
+                  const vehicle = vehicles.find(v => v.id === client.vehicleId);
+                  return (
+                    <TableRow key={client.id}>
+                      <TableCell className="font-medium">{client.name}</TableCell>
+                      <TableCell>{client.email}</TableCell>
+                      <TableCell>{client.phone}</TableCell>
+                      <TableCell>
+                        {vehicle ? `${vehicle.make} ${vehicle.model} (${vehicle.licensePlate})` : 'N/A'}
+                      </TableCell>
+                      <TableCell className="text-right">
+                         <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Acciones</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <Edit className="mr-2 h-4 w-4" />
+                              Editar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">
+                               <Trash2 className="mr-2 h-4 w-4" />
+                              Eliminar
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </CardContent>

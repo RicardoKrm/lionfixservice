@@ -17,7 +17,7 @@ export default function DashboardPage() {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard
-          title="Ingresos Totales"
+          title="Ingresos del Mes"
           value="$45,231.89"
           description="+20.1% desde el mes pasado"
           icon={DollarSign}
@@ -42,14 +42,14 @@ export default function DashboardPage() {
         />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 bg-white/70 backdrop-blur-sm dark:bg-card">
+        <Card className="col-span-4 bg-card text-card-foreground">
           <CardHeader>
-            <CardTitle className="text-primary">¡Bienvenido a LionFix ERP!</CardTitle>
-            <CardDescription>
+            <CardTitle>¡Bienvenido a LionFix ERP!</CardTitle>
+            <CardDescription className="text-card-foreground/80">
               Tu centro de mando para gestionar todas las operaciones del taller.
             </CardDescription>
           </CardHeader>
-          <CardContent className="pl-2">
+          <CardContent className="pl-6">
             <p>
               Desde aquí puedes agendar citas, gestionar órdenes de trabajo, controlar
               tu inventario y comunicarte con tus clientes. Usa el menú de la
@@ -59,7 +59,7 @@ export default function DashboardPage() {
         </Card>
         <Card className="col-span-3 bg-primary/90 text-primary-foreground relative overflow-hidden">
           <CardHeader>
-            <CardTitle>Potencia Tu Productividad</CardTitle>
+            <CardTitle>Potencia Tu Productividad con IA</CardTitle>
             <CardDescription className="text-primary-foreground/80">
               Nuestras herramientas de IA te ayudan a automatizar la comunicación.
             </CardDescription>
@@ -70,9 +70,13 @@ export default function DashboardPage() {
             </p>
           </CardContent>
           <div className="absolute -bottom-4 -right-4">
-            <svg width="140" height="140" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-accent/30">
-                <path d="M14.4 6.00002L12 1.33334L9.6 6.00002L4.92666 8.40002L9.6 10.8L12 15.4667L14.4 10.8L19.0733 8.40002L14.4 6.00002Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6.7998 14.4L5.33313 12L3.86646 14.4L1.46646 15.8733L3.86646 17.3467L5.33313 19.7467L6.7998 17.3467L9.1998 15.8733L6.7998 14.4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+             <svg width="140" height="140" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-accent/30">
+                <path d="M12.4853 3.48532L14.9623 5.96234L12.4853 8.43936L9.96987 5.96234L12.4853 3.48532Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M17.8888 5.68629L20.3658 8.16331L17.8888 10.6403L15.3734 8.16331L17.8888 5.68629Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7.04336 5.68629L9.52038 8.16331L7.04336 10.6403L4.52794 8.16331L7.04336 5.68629Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12.4853 10.8787L14.9623 13.3557L12.4853 15.8327L9.96987 13.3557L12.4853 10.8787Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M16.3305 14.5459L18.8075 17.0229L16.3305 19.5L13.8151 17.0229L16.3305 14.5459Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8.64013 14.5459L11.1172 17.0229L8.64013 19.5L6.12471 17.0229L8.64013 14.5459Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
         </Card>
