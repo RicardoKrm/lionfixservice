@@ -1,3 +1,4 @@
+
 export type Vehicle = {
   id: string;
   licensePlate: string;
@@ -59,3 +60,13 @@ export type Quote = {
     total: number;
     status: QuoteStatus;
 }
+
+export type CalendarEvent = {
+  id: string;
+  start: string;
+  end: string;
+  title: string;
+  vehicle: string;
+  technician: string;
+  workstation: number;
+};

@@ -1,4 +1,5 @@
-import type { Client, Vehicle, WorkOrder, Quote } from '@/types';
+
+import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent } from '@/types';
 
 export const vehicles: Vehicle[] = [
   { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG' },
@@ -69,7 +70,7 @@ export const workOrders: WorkOrder[] = [
   },
 ];
 
-export const calendarEvents = [
+export const calendarEvents: CalendarEvent[] = [
     { id: 'E001', start: '2024-07-26T09:00:00', end: '2024-07-26T11:00:00', title: 'OT-2024-005: Mantención 20.000km', vehicle: 'ZZ-YY-99', technician: 'Pedro Pascal', workstation: 1 },
     { id: 'E002', start: '2024-07-26T10:00:00', end: '2024-07-26T12:00:00', title: 'Diagnóstico', vehicle: 'XW-VU-87', technician: 'Ricardo Milos', workstation: 2 },
     { id: 'E003', start: '2024-07-26T11:30:00', end: '2024-07-26T13:00:00', title: 'Rotación Neumáticos', vehicle: 'AB-CD-12', technician: 'Pedro Pascal', workstation: 1 },

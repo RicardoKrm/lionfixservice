@@ -1,25 +1,26 @@
+
 "use client";
 
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { calendarEvents } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import type { CalendarEvent } from '@/types';
 
 const WORKSTATIONS = [1, 2, 3];
 const TIME_SLOTS = Array.from({ length: 10 }, (_, i) => `${i + 8}:00`); // 8:00 to 17:00
 
-export function WorkshopCalendar() {
+export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
   const eventsByWorkstation = useMemo(() => {
-    const grouped = new Map<number, typeof calendarEvents>();
-    calendarEvents.forEach(event => {
+    const grouped = new Map<number, typeof events>();
+    events.forEach(event => {
       if (!grouped.has(event.workstation)) {
         grouped.set(event.workstation, []);
       }
       grouped.get(event.workstation)!.push(event);
     });
     return grouped;
-  }, []);
+  }, [events]);
 
   const getEventPositionAndDuration = (start: string, end: string) => {
     const startDate = new Date(start);
