@@ -30,19 +30,20 @@ export function MaintenanceReminderForm() {
         return;
     }
     setIsLoading(true);
+    setMessage(''); // Clear previous message
     try {
       const result = await generateMaintenanceReminder({
         customerName: selectedClient.name,
         vehicle: `${selectedVehicle.make} ${selectedVehicle.model}`,
-        lastServiceDate: "hace aproximadamente 6 meses", // Mock data
+        lastServiceDate: "hace aproximadamente 6 meses", // Mock data for the prompt
       });
       setMessage(result);
     } catch (error) {
       console.error(error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "No se pudo generar el recordatorio.",
+        title: "Error de IA",
+        description: "No se pudo generar el recordatorio. Intente de nuevo.",
       });
     }
     setIsLoading(false);
@@ -51,11 +52,11 @@ export function MaintenanceReminderForm() {
   const handleSend = () => {
     if (!message || !selectedClient) return;
     setIsLoading(true);
-    // Simulate sending
+    // Simulate sending action
     setTimeout(() => {
       toast({
         title: "¡Recordatorio Enviado!",
-        description: `Recordatorio de mantenimiento enviado a ${selectedClient.name} a ${selectedClient.email}`,
+        description: `El mensaje ha sido enviado a ${selectedClient.name} a través de sus canales de contacto.`,
       });
       setIsLoading(false);
       setMessage('');
@@ -68,19 +69,19 @@ export function MaintenanceReminderForm() {
         <CardHeader>
             <CardTitle>Recordatorios de Mantenimiento con IA</CardTitle>
             <CardDescription>
-                Seleccione un cliente para generar un mensaje de recordatorio personalizado usando IA.
+                Seleccione un cliente para que nuestra IA redacte un mensaje de recordatorio personalizado y profesional.
             </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
             <div className="space-y-2">
-                <Label htmlFor="client-select">Cliente</Label>
+                <Label htmlFor="client-select">Cliente y Vehículo</Label>
                 <Select value={selectedClientId} onValueChange={setSelectedClientId}>
                     <SelectTrigger id="client-select">
                         <SelectValue placeholder="Seleccione un cliente..." />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectLabel>Clientes</SelectLabel>
+                            <SelectLabel>Clientes Registrados</SelectLabel>
                             {clients.map(client => (
                                 <SelectItem key={client.id} value={client.id}>
                                     {client.name} - ({vehicles.find(v => v.id === client.vehicleId)?.licensePlate})
@@ -94,17 +95,18 @@ export function MaintenanceReminderForm() {
                 <Label htmlFor="reminder-message">Mensaje Generado</Label>
                 <Textarea
                     id="reminder-message"
-                    placeholder="El recordatorio generado aparecerá aquí..."
+                    placeholder="El recordatorio generado por la IA aparecerá aquí..."
                     value={message}
                     onChange={e => setMessage(e.target.value)}
                     rows={8}
+                    readOnly={isLoading}
                 />
             </div>
         </CardContent>
         <CardFooter className="flex justify-between">
             <Button variant="outline" onClick={handleGenerate} disabled={isLoading || !selectedClientId}>
                 <Bot className="mr-2 h-4 w-4" />
-                {isLoading ? 'Generando...' : 'Generar Mensaje'}
+                {isLoading && !message ? 'Generando...' : 'Generar Mensaje'}
             </Button>
             <Button onClick={handleSend} disabled={isLoading || !message}>
                 <Send className="mr-2 h-4 w-4" />

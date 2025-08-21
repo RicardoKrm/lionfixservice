@@ -16,21 +16,23 @@ export const generateMaintenanceReminder = ai.defineFlow(
   async (input) => {
     const { text } = await ai.generate({
         prompt: `
-        You are an assistant for a car repair shop named "Lion Fix Service SPA".
-        Your task is to generate a friendly and professional maintenance reminder message for a customer.
+        You are an expert copywriter for "Lion Fix Service SPA", a premium car repair shop.
+        Your task is to generate a friendly, professional, and slightly persuasive maintenance reminder message for a customer.
         The message should be suitable for email or WhatsApp.
-        Keep it concise and clear.
+        Keep it concise and clear, focusing on the vehicle's well-being and customer care.
         
         Customer Name: ${input.customerName}
         Vehicle: ${input.vehicle}
         Last Service Date: ${input.lastServiceDate}
         
-        Generate the reminder message. Start by greeting the customer by name.
-        Remind them about their vehicle and suggest it's time for a periodic maintenance check-up based on their last service date.
-        End with a friendly call to action to book an appointment.
-        Sign off as "The team at Lion Fix Service".
+        Generate the reminder message.
+        1. Start with a warm and personal greeting to the customer.
+        2. Gently remind them about their specific vehicle.
+        3. Explain that based on their last service date, it's the ideal time for a periodic check-up to ensure everything is running smoothly and prevent future issues.
+        4. End with a clear and easy call to action, inviting them to book an appointment with us.
+        5. Sign off as "El equipo de Lion Fix Service".
       `,
-      config: { temperature: 0.5 },
+      config: { temperature: 0.6 },
     });
 
     return text;
