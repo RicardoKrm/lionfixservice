@@ -37,7 +37,7 @@ export default function CalendarPage() {
           Nueva Cita
         </Button>
       </DashboardHeader>
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 overflow-x-auto">
         <WorkshopCalendar events={events} />
       </main>
       <AppointmentFormDialog 

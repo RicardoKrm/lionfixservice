@@ -2,13 +2,13 @@
 "use client";
 
 import { useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { CalendarEvent } from '@/types';
 
 const WORKSTATIONS = [1, 2, 3];
-const TIME_SLOTS = Array.from({ length: 10 }, (_, i) => `${i + 8}:00`); // 8:00 to 17:00
+const TIME_SLOTS = Array.from({ length: 11 }, (_, i) => `${i + 8}:00`); // 8:00 to 18:00
 
 export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
   const eventsByWorkstation = useMemo(() => {
@@ -27,7 +27,7 @@ export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
     const endDate = new Date(end);
     const startHour = startDate.getHours() + startDate.getMinutes() / 60;
     const endHour = endDate.getHours() + endDate.getMinutes() / 60;
-    const top = (startHour - 8) * 4; // 4rem per hour
+    const top = (startHour - 8) * 4; // 4rem per hour (h-16)
     const height = (endHour - startHour) * 4;
     return { top: `${top}rem`, height: `${height}rem` };
   };
@@ -35,12 +35,13 @@ export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
   return (
     <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
       <CardHeader>
-        <CardTitle>Agenda Taller - 26 de Julio, 2024</CardTitle>
+        <CardTitle>Agenda del Taller</CardTitle>
+        <CardDescription>Vista de la planificación diaria por puesto de trabajo.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="relative grid grid-cols-[auto,1fr,1fr,1fr] gap-x-4">
+        <div className="relative grid grid-cols-[auto_repeat(3,1fr)] gap-x-4">
           {/* Time Gutter */}
-          <div className="relative">
+          <div className="relative -top-4">
             {TIME_SLOTS.map(time => (
               <div key={time} className="h-16 flex items-start -mt-3">
                 <span className="text-xs text-muted-foreground">{time}</span>
@@ -51,7 +52,7 @@ export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
           {/* Workstation Columns */}
           {WORKSTATIONS.map(ws => (
             <div key={ws} className="relative border-l border-dashed">
-              <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm py-2 text-center font-semibold text-primary border-b">
+              <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm py-2 text-center font-semibold text-primary border-b -mt-6 mb-2">
                 Puesto {ws}
               </div>
               <div className="relative h-full">
@@ -67,14 +68,19 @@ export function WorkshopCalendar({ events }: { events: CalendarEvent[] }) {
                     <div
                       key={event.id}
                       className={cn(
-                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer",
-                        ws % 2 === 0 ? "bg-accent/80 text-accent-foreground" : "bg-primary/80 text-primary-foreground"
+                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer shadow-md",
+                        ws % 2 === 0 ? "bg-accent/90 text-accent-foreground" : "bg-primary/90 text-primary-foreground"
                       )}
                       style={{ top, height }}
+                      title={`${event.title} - ${event.vehicle}`}
                     >
                       <p className="font-bold truncate">{event.title}</p>
-                      <p className="truncate">Patente: {event.vehicle}</p>
-                      <p className="truncate">Técnico: <Badge variant="outline" className="text-xs bg-background/20 border-none">{event.technician}</Badge></p>
+                      <p className="truncate font-mono">{event.vehicle}</p>
+                      <div className="mt-auto">
+                        <Badge variant="outline" className="text-xs bg-background/20 border-none px-1.5 py-0.5 font-normal">
+                            {event.technician}
+                        </Badge>
+                      </div>
                     </div>
                   );
                 })}

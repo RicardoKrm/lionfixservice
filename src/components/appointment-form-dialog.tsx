@@ -10,20 +10,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useEffect } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import type { CalendarEvent } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Textarea } from "./ui/textarea";
 
 const appointmentSchema = z.object({
     title: z.string().min(3, "El título es requerido."),
-    vehicle: z.string().min(6, "La patente es requerida."),
+    vehicle: z.string().min(6, "La patente es requerida.").toUpperCase(),
     technician: z.string().min(1, "Debe seleccionar un técnico."),
     workstation: z.coerce.number().min(1, "Debe seleccionar un puesto."),
     start: z.string().refine(val => !isNaN(Date.parse(val)), { message: "Fecha de inicio inválida" }),
@@ -33,7 +31,7 @@ const appointmentSchema = z.object({
     path: ["end"],
 });
 
-type AppointmentFormData = z.infer<typeof appointmentSchema>;
+type AppointmentFormData = Omit<CalendarEvent, 'id'>;
 
 type AppointmentFormDialogProps = {
   isOpen: boolean;
@@ -109,7 +107,7 @@ export function AppointmentFormDialog({ isOpen, onOpenChange, onSubmit, event }:
                         <FormItem>
                         <FormLabel>Patente del Vehículo</FormLabel>
                         <FormControl>
-                            <Input placeholder="ABCD-12" {...field} />
+                            <Input placeholder="ABCD-12" {...field} className="uppercase"/>
                         </FormControl>
                         <FormMessage />
                         </FormItem>
