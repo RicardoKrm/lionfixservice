@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -124,7 +125,7 @@ export function AppSidebar() {
           
           <SidebarMenuItem>
             <SidebarMenuButton>
-              <LineChart />
+              <FileDigit />
               <span>Finanzas</span>
             </SidebarMenuButton>
             <SidebarMenuSub>

@@ -74,8 +74,8 @@ export default function QuoteDetailPage({
   
   const handleConvertToOT = () => {
     toast({
-      title: "Función no implementada",
-      description: "Próximamente: convertir esta cotización a una Orden de Trabajo con un solo clic.",
+      title: "Orden de Trabajo Creada (Simulación)",
+      description: `Se ha generado la OT-2024-005 a partir de la cotización ${quote.id}.`,
     });
   }
 
