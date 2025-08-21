@@ -15,6 +15,14 @@ export type Client = {
   vehicleId: string;
 };
 
+export type Part = {
+  sku: string;
+  name: string;
+  stock: number;
+  location: string;
+  alertThreshold: number;
+};
+
 export type WorkOrder = {
   id: string;
   clientId: string;
