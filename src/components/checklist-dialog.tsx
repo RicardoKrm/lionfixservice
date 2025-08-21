@@ -22,11 +22,12 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState, useRef, useEffect } from "react";
-import { Camera, Upload, X, Video } from "lucide-react";
+import { Camera, Upload, X, Video, FileText, Fingerprint } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { Checklist } from "@/types";
+import { Separator } from "./ui/separator";
 
 export const checklistItems = {
   exterior: [
@@ -181,6 +182,12 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
         setFormData({ ...formData, checkedItems: updatedItems });
     }
   }
+
+  const handleActionClick = (action: 'sign' | 'pdf') => {
+      const title = action === 'sign' ? "Firma Digital (Simulación)" : "Generar PDF (Simulación)";
+      const description = action === 'sign' ? "La funcionalidad de firma digital se implementaría aquí." : "Se generaría un PDF con los detalles del checklist.";
+      toast({ title, description });
+  }
   
   if (!open || !formData) return null;
 
@@ -334,11 +341,22 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
                 ))}
               </div>
             </div>
+             <Separator/>
              <div className="flex items-center space-x-2 pt-4">
                 <Checkbox id="completed-checkbox" checked={formData.completed} onCheckedChange={(checked) => setFormData({...formData, completed: !!checked})} />
                 <Label htmlFor="completed-checkbox" className="font-semibold">
                     Marcar Checklist como Completado
                 </Label>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2">
+                <Button variant="outline" className="w-full" onClick={() => handleActionClick('sign')}>
+                    <Fingerprint className="mr-2 h-4 w-4" />
+                    Firmar Digitalmente
+                </Button>
+                <Button variant="outline" className="w-full" onClick={() => handleActionClick('pdf')}>
+                    <FileText className="mr-2 h-4 w-4" />
+                    Generar PDF
+                </Button>
             </div>
           </div>
         </div>

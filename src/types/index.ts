@@ -27,6 +27,12 @@ export type Part = {
 
 export type WorkOrderStatus = 'Recibido' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
 
+export type ServiceLogEntry = {
+  timestamp: string;
+  technician: string;
+  entry: string;
+};
+
 export type WorkOrder = {
   id: string;
   clientId: string;
@@ -36,7 +42,7 @@ export type WorkOrder = {
   technician: string;
   entryDate: string;
   completionDate?: string;
-  notes?: string;
+  serviceLog: ServiceLogEntry[];
   parts: { name: string; sku: string; quantity: number }[];
 };
 

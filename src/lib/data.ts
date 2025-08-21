@@ -1,5 +1,5 @@
 
-import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part } from '@/types';
+import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry } from '@/types';
 
 export const vehicles: Vehicle[] = [
   { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG' },
@@ -24,6 +24,13 @@ export const parts: Part[] = [
   { sku: "BULB-H4", name: "Ampolleta Halógena H4", stock: 25, location: "Cajón D-1", alertThreshold: 10 },
 ];
 
+const initialServiceLog: ServiceLogEntry[] = [
+  { timestamp: '2024-07-15T09:05:00Z', technician: 'Pedro Pascal', entry: 'Vehículo recibido. Se inicia revisión según pauta de mantención de 10.000km.' },
+  { timestamp: '2024-07-15T11:30:00Z', technician: 'Pedro Pascal', entry: 'Cambio de aceite y filtro de aceite realizado.' },
+  { timestamp: '2024-07-15T15:00:00Z', technician: 'Pedro Pascal', entry: 'Revisión de niveles, presión de neumáticos y chequeo de luces completado. Vehículo listo para entrega.' }
+];
+
+
 export const workOrders: WorkOrder[] = [
   {
     id: 'OT-2024-001',
@@ -34,7 +41,7 @@ export const workOrders: WorkOrder[] = [
     technician: 'Pedro Pascal',
     entryDate: '2024-07-15T09:00:00Z',
     completionDate: '2024-07-15T16:30:00Z',
-    notes: 'Cambio de aceite y filtro completado. Se revisaron los niveles de fluidos y la presión de los neumáticos.',
+    serviceLog: initialServiceLog,
     parts: [
       { name: 'Aceite Sintético 5W-30', sku: 'OIL-SYN-5W30', quantity: 5 },
       { name: 'Filtro de Aceite Toyota Corolla \'19+', sku: 'FIL-TOY-COR-01', quantity: 1 },
@@ -48,7 +55,10 @@ export const workOrders: WorkOrder[] = [
     status: 'En Reparación',
     technician: 'Ricardo Milos',
     entryDate: '2024-07-20T11:00:00Z',
-    notes: 'Cliente reporta ruido al frenar. Inspección inicial sugiere pastillas de freno desgastadas.',
+    serviceLog: [
+      { timestamp: '2024-07-20T11:05:00Z', technician: 'Ricardo Milos', entry: 'Cliente reporta ruido al frenar. Se realiza inspección visual y prueba de ruta.' },
+      { timestamp: '2024-07-20T12:00:00Z', technician: 'Ricardo Milos', entry: 'Se desarma tren delantero. Pastillas de freno con 90% de desgaste. Discos con surcos leves.' },
+    ],
     parts: [
         { name: 'Pastillas de Freno Delanteras Honda Civic', sku: 'PAD-HON-CIV-F', quantity: 2 }
     ]
@@ -61,7 +71,10 @@ export const workOrders: WorkOrder[] = [
     status: 'Esperando Repuestos',
     technician: 'Pedro Pascal',
     entryDate: '2024-07-22T14:00:00Z',
-    notes: 'A/C no enfría. Se detectó fuga en el compresor. Se ordenó compresor nuevo.',
+    serviceLog: [
+      { timestamp: '2024-07-22T14:10:00Z', technician: 'Pedro Pascal', entry: 'Cliente indica que el A/C no enfría. Se conecta manómetro para revisar presiones.' },
+      { timestamp: '2024-07-22T15:00:00Z', technician: 'Pedro Pascal', entry: 'Se detecta fuga en el sello del compresor usando tinte UV. Se cotiza y ordena compresor nuevo.' },
+    ],
     parts: [
         { name: 'Compresor A/C Ford Focus', sku: 'AC-FOR-FOC-03', quantity: 1 }
     ]
@@ -74,7 +87,9 @@ export const workOrders: WorkOrder[] = [
     status: 'Recibido',
     technician: 'Ricardo Milos',
     entryDate: '2024-07-25T10:30:00Z',
-    notes: 'Luz de Check Engine encendida. Se realizará escaneo de diagnóstico.',
+    serviceLog: [
+      { timestamp: '2024-07-25T10:35:00Z', technician: 'Ricardo Milos', entry: 'Vehículo ingresa por luz de Check Engine encendida. Se conectará scanner para obtener códigos de falla.' },
+    ],
     parts: []
   },
    {
@@ -85,7 +100,9 @@ export const workOrders: WorkOrder[] = [
     status: 'Recibido',
     technician: 'Pedro Pascal',
     entryDate: '2024-07-28T11:00:00Z',
-    notes: 'Revisión inicial, mantención básica.',
+    serviceLog: [
+      { timestamp: '2024-07-28T11:05:00Z', technician: 'Pedro Pascal', entry: 'Revisión inicial, mantención básica de 5.000km.' },
+    ],
     parts: []
   },
 ];

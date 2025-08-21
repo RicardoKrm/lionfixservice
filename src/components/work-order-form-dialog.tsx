@@ -48,7 +48,6 @@ const workOrderSchema = z.object({
   service: z.string().min(3, "La descripción del servicio es requerida."),
   technician: z.string().min(1, "Debe seleccionar un técnico."),
   status: z.custom<WorkOrderStatus>().optional(),
-  notes: z.string().optional(),
   parts: z.array(partItemSchema).optional(),
 });
 
@@ -57,7 +56,7 @@ type WorkOrderFormData = z.infer<typeof workOrderSchema>;
 type WorkOrderFormDialogProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: Omit<WorkOrder, "id" | "date" | "entryDate">) => void;
+  onSubmit: (data: Omit<WorkOrder, "id" | "date" | "entryDate" | "serviceLog">) => void;
   workOrder?: WorkOrder | null;
 };
 
@@ -74,7 +73,6 @@ export function WorkOrderFormDialog({
       vehicleId: "",
       service: "",
       technician: "",
-      notes: "",
       parts: [],
     },
   });
@@ -105,7 +103,6 @@ export function WorkOrderFormDialog({
           vehicleId: "",
           service: "",
           technician: "",
-          notes: "",
           parts: [],
         });
       }
@@ -207,7 +204,7 @@ export function WorkOrderFormDialog({
               name="service"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Servicio a Realizar</FormLabel>
+                  <FormLabel>Servicio Principal a Realizar</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Ej: Mantención 20.000km, cambio de frenos..."
@@ -309,20 +306,6 @@ export function WorkOrderFormDialog({
                 Añadir Repuesto
               </Button>
             </div>
-
-             <FormField
-                control={form.control}
-                name="notes"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Notas Adicionales</FormLabel>
-                    <FormControl>
-                        <Textarea placeholder="Anotaciones internas sobre el trabajo, solicitudes del cliente, etc." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
 
             <DialogFooter>
               <Button

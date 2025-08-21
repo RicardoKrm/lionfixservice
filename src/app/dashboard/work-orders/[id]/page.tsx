@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil } from "lucide-react";
+import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock } from "lucide-react";
 import { getStatusVariant } from "@/lib/utils";
 import { ServiceNotificationTool } from "@/components/service-notification-tool";
 import { LicensePlateLookup } from "@/components/license-plate-lookup";
@@ -29,13 +29,14 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { WorkOrderFormDialog } from "@/components/work-order-form-dialog";
 import { useToast } from "@/hooks/use-toast";
-import type { WorkOrder, WorkOrderStatus } from "@/types";
+import type { WorkOrder, WorkOrderStatus, ServiceLogEntry } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Textarea } from "@/components/ui/textarea";
 
 
 export default function WorkOrderDetailPage({
@@ -43,11 +44,10 @@ export default function WorkOrderDetailPage({
 }: {
   params: { id: string };
 }) {
-  // NOTE: In a real app, you'd fetch this data. Here we're simulating state.
-  // This state won't persist across navigation. A global state manager (like Zustand or Redux)
-  // or a server-based data management would be needed for that.
   const [workOrders, setWorkOrders] = useState(initialWorkOrders);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [newLogEntry, setNewLogEntry] = useState("");
+
   const { toast } = useToast();
   const router = useRouter();
 
@@ -68,7 +68,7 @@ export default function WorkOrderDetailPage({
     })
   }
 
-  const handleFormSubmit = (data: Omit<WorkOrder, 'id' | 'entryDate' | 'status'>) => {
+  const handleFormSubmit = (data: Omit<WorkOrder, 'id' | 'entryDate' | 'status' | 'serviceLog'>) => {
     const updatedWorkOrder = {
         ...workOrder,
         ...data,
@@ -76,15 +76,31 @@ export default function WorkOrderDetailPage({
     };
     
     setWorkOrders(workOrders.map(wo => wo.id === workOrder.id ? updatedWorkOrder : wo));
-
-    // Here you would also handle inventory deduction in a real application
-    // This is simulated in the parent page for now.
-
     toast({
       title: "Orden de Trabajo Actualizada",
       description: `Se ha actualizado la orden ${workOrder.id}.`,
     });
     setIsFormOpen(false);
+  };
+  
+  const handleAddLogEntry = () => {
+    if (!newLogEntry.trim()) return;
+
+    const entry: ServiceLogEntry = {
+        timestamp: new Date().toISOString(),
+        technician: "Ricardo Milos", // In a real app, this would come from the logged-in user
+        entry: newLogEntry.trim(),
+    };
+
+    const updatedWorkOrders = workOrders.map(wo => 
+      wo.id === workOrder.id ? { ...wo, serviceLog: [...wo.serviceLog, entry] } : wo
+    );
+    setWorkOrders(updatedWorkOrders);
+    setNewLogEntry(""); // Clear the textarea
+    toast({
+      title: "Entrada Agregada",
+      description: "Se ha añadido una nueva entrada a la bitácora de servicio.",
+    });
   };
 
 
@@ -132,7 +148,7 @@ export default function WorkOrderDetailPage({
               <div className="flex items-center">
                 <Wrench className="h-5 w-5 mr-3 text-accent" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Servicio</p>
+                  <p className="text-sm text-muted-foreground">Servicio Principal</p>
                   <p className="font-medium">{workOrder.service}</p>
                 </div>
               </div>
@@ -167,16 +183,46 @@ export default function WorkOrderDetailPage({
                     </div>
                 </div>}
               </div>
-              {workOrder.notes && <>
-                <Separator />
-                <div className="flex items-start">
-                    <StickyNote className="h-5 w-5 mr-3 mt-1 text-accent" />
-                    <div>
-                        <p className="text-sm text-muted-foreground">Notas</p>
-                        <p className="font-medium whitespace-pre-wrap">{workOrder.notes}</p>
-                    </div>
+            </CardContent>
+          </Card>
+          
+           <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center"><StickyNote className="mr-2"/> Bitácora de Diagnóstico y Servicio</CardTitle>
+                <CardDescription>Registro cronológico de todas las acciones y observaciones.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4">
+                    {workOrder.serviceLog.map((log, index) => (
+                        <div key={index} className="flex gap-3">
+                            <div className="flex flex-col items-center">
+                                <div className="bg-primary rounded-full p-1.5 text-primary-foreground">
+                                    <Clock className="h-4 w-4" />
+                                </div>
+                                <div className="flex-grow w-px bg-border my-1"></div>
+                            </div>
+                            <div className="w-full pb-4">
+                                <div className="flex items-center justify-between">
+                                    <p className="font-semibold text-sm">{log.technician}</p>
+                                    <p className="text-xs text-muted-foreground">{new Date(log.timestamp).toLocaleString()}</p>
+                                </div>
+                                <p className="text-sm text-muted-foreground">{log.entry}</p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-              </>}
+                <div className="mt-4 flex flex-col gap-2">
+                    <Textarea 
+                        placeholder="Añadir nueva entrada a la bitácora..."
+                        value={newLogEntry}
+                        onChange={(e) => setNewLogEntry(e.target.value)}
+                        rows={3}
+                    />
+                    <Button onClick={handleAddLogEntry} size="sm" className="self-end">
+                        <MessageSquarePlus className="mr-2 h-4 w-4" />
+                        Agregar Entrada
+                    </Button>
+                </div>
             </CardContent>
           </Card>
 
