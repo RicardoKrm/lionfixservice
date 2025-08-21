@@ -11,8 +11,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { User, Car, Wrench, Calendar, StickyNote, Package } from "lucide-react";
-import { LicensePlateLookup } from "@/components/license-plate-lookup";
+import { getStatusVariant } from "@/lib/utils";
 import { ServiceNotificationTool } from "@/components/service-notification-tool";
+import { LicensePlateLookup } from "@/components/license-plate-lookup";
 import {
   Table,
   TableBody,
@@ -21,22 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const getStatusVariant = (status: (typeof workOrders)[0]["status"]) => {
-    switch (status) {
-      case "Completado":
-      case "Entregado":
-        return "default";
-      case "En Reparación":
-        return "secondary";
-      case "Esperando Repuestos":
-        return "destructive";
-      case "Recibido":
-      default:
-        return "outline";
-    }
-  };
-  
 
 export default function WorkOrderDetailPage({
   params,
@@ -62,7 +47,7 @@ export default function WorkOrderDetailPage({
       <DashboardHeader title={`Orden de Trabajo: ${workOrder.id}`} />
       <main className="flex-1 p-6 grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
+          <Card>
             <CardHeader>
               <CardTitle>Detalles del Servicio</CardTitle>
             </CardHeader>
@@ -118,7 +103,7 @@ export default function WorkOrderDetailPage({
             </CardContent>
           </Card>
 
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
+          <Card>
             <CardHeader>
                 <CardTitle className="flex items-center"><Package className="mr-2"/> Repuestos y Materiales</CardTitle>
                 <CardDescription>Trazabilidad de repuestos y materiales utilizados en esta orden.</CardDescription>
@@ -136,7 +121,7 @@ export default function WorkOrderDetailPage({
                         {workOrder.parts.length > 0 ? workOrder.parts.map(part => (
                             <TableRow key={part.sku}>
                                 <TableCell className="font-medium">{part.name}</TableCell>
-                                <TableCell className="font-code">{part.sku}</TableCell>
+                                <TableCell className="font-mono">{part.sku}</TableCell>
                                 <TableCell className="text-right">{part.quantity}</TableCell>
                             </TableRow>
                         )) : (
@@ -149,12 +134,11 @@ export default function WorkOrderDetailPage({
             </CardContent>
           </Card>
 
-          <LicensePlateLookup />
         </div>
         <div className="space-y-6">
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center"><User className="mr-2"/> Información del Cliente</CardTitle>
+              <CardTitle className="flex items-center"><User className="mr-2"/> Cliente</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
                 <p><strong>Nombre:</strong> {client.name}</p>
@@ -162,19 +146,20 @@ export default function WorkOrderDetailPage({
                 <p><strong>Teléfono:</strong> {client.phone}</p>
             </CardContent>
           </Card>
-           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
+           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center"><Car className="mr-2"/> Información del Vehículo</CardTitle>
+              <CardTitle className="flex items-center"><Car className="mr-2"/> Vehículo</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
                 <p><strong>Patente:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
                 <p><strong>Marca:</strong> {vehicle.make}</p>
                 <p><strong>Modelo:</strong> {vehicle.model}</p>
                 <p><strong>Año:</strong> {vehicle.year}</p>
-                <p><strong>VIN:</strong> <span className="font-code">{vehicle.vin}</span></p>
+                <p><strong>VIN:</strong> <span className="font-mono">{vehicle.vin}</span></p>
             </CardContent>
           </Card>
           <ServiceNotificationTool workOrder={workOrder} client={client} vehicle={vehicle} />
+          <LicensePlateLookup />
         </div>
       </main>
     </div>

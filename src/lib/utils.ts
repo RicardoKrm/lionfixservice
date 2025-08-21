@@ -1,14 +1,13 @@
-
-import { clsx, type ClassValue } from "clsx"
+import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { WorkOrder } from "@/types";
+import type { QuoteStatus, WorkOrder } from "@/types";
 
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-type Status = WorkOrder['status'] | 'Aprobada' | 'Enviada' | 'Rechazada';
+type Status = WorkOrder['status'] | QuoteStatus;
 
 export const getStatusVariant = (status: Status) => {
     switch (status) {
