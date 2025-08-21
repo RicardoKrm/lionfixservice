@@ -17,6 +17,8 @@ import {
   Settings,
   UserCircle,
   Car,
+  ClipboardCheck,
+  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -90,6 +92,26 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
+          
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <ClipboardCheck />
+              <span>Gestión</span>
+            </SidebarMenuButton>
+            <SidebarMenuSub>
+              <SidebarMenuSubItem>
+                 <Link href="/dashboard/management/checklists" passHref>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/checklists")}>Checklists</SidebarMenuSubButton>
+                </Link>
+              </SidebarMenuSubItem>
+               <SidebarMenuSubItem>
+                <Link href="/dashboard/management/iso9001" passHref>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/iso9001")}>Norma ISO 9001</SidebarMenuSubButton>
+                </Link>
+              </SidebarMenuSubItem>
+            </SidebarMenuSub>
+          </SidebarMenuItem>
+
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="border-t border-sidebar-border">

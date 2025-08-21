@@ -1,3 +1,5 @@
+'use server';
+
 import { ai } from '../genkit';
 import { defineFlow } from 'genkit/flow';
 import { z } from 'zod';
@@ -29,7 +31,7 @@ export const generateMaintenanceReminder = defineFlow(
       Sign off as "The team at Lion Fix Service".
     `;
 
-    const llmResponse = await ai.generateText({
+    const llmResponse = await ai.generate({
       prompt: prompt,
       config: { temperature: 0.5 },
     });
