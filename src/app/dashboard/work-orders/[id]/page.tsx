@@ -54,23 +54,23 @@ export default function WorkOrderDetailPage({
 
   if (!client || !vehicle) {
     // Handle cases where related data might be missing
-    return <div>Error: Client or Vehicle data not found.</div>;
+    return <div>Error: Datos de Cliente o Vehículo no encontrados.</div>;
   }
 
   return (
     <div className="flex flex-col h-full">
-      <DashboardHeader title={`Work Order: ${workOrder.id}`} />
+      <DashboardHeader title={`Orden de Trabajo: ${workOrder.id}`} />
       <main className="flex-1 p-6 grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
             <CardHeader>
-              <CardTitle>Service Details</CardTitle>
+              <CardTitle>Detalles del Servicio</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center">
                 <Wrench className="h-5 w-5 mr-3 text-accent" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Service</p>
+                  <p className="text-sm text-muted-foreground">Servicio</p>
                   <p className="font-medium">{workOrder.service}</p>
                 </div>
               </div>
@@ -79,12 +79,12 @@ export default function WorkOrderDetailPage({
                 <div className="flex items-center">
                     <User className="h-5 w-5 mr-3 text-accent" />
                     <div>
-                        <p className="text-sm text-muted-foreground">Technician</p>
+                        <p className="text-sm text-muted-foreground">Técnico</p>
                         <p className="font-medium">{workOrder.technician}</p>
                     </div>
                 </div>
                 <div>
-                    <p className="text-sm text-muted-foreground">Status</p>
+                    <p className="text-sm text-muted-foreground">Estado</p>
                     <Badge variant={getStatusVariant(workOrder.status)}>{workOrder.status}</Badge>
                 </div>
               </div>
@@ -93,14 +93,14 @@ export default function WorkOrderDetailPage({
                 <div className="flex items-center">
                     <Calendar className="h-5 w-5 mr-3 text-accent" />
                     <div>
-                        <p className="text-sm text-muted-foreground">Entry Date</p>
+                        <p className="text-sm text-muted-foreground">Fecha de Ingreso</p>
                         <p className="font-medium">{new Date(workOrder.entryDate).toLocaleString()}</p>
                     </div>
                 </div>
                  {workOrder.completionDate && <div className="flex items-center">
                     <Calendar className="h-5 w-5 mr-3 text-accent" />
                     <div>
-                        <p className="text-sm text-muted-foreground">Completion Date</p>
+                        <p className="text-sm text-muted-foreground">Fecha de Finalización</p>
                         <p className="font-medium">{new Date(workOrder.completionDate).toLocaleString()}</p>
                     </div>
                 </div>}
@@ -110,7 +110,7 @@ export default function WorkOrderDetailPage({
                 <div className="flex items-start">
                     <StickyNote className="h-5 w-5 mr-3 mt-1 text-accent" />
                     <div>
-                        <p className="text-sm text-muted-foreground">Notes</p>
+                        <p className="text-sm text-muted-foreground">Notas</p>
                         <p className="font-medium whitespace-pre-wrap">{workOrder.notes}</p>
                     </div>
                 </div>
@@ -120,16 +120,16 @@ export default function WorkOrderDetailPage({
 
           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
             <CardHeader>
-                <CardTitle className="flex items-center"><Package className="mr-2"/> Parts & Materials Used</CardTitle>
+                <CardTitle className="flex items-center"><Package className="mr-2"/> Repuestos y Materiales</CardTitle>
                 <CardDescription>Trazabilidad de repuestos y materiales utilizados en esta orden.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Part Name</TableHead>
+                            <TableHead>Nombre del Repuesto</TableHead>
                             <TableHead>SKU</TableHead>
-                            <TableHead className="text-right">Quantity</TableHead>
+                            <TableHead className="text-right">Cantidad</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -141,7 +141,7 @@ export default function WorkOrderDetailPage({
                             </TableRow>
                         )) : (
                             <TableRow>
-                                <TableCell colSpan={3} className="text-center text-muted-foreground">No parts recorded for this order.</TableCell>
+                                <TableCell colSpan={3} className="text-center text-muted-foreground">No se registraron repuestos para esta orden.</TableCell>
                             </TableRow>
                         )}
                     </TableBody>
@@ -154,23 +154,23 @@ export default function WorkOrderDetailPage({
         <div className="space-y-6">
           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
             <CardHeader>
-              <CardTitle className="flex items-center"><User className="mr-2"/> Client Information</CardTitle>
+              <CardTitle className="flex items-center"><User className="mr-2"/> Información del Cliente</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-                <p><strong>Name:</strong> {client.name}</p>
+                <p><strong>Nombre:</strong> {client.name}</p>
                 <p><strong>Email:</strong> {client.email}</p>
-                <p><strong>Phone:</strong> {client.phone}</p>
+                <p><strong>Teléfono:</strong> {client.phone}</p>
             </CardContent>
           </Card>
            <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
             <CardHeader>
-              <CardTitle className="flex items-center"><Car className="mr-2"/> Vehicle Information</CardTitle>
+              <CardTitle className="flex items-center"><Car className="mr-2"/> Información del Vehículo</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-                <p><strong>License Plate:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
-                <p><strong>Make:</strong> {vehicle.make}</p>
-                <p><strong>Model:</strong> {vehicle.model}</p>
-                <p><strong>Year:</strong> {vehicle.year}</p>
+                <p><strong>Patente:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
+                <p><strong>Marca:</strong> {vehicle.make}</p>
+                <p><strong>Modelo:</strong> {vehicle.model}</p>
+                <p><strong>Año:</strong> {vehicle.year}</p>
                 <p><strong>VIN:</strong> <span className="font-code">{vehicle.vin}</span></p>
             </CardContent>
           </Card>

@@ -11,7 +11,7 @@ export default function WorkOrdersPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <DashboardHeader title="Work Orders" />
+      <DashboardHeader title="Órdenes de Trabajo" />
       <main className="flex-1 p-6">
         <WorkOrderTable data={enrichedWorkOrders} />
       </main>

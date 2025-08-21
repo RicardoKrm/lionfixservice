@@ -34,7 +34,7 @@ export function WorkshopCalendar() {
   return (
     <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
       <CardHeader>
-        <CardTitle>Workshop Schedule - July 26, 2024</CardTitle>
+        <CardTitle>Agenda Taller - 26 de Julio, 2024</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="relative grid grid-cols-[auto,1fr,1fr,1fr] gap-x-4">
@@ -51,7 +51,7 @@ export function WorkshopCalendar() {
           {WORKSTATIONS.map(ws => (
             <div key={ws} className="relative border-l border-dashed">
               <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm py-2 text-center font-semibold text-primary border-b">
-                Workstation {ws}
+                Puesto {ws}
               </div>
               <div className="relative h-full">
                 {/* Grid Lines */}
@@ -72,8 +72,8 @@ export function WorkshopCalendar() {
                       style={{ top, height }}
                     >
                       <p className="font-bold truncate">{event.title}</p>
-                      <p className="truncate">Plate: {event.vehicle}</p>
-                      <p className="truncate">Tech: <Badge variant="outline" className="text-xs bg-background/20 border-none">{event.technician}</Badge></p>
+                      <p className="truncate">Patente: {event.vehicle}</p>
+                      <p className="truncate">Técnico: <Badge variant="outline" className="text-xs bg-background/20 border-none">{event.technician}</Badge></p>
                     </div>
                   );
                 })}

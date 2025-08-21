@@ -13,60 +13,60 @@ export default function DashboardPage() {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6 bg-background">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight text-primary">Dashboard</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-primary">Panel de Control</h2>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard
-          title="Total Revenue"
+          title="Ingresos Totales"
           value="$45,231.89"
-          description="+20.1% from last month"
+          description="+20.1% desde el mes pasado"
           icon={DollarSign}
         />
         <KpiCard
-          title="Active Work Orders"
+          title="Órdenes Activas"
           value="4"
-          description="2 waiting for parts"
+          description="2 esperando repuestos"
           icon={Wrench}
         />
         <KpiCard
-          title="Avg. Repair Time"
-          value="3.5 Days"
-          description="-5% from last month"
+          title="Tiempo Prom. Reparación"
+          value="3.5 Días"
+          description="-5% desde el mes pasado"
           icon={Clock}
         />
         <KpiCard
-          title="New Clients"
+          title="Nuevos Clientes"
           value="+23"
-          description="+180.1% from last month"
+          description="+180.1% desde el mes pasado"
           icon={Users}
         />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4 bg-white/70 backdrop-blur-sm dark:bg-card">
           <CardHeader>
-            <CardTitle className="text-primary">Welcome to LionFix ERP!</CardTitle>
+            <CardTitle className="text-primary">¡Bienvenido a LionFix ERP!</CardTitle>
             <CardDescription>
-              Your central hub for managing all workshop operations.
+              Tu centro de mando para gestionar todas las operaciones del taller.
             </CardDescription>
           </CardHeader>
           <CardContent className="pl-2">
             <p>
-              From here you can schedule appointments, manage work orders, track
-              your inventory, and communicate with your clients. Use the menu on
-              the left to navigate through the different modules.
+              Desde aquí puedes agendar citas, gestionar órdenes de trabajo, controlar
+              tu inventario y comunicarte con tus clientes. Usa el menú de la
+              izquierda para navegar por los diferentes módulos.
             </p>
           </CardContent>
         </Card>
         <Card className="col-span-3 bg-primary/90 text-primary-foreground relative overflow-hidden">
           <CardHeader>
-            <CardTitle>Boost Your Productivity</CardTitle>
+            <CardTitle>Potencia Tu Productividad</CardTitle>
             <CardDescription className="text-primary-foreground/80">
-              Our AI tools help you automate communication.
+              Nuestras herramientas de IA te ayudan a automatizar la comunicación.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p>
-              Generate maintenance reminders and service notifications with a single click.
+              Genera recordatorios de mantenimiento y notificaciones de servicio con un solo clic.
             </p>
           </CardContent>
           <div className="absolute -bottom-4 -right-4">

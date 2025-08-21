@@ -55,7 +55,7 @@ export function ServiceNotificationTool({
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to generate notification message.",
+        description: "No se pudo generar la notificación.",
       });
     }
     setIsLoading(false);
@@ -67,8 +67,8 @@ export function ServiceNotificationTool({
     // Simulate sending
     setTimeout(() => {
       toast({
-        title: "Notification Sent!",
-        description: `Message sent to ${client.name} at ${client.email}`,
+        title: "¡Notificación Enviada!",
+        description: `Mensaje enviado a ${client.name} a ${client.email}`,
       });
       setIsLoading(false);
       setMessage("");
@@ -78,31 +78,31 @@ export function ServiceNotificationTool({
   return (
     <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
       <CardHeader>
-        <CardTitle>Service Notifications</CardTitle>
+        <CardTitle>Notificaciones de Servicio</CardTitle>
         <CardDescription>
-          Generate and send AI-powered status updates to the client.
+          Genere y envíe actualizaciones de estado al cliente usando IA.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="status-select">Select Status to Notify</Label>
+          <Label htmlFor="status-select">Seleccione Estado a Notificar</Label>
           <Select value={status} onValueChange={setStatus}>
             <SelectTrigger id="status-select" className="w-[180px]">
-              <SelectValue placeholder="Select status" />
+              <SelectValue placeholder="Seleccionar estado" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="In Repair">In Repair</SelectItem>
-              <SelectItem value="Awaiting Parts">Awaiting Parts</SelectItem>
-              <SelectItem value="Completed">Completed</SelectItem>
-              <SelectItem value="Delivered">Delivered</SelectItem>
+              <SelectItem value="In Repair">En Reparación</SelectItem>
+              <SelectItem value="Awaiting Parts">Esperando Repuestos</SelectItem>
+              <SelectItem value="Completed">Completado</SelectItem>
+              <SelectItem value="Delivered">Entregado</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-            <Label htmlFor="message">Message</Label>
+            <Label htmlFor="message">Mensaje</Label>
             <Textarea
             id="message"
-            placeholder="Generated message will appear here..."
+            placeholder="El mensaje generado aparecerá aquí..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={5}
@@ -112,11 +112,11 @@ export function ServiceNotificationTool({
       <CardFooter className="flex justify-between">
         <Button variant="outline" onClick={handleGenerate} disabled={isLoading}>
           <Bot className="mr-2 h-4 w-4" />
-          {isLoading ? "Generating..." : "Generate Message"}
+          {isLoading ? "Generando..." : "Generar Mensaje"}
         </Button>
         <Button onClick={handleSend} disabled={!message || isLoading}>
           <Send className="mr-2 h-4 w-4" />
-          {isLoading ? "Sending..." : "Send Notification"}
+          {isLoading ? "Enviando..." : "Enviar Notificación"}
         </Button>
       </CardFooter>
     </Card>

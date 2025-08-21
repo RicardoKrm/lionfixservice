@@ -60,7 +60,7 @@ const getStatusVariant = (status: EnrichedWorkOrder["status"]) => {
 const columns: ColumnDef<EnrichedWorkOrder>[] = [
   {
     accessorKey: "id",
-    header: "Order ID",
+    header: "ID Orden",
     cell: ({ row }) => (
       <Link href={`/dashboard/work-orders/${row.getValue("id")}`}>
         <div className="font-medium text-accent hover:underline">{row.getValue("id")}</div>
@@ -69,23 +69,23 @@ const columns: ColumnDef<EnrichedWorkOrder>[] = [
   },
   {
     accessorKey: "client.name",
-    header: "Client",
+    header: "Cliente",
     cell: ({ row }) => <div>{row.original.client.name}</div>,
   },
   {
     accessorKey: "vehicle.licensePlate",
-    header: "License Plate",
+    header: "Patente",
     cell: ({ row }) => (
       <div className="font-mono uppercase">{row.original.vehicle.licensePlate}</div>
     ),
   },
   {
     accessorKey: "service",
-    header: "Service",
+    header: "Servicio",
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Estado",
     cell: ({ row }) => (
       <Badge variant={getStatusVariant(row.getValue("status"))}>
         {row.getValue("status")}
@@ -94,11 +94,11 @@ const columns: ColumnDef<EnrichedWorkOrder>[] = [
   },
   {
     accessorKey: "technician",
-    header: "Technician",
+    header: "Técnico",
   },
   {
     accessorKey: "entryDate",
-    header: "Entry Date",
+    header: "Fecha Ingreso",
     cell: ({ row }) => {
       const date = new Date(row.getValue("entryDate"));
       return <div>{date.toLocaleDateString()}</div>;
@@ -113,22 +113,22 @@ const columns: ColumnDef<EnrichedWorkOrder>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Abrir menú</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(workOrder.id)}
             >
-              Copy Order ID
+              Copiar ID de Orden
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link href={`/dashboard/work-orders/${workOrder.id}`}>
-              <DropdownMenuItem>View details</DropdownMenuItem>
+              <DropdownMenuItem>Ver detalles</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>Mark as Completed</DropdownMenuItem>
+            <DropdownMenuItem>Marcar como Completada</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -168,7 +168,7 @@ export function WorkOrderTable({ data }: { data: EnrichedWorkOrder[] }) {
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter by client name..."
+          placeholder="Filtrar por nombre de cliente..."
           value={(table.getColumn("client.name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("client.name")?.setFilterValue(event.target.value)
@@ -177,7 +177,7 @@ export function WorkOrderTable({ data }: { data: EnrichedWorkOrder[] }) {
         />
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
-          New Work Order
+          Nueva Orden de Trabajo
         </Button>
       </div>
       <div className="rounded-md border bg-white/70 backdrop-blur-sm dark:bg-card">
@@ -223,7 +223,7 @@ export function WorkOrderTable({ data }: { data: EnrichedWorkOrder[] }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No hay resultados.
                 </TableCell>
               </TableRow>
             )}
@@ -232,8 +232,8 @@ export function WorkOrderTable({ data }: { data: EnrichedWorkOrder[] }) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} de{" "}
+          {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
         </div>
         <div className="space-x-2">
           <Button
@@ -242,7 +242,7 @@ export function WorkOrderTable({ data }: { data: EnrichedWorkOrder[] }) {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             variant="outline"
@@ -250,7 +250,7 @@ export function WorkOrderTable({ data }: { data: EnrichedWorkOrder[] }) {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Siguiente
           </Button>
         </div>
       </div>

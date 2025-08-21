@@ -50,10 +50,10 @@ export function AppSidebar() {
             <Link href="/dashboard" passHref>
               <SidebarMenuButton
                 isActive={pathname === "/dashboard"}
-                tooltip="Dashboard"
+                tooltip="Panel de Control"
               >
                 <Home />
-                <span>Dashboard</span>
+                <span>Panel de Control</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
@@ -61,10 +61,10 @@ export function AppSidebar() {
             <Link href="/dashboard/work-orders" passHref>
               <SidebarMenuButton
                 isActive={isActive("/dashboard/work-orders")}
-                tooltip="Work Orders"
+                tooltip="Órdenes de Trabajo"
               >
                 <Wrench />
-                <span>Work Orders</span>
+                <span>Órdenes de Trabajo</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
@@ -72,10 +72,10 @@ export function AppSidebar() {
             <Link href="/dashboard/calendar" passHref>
               <SidebarMenuButton
                 isActive={isActive("/dashboard/calendar")}
-                tooltip="Calendar"
+                tooltip="Calendario"
               >
                 <Calendar />
-                <span>Calendar</span>
+                <span>Calendario</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
@@ -83,10 +83,10 @@ export function AppSidebar() {
             <Link href="/dashboard/reminders" passHref>
               <SidebarMenuButton
                 isActive={isActive("/dashboard/reminders")}
-                tooltip="Reminders"
+                tooltip="Recordatorios"
               >
                 <Send />
-                <span>Maintenance Reminders</span>
+                <span>Recordatorios</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
@@ -95,15 +95,15 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Profile">
+            <SidebarMenuButton tooltip="Perfil">
               <UserCircle />
-              <span>Profile</span>
+              <span>Perfil</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Settings">
+            <SidebarMenuButton tooltip="Ajustes">
               <Settings />
-              <span>Settings</span>
+              <span>Ajustes</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

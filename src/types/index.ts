@@ -20,7 +20,7 @@ export type WorkOrder = {
   clientId: string;
   vehicleId: string;
   service: string;
-  status: 'Received' | 'In Repair' | 'Awaiting Parts' | 'Completed' | 'Delivered';
+  status: 'Recibido' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
   technician: string;
   entryDate: string;
   completionDate?: string;
