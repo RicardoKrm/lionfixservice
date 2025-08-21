@@ -27,6 +27,7 @@ import {
   Package,
   LineChart,
   FileDigit,
+  BarChart,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -111,17 +112,6 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <Link href="/dashboard/reminders" passHref>
-              <SidebarMenuButton
-                isActive={isActive("/dashboard/reminders")}
-                tooltip="Recordatorios"
-              >
-                <Send />
-                <span>Recordatorios</span>
-              </SidebarMenuButton>
-            </Link>
-          </SidebarMenuItem>
           
           <SidebarMenuItem>
             <SidebarMenuButton>
@@ -145,7 +135,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <ClipboardCheck />
-              <span>Gestión</span>
+              <span>Gestión y Comms</span>
             </SidebarMenuButton>
             <SidebarMenuSub>
               <SidebarMenuSubItem>
@@ -156,6 +146,11 @@ export function AppSidebar() {
                <SidebarMenuSubItem>
                 <Link href="/dashboard/management/iso9001" passHref>
                   <SidebarMenuSubButton isActive={isActive("/dashboard/management/iso9001")}>Norma ISO 9001</SidebarMenuSubButton>
+                </Link>
+              </SidebarMenuSubItem>
+              <SidebarMenuSubItem>
+                <Link href="/dashboard/reminders" passHref>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/reminders")}>Recordatorios IA</SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
             </SidebarMenuSub>
