@@ -27,3 +27,8 @@ export type WorkOrder = {
   notes?: string;
   parts: { name: string; sku: string; quantity: number }[];
 };
+
+export type EnrichedWorkOrder = WorkOrder & {
+  client: Client;
+  vehicle: Vehicle;
+};
