@@ -123,7 +123,7 @@ export default function ClientsPage() {
             const clientWorkOrders = workOrders.filter(wo => wo.clientId === client.id);
             
             return (
-              <Card key={client.id} className="flex flex-col">
+              <Card key={client.id} className="flex flex-col bg-white/70 backdrop-blur-sm dark:bg-card">
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
@@ -155,7 +155,7 @@ export default function ClientsPage() {
                     <h4 className="font-semibold flex items-center gap-2 mb-2"><Car className="h-5 w-5 text-primary"/> Vehículos ({clientVehicles.length})</h4>
                     <div className="space-y-2">
                     {clientVehicles.length > 0 ? clientVehicles.map(vehicle => (
-                      <div key={vehicle.id} className="text-sm p-2 rounded-md border bg-muted/50">
+                      <div key={vehicle.id} className="text-sm p-2 rounded-md border bg-background/50">
                         <p className="font-semibold">{vehicle.make} {vehicle.model} ({vehicle.year})</p>
                         <p className="font-mono text-muted-foreground uppercase">{vehicle.licensePlate}</p>
                       </div>
@@ -168,7 +168,7 @@ export default function ClientsPage() {
                      <div className="space-y-2">
                        {clientWorkOrders.length > 0 ? clientWorkOrders.map(wo => (
                          <Link key={wo.id} href={`/dashboard/work-orders/${wo.id}`} passHref>
-                           <div className="text-sm p-2 rounded-md border bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
+                           <div className="text-sm p-2 rounded-md border bg-background/50 hover:bg-muted transition-colors cursor-pointer">
                               <p className="font-semibold">{wo.id} - <span className="font-normal">{wo.service}</span></p>
                               <p className="text-muted-foreground">{new Date(wo.entryDate).toLocaleDateString()}</p>
                            </div>
