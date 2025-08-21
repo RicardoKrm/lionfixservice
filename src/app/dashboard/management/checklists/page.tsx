@@ -16,13 +16,14 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PlusCircle, FileText, MoreHorizontal } from "lucide-react";
+import { PlusCircle, FileText, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CreateChecklistDialog } from "@/components/checklist-dialog";
 
 const sampleChecklists = [
   { id: "CHK-001", type: "Recepción", vehicle: "ABCD-12", date: "2024-07-28", completed: true },
@@ -35,10 +36,12 @@ export default function ChecklistsPage() {
   return (
     <div className="flex flex-col h-full">
       <DashboardHeader title="Checklists de Vehículos">
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Nuevo Checklist
-        </Button>
+        <CreateChecklistDialog>
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Nuevo Checklist
+          </Button>
+        </CreateChecklistDialog>
       </DashboardHeader>
       <main className="flex-1 p-6">
         <Card>
@@ -73,20 +76,12 @@ export default function ChecklistsPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
+                       <CreateChecklistDialog checklist={checklist}>
+                         <Button variant="ghost" size="icon">
                             <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Acciones</span>
                           </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <FileText className="mr-2 h-4 w-4" />
-                            Ver/Editar
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                       </CreateChecklistDialog>
                     </TableCell>
                   </TableRow>
                 ))}

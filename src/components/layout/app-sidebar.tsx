@@ -25,6 +25,7 @@ import {
   Users,
   Package,
   LineChart,
+  FileDigit,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -127,6 +128,11 @@ export function AppSidebar() {
               <span>Finanzas</span>
             </SidebarMenuButton>
             <SidebarMenuSub>
+               <SidebarMenuSubItem>
+                 <Link href="/dashboard/finance/quotes" passHref>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/quotes")}>Cotizaciones</SidebarMenuSubButton>
+                </Link>
+              </SidebarMenuSubItem>
               <SidebarMenuSubItem>
                  <Link href="/dashboard/finance/reports" passHref>
                   <SidebarMenuSubButton isActive={isActive("/dashboard/finance/reports")}>Reportes y KPIs</SidebarMenuSubButton>
