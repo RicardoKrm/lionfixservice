@@ -32,3 +32,22 @@ export type EnrichedWorkOrder = WorkOrder & {
   client: Client;
   vehicle: Vehicle;
 };
+
+export type QuoteStatus = 'Enviada' | 'Aprobada' | 'Rechazada';
+
+export type QuoteItem = {
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    total: number;
+}
+
+export type Quote = {
+    id: string;
+    clientId: string;
+    vehicleId: string;
+    date: string;
+    items: QuoteItem[];
+    total: number;
+    status: QuoteStatus;
+}

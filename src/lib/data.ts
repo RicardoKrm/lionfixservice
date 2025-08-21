@@ -1,4 +1,4 @@
-import type { Client, Vehicle, WorkOrder } from '@/types';
+import type { Client, Vehicle, WorkOrder, Quote } from '@/types';
 
 export const vehicles: Vehicle[] = [
   { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG' },
@@ -75,3 +75,44 @@ export const calendarEvents = [
     { id: 'E003', start: '2024-07-26T11:30:00', end: '2024-07-26T13:00:00', title: 'Rotación Neumáticos', vehicle: 'AB-CD-12', technician: 'Pedro Pascal', workstation: 1 },
     { id: 'E004', start: '2024-07-26T14:00:00', end: '2024-07-26T17:00:00', title: 'Ajuste de Motor', vehicle: 'PQ-RS-34', technician: 'Ricardo Milos', workstation: 3 },
   ];
+
+export const quotes: Quote[] = [
+  {
+    id: 'COT-2024-001',
+    clientId: 'C002',
+    vehicleId: 'V002',
+    date: '2024-07-21T10:00:00Z',
+    items: [
+      { description: 'Cambio de pastillas de freno delanteras', quantity: 1, unitPrice: 80000, total: 80000 },
+      { description: 'Rectificación de discos delanteros', quantity: 2, unitPrice: 15000, total: 30000 },
+      { description: 'Mano de obra', quantity: 2, unitPrice: 25000, total: 50000 },
+    ],
+    total: 160000,
+    status: 'Aprobada',
+  },
+  {
+    id: 'COT-2024-002',
+    clientId: 'C003',
+    vehicleId: 'V003',
+    date: '2024-07-23T11:30:00Z',
+    items: [
+      { description: 'Cambio de compresor de A/C', quantity: 1, unitPrice: 250000, total: 250000 },
+      { description: 'Carga de gas refrigerante', quantity: 1, unitPrice: 40000, total: 40000 },
+      { description: 'Mano de obra', quantity: 3, unitPrice: 25000, total: 75000 },
+    ],
+    total: 365000,
+    status: 'Enviada',
+  },
+    {
+    id: 'COT-2024-003',
+    clientId: 'C001',
+    vehicleId: 'V001',
+    date: '2024-07-25T15:00:00Z',
+    items: [
+      { description: 'Cambio de neumáticos (4)', quantity: 4, unitPrice: 75000, total: 300000 },
+      { description: 'Alineación y balanceo', quantity: 1, unitPrice: 35000, total: 35000 },
+    ],
+    total: 335000,
+    status: 'Rechazada',
+  },
+];
