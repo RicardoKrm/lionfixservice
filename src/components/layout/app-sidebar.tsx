@@ -22,6 +22,9 @@ import {
   Car,
   ClipboardCheck,
   ShieldCheck,
+  Users,
+  Package,
+  LineChart,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -84,6 +87,28 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
+           <SidebarMenuItem>
+            <Link href="/dashboard/clients" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/clients")}
+                tooltip="Clientes"
+              >
+                <Users />
+                <span>Clientes</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+           <SidebarMenuItem>
+            <Link href="/dashboard/inventory" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/inventory")}
+                tooltip="Inventario"
+              >
+                <Package />
+                <span>Inventario</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <Link href="/dashboard/reminders" passHref>
               <SidebarMenuButton
@@ -96,6 +121,20 @@ export function AppSidebar() {
             </Link>
           </SidebarMenuItem>
           
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <LineChart />
+              <span>Finanzas</span>
+            </SidebarMenuButton>
+            <SidebarMenuSub>
+              <SidebarMenuSubItem>
+                 <Link href="/dashboard/finance/reports" passHref>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/reports")}>Reportes y KPIs</SidebarMenuSubButton>
+                </Link>
+              </SidebarMenuSubItem>
+            </SidebarMenuSub>
+          </SidebarMenuItem>
+
           <SidebarMenuItem>
             <SidebarMenuButton>
               <ClipboardCheck />
