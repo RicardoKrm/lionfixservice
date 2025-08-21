@@ -90,3 +90,14 @@ export type Checklist = {
   images: string[];
   checkedItems: { [key: string]: boolean };
 };
+
+export type PurchaseOrderItem = {
+    sku: string;
+    name: string;
+    quantity: number;
+};
+
+export type PurchaseOrder = {
+    supplier: string;
+    items: PurchaseOrderItem[];
+};

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PlusCircle, MoreHorizontal, Edit, Trash2 } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Edit, Trash2, ShoppingCart } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,9 +38,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { PartFormDialog } from "@/components/part-form-dialog";
-import type { Part } from "@/types";
+import type { Part, PurchaseOrder } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { parts as initialInventory } from "@/lib/data";
+import { PurchaseOrderDialog } from "@/components/purchase-order-dialog";
 
 
 export default function InventoryPage() {
@@ -48,6 +49,7 @@ export default function InventoryPage() {
   const [selectedPart, setSelectedPart] = useState<Part | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isPurchaseOrderOpen, setIsPurchaseOrderOpen] = useState(false);
   const { toast } = useToast();
 
   const handleNewPart = () => {
@@ -109,9 +111,23 @@ export default function InventoryPage() {
     setSelectedPart(null);
   };
 
+  const handlePurchaseOrderSubmit = (data: PurchaseOrder) => {
+    console.log("Nueva Orden de Compra (Simulación):", data);
+    toast({
+        title: "Orden de Compra Enviada (Simulación)",
+        description: `Se ha enviado una orden de compra a ${data.supplier} con ${data.items.length} ítems.`,
+    });
+    setIsPurchaseOrderOpen(false);
+  };
+
+
   return (
     <div className="flex flex-col h-full">
       <DashboardHeader title="Control de Inventario">
+        <Button variant="outline" onClick={() => setIsPurchaseOrderOpen(true)}>
+          <ShoppingCart className="mr-2 h-4 w-4" />
+          Nueva Orden de Compra
+        </Button>
         <Button onClick={handleNewPart}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Nuevo Repuesto
@@ -186,6 +202,12 @@ export default function InventoryPage() {
         onOpenChange={setIsFormOpen}
         onSubmit={handleFormSubmit}
         part={selectedPart}
+      />
+
+       <PurchaseOrderDialog
+        isOpen={isPurchaseOrderOpen}
+        onOpenChange={setIsPurchaseOrderOpen}
+        onSubmit={handlePurchaseOrderSubmit}
       />
 
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
