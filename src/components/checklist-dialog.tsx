@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -23,10 +22,11 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState, useRef, useEffect } from "react";
-import { Camera, Upload, Car, X, Video } from "lucide-react";
+import { Camera, Upload, X, Video } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { Checklist } from "@/types";
 
 const checklistItems = {
   exterior: [
@@ -53,22 +53,15 @@ const checklistItems = {
   ],
 };
 
-type ChecklistData = {
-  id: string;
-  type: string;
-  vehicle: string;
-  date: string;
-  completed: boolean;
+type ChecklistDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  checklist: Checklist | null;
+  onSave: (checklist: Checklist) => void;
 };
 
-type CreateChecklistDialogProps = {
-  children: React.ReactNode;
-  checklist?: ChecklistData;
-};
-
-export function CreateChecklistDialog({ children, checklist }: CreateChecklistDialogProps) {
-  const [open, setOpen] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: ChecklistDialogProps) {
+  const [formData, setFormData] = useState<Checklist | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -77,16 +70,41 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const { toast } = useToast();
 
+  useEffect(() => {
+    if (open) {
+      if (checklist) {
+        setFormData(checklist);
+      } else {
+        setFormData({
+            id: '',
+            type: 'Recepción',
+            vehiclePlate: '',
+            date: new Date().toISOString().split('T')[0],
+            completed: false,
+            notes: '',
+            images: [],
+        })
+      }
+    } else {
+        // Reset state when dialog closes
+        stopCamera();
+        setFormData(null);
+    }
+  }, [open, checklist]);
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+    if (e.target.files && formData) {
       const files = Array.from(e.target.files);
       const newImages = files.map((file) => URL.createObjectURL(file));
-      setImages((prev) => [...prev, ...newImages]);
+      setFormData({ ...formData, images: [...formData.images, ...newImages]});
     }
   };
   
   const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
+    if(formData) {
+        const updatedImages = formData.images.filter((_, i) => i !== index);
+        setFormData({...formData, images: updatedImages});
+    }
   }
 
   const stopCamera = () => {
@@ -98,7 +116,7 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
     setIsCameraOn(false);
   }
   
-  const startCamera = async () => {
+  const handleCameraToggle = async () => {
     if (isCameraOn) {
       stopCamera();
       return;
@@ -108,6 +126,7 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
       setHasCameraPermission(true);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        videoRef.current.play();
       }
       setIsCameraOn(true);
     } catch (error) {
@@ -123,7 +142,7 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
   }
 
   const takePicture = () => {
-    if (videoRef.current && canvasRef.current) {
+    if (videoRef.current && canvasRef.current && formData) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
       canvas.width = video.videoWidth;
@@ -132,42 +151,42 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
       if (context) {
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         const dataUrl = canvas.toDataURL('image/png');
-        setImages(prev => [...prev, dataUrl]);
+        setFormData({ ...formData, images: [...formData.images, dataUrl]});
         stopCamera();
       }
     }
   };
-  
-  useEffect(() => {
-    if (!open) {
-      setImages([]);
-      stopCamera();
+
+  const handleSaveClick = () => {
+    if (formData) {
+        onSave(formData);
     }
-  }, [open]);
+  };
+  
+  if (!open || !formData) return null;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{checklist ? "Editar" : "Crear"} Checklist</DialogTitle>
           <DialogDescription>
             {checklist
-              ? `Editando checklist para el vehículo ${checklist.vehicle}`
+              ? `Editando checklist para el vehículo ${checklist.vehiclePlate}`
               : "Complete los detalles para un nuevo checklist de vehículo."}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 py-4">
           {/* Columna Izquierda: Datos e Imágenes */}
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="vehicle-plate">Patente Vehículo</Label>
-                <Input id="vehicle-plate" defaultValue={checklist?.vehicle} placeholder="ABCD-12" />
+                <Input id="vehicle-plate" value={formData.vehiclePlate} onChange={(e) => setFormData({...formData, vehiclePlate: e.target.value})} placeholder="ABCD-12" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="checklist-type">Tipo de Checklist</Label>
-                <Select defaultValue={checklist?.type}>
+                <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value})}>
                   <SelectTrigger id="checklist-type">
                     <SelectValue placeholder="Seleccionar tipo..." />
                   </SelectTrigger>
@@ -204,9 +223,9 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
                 <canvas ref={canvasRef} className="hidden"></canvas>
 
                 <div className="grid grid-cols-3 gap-2">
-                    {images.map((src, index) => (
+                    {formData.images.map((src, index) => (
                         <div key={index} className="relative group">
-                            <Image src={src} alt={`daño ${index + 1}`} width={150} height={100} className="rounded-md object-cover w-full aspect-video"/>
+                            <Image src={src} alt={`evidencia ${index + 1}`} width={150} height={100} className="rounded-md object-cover w-full aspect-video"/>
                             <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100" onClick={() => removeImage(index)}>
                                 <X className="h-4 w-4"/>
                             </Button>
@@ -225,7 +244,7 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
                         accept="image/*"
                         multiple
                     />
-                    <Button variant="secondary" onClick={startCamera}>
+                    <Button variant="secondary" onClick={handleCameraToggle}>
                         <Camera className="mr-2 h-4 w-4" /> {isCameraOn ? "Cerrar Cámara" : "Tomar Foto"}
                     </Button>
                 </div>
@@ -237,6 +256,8 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
                 id="notes"
                 placeholder="Anotar cualquier detalle relevante no cubierto en el checklist, como objetos de valor dejados por el cliente."
                 rows={4}
+                value={formData.notes}
+                onChange={(e) => setFormData({...formData, notes: e.target.value})}
               />
             </div>
           </div>
@@ -282,10 +303,17 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
                 ))}
               </div>
             </div>
+             <div className="flex items-center space-x-2 pt-4">
+                <Checkbox id="completed-checkbox" checked={formData.completed} onCheckedChange={(checked) => setFormData({...formData, completed: !!checked})} />
+                <Label htmlFor="completed-checkbox" className="font-semibold">
+                    Marcar Checklist como Completado
+                </Label>
+            </div>
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => setOpen(false)}>Guardar Checklist</Button>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button type="submit" onClick={handleSaveClick}>Guardar Checklist</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,4 +1,7 @@
 
+"use client";
+
+import { useState } from "react";
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
@@ -24,25 +27,49 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CreateChecklistDialog } from "@/components/checklist-dialog";
+import { ChecklistDialog } from "@/components/checklist-dialog";
+import type { Checklist } from "@/types";
 
-const sampleChecklists = [
-  { id: "CHK-001", type: "Recepción", vehicle: "ABCD-12", date: "2024-07-28", completed: true },
-  { id: "CHK-002", type: "Entrega", vehicle: "EFGH-34", date: "2024-07-29", completed: true },
-  { id: "CHK-003", type: "Recepción", vehicle: "IJKL-56", date: "2024-07-30", completed: false },
+const initialChecklists: Checklist[] = [
+  { id: "CHK-001", type: "Recepción", vehiclePlate: "ABCD-12", date: "2024-07-28", completed: true, notes: "Cliente deja cargador de teléfono.", images: [] },
+  { id: "CHK-002", type: "Entrega", vehiclePlate: "EFGH-34", date: "2024-07-29", completed: true, notes: "Vehículo se entrega lavado.", images: [] },
+  { id: "CHK-003", type: "Recepción", vehiclePlate: "IJKL-56", date: "2024-07-30", completed: false, notes: "Revisar rayón en puerta trasera derecha.", images: [] },
 ];
 
 
 export default function ChecklistsPage() {
+  const [checklists, setChecklists] = useState(initialChecklists);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedChecklist, setSelectedChecklist] = useState<Checklist | null>(null);
+
+  const handleNew = () => {
+    setSelectedChecklist(null);
+    setIsDialogOpen(true);
+  }
+
+  const handleEdit = (checklist: Checklist) => {
+    setSelectedChecklist(checklist);
+    setIsDialogOpen(true);
+  }
+
+  const handleSave = (data: Checklist) => {
+    if (selectedChecklist) {
+        setChecklists(checklists.map(c => c.id === data.id ? data : c));
+    } else {
+        const newChecklist = { ...data, id: `CHK-${(checklists.length + 1).toString().padStart(3, '0')}`};
+        setChecklists([...checklists, newChecklist]);
+    }
+    setIsDialogOpen(false);
+  }
+
+
   return (
     <div className="flex flex-col h-full">
       <DashboardHeader title="Checklists de Vehículos">
-        <CreateChecklistDialog>
-          <Button>
+          <Button onClick={handleNew}>
             <PlusCircle className="mr-2 h-4 w-4" />
             Nuevo Checklist
           </Button>
-        </CreateChecklistDialog>
       </DashboardHeader>
       <main className="flex-1 p-6">
         <Card>
@@ -65,11 +92,11 @@ export default function ChecklistsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sampleChecklists.map((checklist) => (
+                {checklists.map((checklist) => (
                   <TableRow key={checklist.id}>
                     <TableCell className="font-medium">{checklist.id}</TableCell>
                     <TableCell>{checklist.type}</TableCell>
-                    <TableCell className="font-mono">{checklist.vehicle}</TableCell>
+                    <TableCell className="font-mono">{checklist.vehiclePlate}</TableCell>
                     <TableCell>{checklist.date}</TableCell>
                     <TableCell>
                       <Badge variant={checklist.completed ? "default" : "secondary"}>
@@ -77,12 +104,9 @@ export default function ChecklistsPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                       <CreateChecklistDialog checklist={checklist}>
-                         <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Acciones</span>
-                          </Button>
-                       </CreateChecklistDialog>
+                       <Button variant="outline" size="sm" onClick={() => handleEdit(checklist)}>
+                          Ver / Editar
+                       </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -91,6 +115,12 @@ export default function ChecklistsPage() {
           </CardContent>
         </Card>
       </main>
+      <ChecklistDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        checklist={selectedChecklist}
+        onSave={handleSave}
+       />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 
+
 export type Vehicle = {
   id: string;
   licensePlate: string;
@@ -69,4 +70,14 @@ export type CalendarEvent = {
   vehicle: string;
   technician: string;
   workstation: number;
+};
+
+export type Checklist = {
+  id: string;
+  type: string;
+  vehiclePlate: string;
+  date: string;
+  completed: boolean;
+  notes: string;
+  images: string[];
 };
