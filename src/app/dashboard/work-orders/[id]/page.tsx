@@ -24,14 +24,14 @@ import {
 
 const getStatusVariant = (status: (typeof workOrders)[0]["status"]) => {
     switch (status) {
-      case "Completed":
-      case "Delivered":
+      case "Completado":
+      case "Entregado":
         return "default";
-      case "In Repair":
+      case "En Reparación":
         return "secondary";
-      case "Awaiting Parts":
+      case "Esperando Repuestos":
         return "destructive";
-      case "Received":
+      case "Recibido":
       default:
         return "outline";
     }

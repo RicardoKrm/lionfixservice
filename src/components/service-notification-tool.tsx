@@ -91,10 +91,10 @@ export function ServiceNotificationTool({
               <SelectValue placeholder="Seleccionar estado" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="In Repair">En Reparación</SelectItem>
-              <SelectItem value="Awaiting Parts">Esperando Repuestos</SelectItem>
-              <SelectItem value="Completed">Completado</SelectItem>
-              <SelectItem value="Delivered">Entregado</SelectItem>
+              <SelectItem value="En Reparación">En Reparación</SelectItem>
+              <SelectItem value="Esperando Repuestos">Esperando Repuestos</SelectItem>
+              <SelectItem value="Completado">Completado</SelectItem>
+              <SelectItem value="Entregado">Entregado</SelectItem>
             </SelectContent>
           </Select>
         </div>
