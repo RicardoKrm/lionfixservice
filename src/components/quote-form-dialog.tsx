@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useEffect, useMemo } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import type { Quote } from "@/types";
+import type { Quote, Vehicle } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { clients, vehicles } from "@/lib/data";
@@ -31,12 +31,12 @@ const quoteItemSchema = z.object({
 
 const quoteSchema = z.object({
     clientId: z.string().min(1, "Debe seleccionar un cliente."),
-    vehicleId: z.string(),
+    vehicleId: z.string().min(1, "Debe seleccionar un vehículo."),
     items: z.array(quoteItemSchema).min(1, "Debe añadir al menos un ítem."),
     total: z.number(),
 });
 
-type QuoteFormData = Omit<z.infer<typeof quoteSchema>, "total" | "vehicleId"> & { vehicleId?: string, total?: number};
+type QuoteFormData = Omit<z.infer<typeof quoteSchema>, "total"> & { total?: number};
 
 
 type QuoteFormDialogProps = {
@@ -52,6 +52,7 @@ export function QuoteFormDialog({ isOpen, onOpenChange, onSubmit, quote }: Quote
     resolver: zodResolver(quoteSchema),
     defaultValues: {
       clientId: "",
+      vehicleId: "",
       items: [{ description: "", quantity: 1, unitPrice: 0 }],
     },
   });
@@ -67,29 +68,38 @@ export function QuoteFormDialog({ isOpen, onOpenChange, onSubmit, quote }: Quote
   }, [watchItems]);
 
   const selectedClientId = form.watch("clientId");
-  const selectedVehicle = useMemo(() => vehicles.find(v => v.id === clients.find(c => c.id === selectedClientId)?.vehicleId), [selectedClientId]);
+  
+  const clientVehicles = useMemo(() => {
+    const client = clients.find(c => c.id === selectedClientId);
+    if (!client) return [];
+    return vehicles.filter(v => client.vehicleIds.includes(v.id));
+  }, [selectedClientId]);
 
   useEffect(() => {
     if (isOpen) {
       if (quote) {
           form.reset({
             clientId: quote.clientId,
+            vehicleId: quote.vehicleId,
             items: quote.items,
           });
       } else {
           form.reset({
             clientId: "",
+            vehicleId: "",
             items: [{ description: "", quantity: 1, unitPrice: 0 }],
           });
       }
     }
   }, [quote, form, isOpen]);
 
+  useEffect(() => {
+      form.setValue('vehicleId', '');
+  }, [selectedClientId, form]);
+
   const handleFormSubmit = (data: QuoteFormData) => {
-    if (!selectedVehicle) return;
     const finalData = {
         ...data,
-        vehicleId: selectedVehicle.id,
         total: total,
     }
     onSubmit(finalData);
@@ -129,13 +139,30 @@ export function QuoteFormDialog({ isOpen, onOpenChange, onSubmit, quote }: Quote
                             </FormItem>
                         )}
                     />
-                    <FormItem>
-                        <FormLabel>Vehículo</FormLabel>
-                        <Input 
-                            value={selectedVehicle ? `${selectedVehicle.make} ${selectedVehicle.model} (${selectedVehicle.licensePlate})` : 'Seleccione un cliente'} 
-                            disabled 
-                        />
-                    </FormItem>
+                    <FormField
+                        control={form.control}
+                        name="vehicleId"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Vehículo</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value} disabled={!selectedClientId}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Seleccionar vehículo..." />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {clientVehicles.map((vehicle: Vehicle) => (
+                                        <SelectItem key={vehicle.id} value={vehicle.id}>
+                                            {vehicle.make} {vehicle.model} ({vehicle.licensePlate})
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
                 
                 <Separator />

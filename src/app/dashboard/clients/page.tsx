@@ -9,17 +9,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, PlusCircle, Edit, Trash2 } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Edit, Trash2, Car, Wrench } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,10 +30,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-import { clients as initialClients, vehicles } from "@/lib/data";
+import { clients as initialClients, vehicles, workOrders } from "@/lib/data";
 import type { Client, Vehicle } from "@/types";
 import { ClientFormDialog } from "@/components/client-form-dialog";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>(initialClients);
@@ -77,7 +72,7 @@ export default function ClientsPage() {
     setSelectedClient(null);
   }
   
-  const handleFormSubmit = (data: Omit<Client, 'id' | 'vehicleId'> & { vehicleId?: string}) => {
+  const handleFormSubmit = (data: Omit<Client, 'id' | 'vehicleIds'>) => {
     if (selectedClient) {
         // Edit existing client
         const updatedClients = clients.map(c => c.id === selectedClient.id ? { ...selectedClient, ...data } : c);
@@ -91,7 +86,7 @@ export default function ClientsPage() {
         const newClient: Client = {
             id: `C${(clients.length + 1).toString().padStart(3, '0')}`,
             ...data,
-            vehicleId: data.vehicleId || '' // Ensure vehicleId is not undefined
+            vehicleIds: [] // Un nuevo cliente empieza sin vehículos
         };
         setClients([...clients, newClient]);
         toast({
@@ -112,63 +107,80 @@ export default function ClientsPage() {
           Nuevo Cliente
         </Button>
       </DashboardHeader>
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 space-y-6">
         <Card>
-          <CardHeader>
+           <CardHeader>
             <CardTitle>Listado de Clientes</CardTitle>
             <CardDescription>
               Aquí podrás ver y gestionar la información de tus clientes y el historial de sus vehículos.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Teléfono</TableHead>
-                  <TableHead>Vehículo Principal</TableHead>
-                  <TableHead className="text-right">Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {clients.map((client) => {
-                  const vehicle = vehicles.find(v => v.id === client.vehicleId);
-                  return (
-                    <TableRow key={client.id}>
-                      <TableCell className="font-medium">{client.name}</TableCell>
-                      <TableCell>{client.email}</TableCell>
-                      <TableCell>{client.phone}</TableCell>
-                      <TableCell>
-                        {vehicle ? `${vehicle.make} ${vehicle.model} (${vehicle.licensePlate})` : 'N/A'}
-                      </TableCell>
-                      <TableCell className="text-right">
-                         <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Acciones</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEditClient(client)}>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteClient(client)}>
-                               <Trash2 className="mr-2 h-4 w-4" />
-                              Eliminar
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </CardContent>
         </Card>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          {clients.map((client) => {
+            const clientVehicles = vehicles.filter(v => client.vehicleIds.includes(v.id));
+            const clientWorkOrders = workOrders.filter(wo => wo.clientId === client.id);
+            
+            return (
+              <Card key={client.id} className="flex flex-col">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle>{client.name}</CardTitle>
+                      <CardDescription>{client.email} - {client.phone}</CardDescription>
+                    </div>
+                     <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Acciones</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleEditClient(client)}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          Editar Cliente
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteClient(client)}>
+                           <Trash2 className="mr-2 h-4 w-4" />
+                          Eliminar Cliente
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-grow space-y-4">
+                  <div>
+                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Car className="h-5 w-5 text-primary"/> Vehículos ({clientVehicles.length})</h4>
+                    <div className="space-y-2">
+                    {clientVehicles.length > 0 ? clientVehicles.map(vehicle => (
+                      <div key={vehicle.id} className="text-sm p-2 rounded-md border bg-muted/50">
+                        <p className="font-semibold">{vehicle.make} {vehicle.model} ({vehicle.year})</p>
+                        <p className="font-mono text-muted-foreground uppercase">{vehicle.licensePlate}</p>
+                      </div>
+                    )) : <p className="text-sm text-muted-foreground">No hay vehículos registrados.</p>}
+                    </div>
+                  </div>
+                   <Separator />
+                   <div>
+                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Wrench className="h-5 w-5 text-primary"/> Historial de Trabajos ({clientWorkOrders.length})</h4>
+                     <div className="space-y-2">
+                       {clientWorkOrders.length > 0 ? clientWorkOrders.map(wo => (
+                         <Link key={wo.id} href={`/dashboard/work-orders/${wo.id}`} passHref>
+                           <div className="text-sm p-2 rounded-md border bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
+                              <p className="font-semibold">{wo.id} - <span className="font-normal">{wo.service}</span></p>
+                              <p className="text-muted-foreground">{new Date(wo.entryDate).toLocaleDateString()}</p>
+                           </div>
+                         </Link>
+                       )) : <p className="text-sm text-muted-foreground">No hay órdenes de trabajo.</p>}
+                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
       </main>
 
        <ClientFormDialog

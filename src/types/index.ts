@@ -14,7 +14,7 @@ export type Client = {
   name: string;
   email: string;
   phone: string;
-  vehicleId: string;
+  vehicleIds: string[];
 };
 
 export type Part = {

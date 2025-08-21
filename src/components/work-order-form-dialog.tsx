@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -22,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import type { WorkOrder } from "@/types";
+import type { WorkOrder, Vehicle } from "@/types";
 import {
   Select,
   SelectContent,
@@ -43,14 +44,14 @@ const partItemSchema = z.object({
 
 const workOrderSchema = z.object({
   clientId: z.string().min(1, "Debe seleccionar un cliente."),
-  vehicleId: z.string(),
+  vehicleId: z.string().min(1, "Debe seleccionar un vehículo."),
   service: z.string().min(3, "La descripción del servicio es requerida."),
   technician: z.string().min(1, "Debe seleccionar un técnico."),
   notes: z.string().optional(),
   parts: z.array(partItemSchema).optional(),
 });
 
-type WorkOrderFormData = Omit<z.infer<typeof workOrderSchema>, "vehicleId">;
+type WorkOrderFormData = z.infer<typeof workOrderSchema>;
 
 type WorkOrderFormDialogProps = {
   isOpen: boolean;
@@ -69,6 +70,7 @@ export function WorkOrderFormDialog({
     resolver: zodResolver(workOrderSchema),
     defaultValues: {
       clientId: "",
+      vehicleId: "",
       service: "",
       technician: "",
       notes: "",
@@ -82,13 +84,13 @@ export function WorkOrderFormDialog({
   });
 
   const selectedClientId = form.watch("clientId");
-  const selectedVehicle = useMemo(
-    () =>
-      vehicles.find(
-        (v) => v.id === clients.find((c) => c.id === selectedClientId)?.vehicleId
-      ),
-    [selectedClientId]
-  );
+
+  const clientVehicles = useMemo(() => {
+    const client = clients.find(c => c.id === selectedClientId);
+    if (!client) return [];
+    return vehicles.filter(v => client.vehicleIds.includes(v.id));
+  }, [selectedClientId]);
+
 
   useEffect(() => {
     if (isOpen) {
@@ -99,6 +101,7 @@ export function WorkOrderFormDialog({
       } else {
         form.reset({
           clientId: "",
+          vehicleId: "",
           service: "",
           technician: "",
           notes: "",
@@ -108,11 +111,13 @@ export function WorkOrderFormDialog({
     }
   }, [workOrder, form, isOpen]);
 
+  useEffect(() => {
+      form.setValue('vehicleId', '');
+  }, [selectedClientId, form]);
+
   const handleFormSubmit = (data: WorkOrderFormData) => {
-    if (!selectedVehicle) return;
     const finalData = {
       ...data,
-      vehicleId: selectedVehicle.id,
       parts: data.parts || [],
     };
     onSubmit(finalData);
@@ -159,17 +164,30 @@ export function WorkOrderFormDialog({
                   </FormItem>
                 )}
               />
-              <FormItem>
-                <FormLabel>Vehículo</FormLabel>
-                <Input
-                  value={
-                    selectedVehicle
-                      ? `${selectedVehicle.make} ${selectedVehicle.model} (${selectedVehicle.licensePlate})`
-                      : "Seleccione un cliente"
-                  }
-                  disabled
+              <FormField
+                control={form.control}
+                name="vehicleId"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Vehículo</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={!selectedClientId}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar vehículo..." />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {clientVehicles.map((vehicle: Vehicle) => (
+                                <SelectItem key={vehicle.id} value={vehicle.id}>
+                                    {vehicle.make} {vehicle.model} ({vehicle.licensePlate})
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                    </FormItem>
+                )}
                 />
-              </FormItem>
             </div>
 
             <FormField

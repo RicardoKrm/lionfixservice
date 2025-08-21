@@ -6,13 +6,14 @@ export const vehicles: Vehicle[] = [
   { id: 'V002', licensePlate: 'EFGH-34', make: 'Honda', model: 'Civic', year: 2019, vin: '0987654321HGFEDCBA' },
   { id: 'V003', licensePlate: 'IJKL-56', make: 'Ford', model: 'Focus', year: 2021, vin: '5432109876GFEDCBAH' },
   { id: 'V004', licensePlate: 'MNOP-78', make: 'Chevrolet', model: 'Cruze', year: 2018, vin: '6789012345FEDCBAHG' },
+  { id: 'V005', licensePlate: 'QRST-90', make: 'Toyota', model: 'RAV4', year: 2022, vin: 'ABC123DEF456GHI789' },
 ];
 
 export const clients: Client[] = [
-  { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@example.com', phone: '+56912345678', vehicleId: 'V001' },
-  { id: 'C002', name: 'María Rodríguez', email: 'maria.r@example.com', phone: '+56987654321', vehicleId: 'V002' },
-  { id: 'C003', name: 'Carlos Gómez', email: 'carlos.gomez@example.com', phone: '+56911223344', vehicleId: 'V003' },
-  { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@example.com', phone: '+56955667788', vehicleId: 'V004' },
+  { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@example.com', phone: '+56912345678', vehicleIds: ['V001', 'V005'] },
+  { id: 'C002', name: 'María Rodríguez', email: 'maria.r@example.com', phone: '+56987654321', vehicleIds: ['V002'] },
+  { id: 'C003', name: 'Carlos Gómez', email: 'carlos.gomez@example.com', phone: '+56911223344', vehicleIds: ['V003'] },
+  { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@example.com', phone: '+56955667788', vehicleIds: ['V004'] },
 ];
 
 export const workOrders: WorkOrder[] = [
@@ -66,6 +67,17 @@ export const workOrders: WorkOrder[] = [
     technician: 'Ricardo Milos',
     entryDate: '2024-07-25T10:30:00Z',
     notes: 'Luz de Check Engine encendida. Se realizará escaneo de diagnóstico.',
+    parts: []
+  },
+   {
+    id: 'OT-2024-005',
+    clientId: 'C001',
+    vehicleId: 'V005',
+    service: 'Servicio de 5.000km',
+    status: 'Recibido',
+    technician: 'Pedro Pascal',
+    entryDate: '2024-07-28T11:00:00Z',
+    notes: 'Revisión inicial, mantención básica.',
     parts: []
   },
 ];
