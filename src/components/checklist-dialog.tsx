@@ -28,7 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { Checklist } from "@/types";
 
-const checklistItems = {
+export const checklistItems = {
   exterior: [
     "Luces Delanteras",
     "Luces Traseras",
@@ -52,6 +52,12 @@ const checklistItems = {
     "Fugas Visibles (Motor/Transmisión)",
   ],
 };
+
+const allChecklistItems = [
+    ...checklistItems.exterior, 
+    ...checklistItems.interior, 
+    ...checklistItems.mecanica
+];
 
 type ChecklistDialogProps = {
   open: boolean;
@@ -83,6 +89,7 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
             completed: false,
             notes: '',
             images: [],
+            checkedItems: {},
         })
       }
     } else {
@@ -162,6 +169,18 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
         onSave(formData);
     }
   };
+
+  const handleCheckedChange = (item: string, checked: boolean) => {
+    if (formData) {
+        const updatedItems = { ...formData.checkedItems };
+        if (checked) {
+            updatedItems[item] = true;
+        } else {
+            delete updatedItems[item];
+        }
+        setFormData({ ...formData, checkedItems: updatedItems });
+    }
+  }
   
   if (!open || !formData) return null;
 
@@ -186,7 +205,7 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
               </div>
               <div className="space-y-2">
                 <Label htmlFor="checklist-type">Tipo de Checklist</Label>
-                <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value})}>
+                <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value as 'Recepción' | 'Entrega'})}>
                   <SelectTrigger id="checklist-type">
                     <SelectValue placeholder="Seleccionar tipo..." />
                   </SelectTrigger>
@@ -269,7 +288,11 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
               <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                 {checklistItems.exterior.map((item) => (
                   <div key={item} className="flex items-center space-x-2">
-                    <Checkbox id={item} />
+                    <Checkbox 
+                        id={item} 
+                        checked={!!formData.checkedItems[item]}
+                        onCheckedChange={(checked) => handleCheckedChange(item, !!checked)}
+                    />
                     <Label htmlFor={item} className="font-normal text-sm">
                       {item}
                     </Label>
@@ -282,7 +305,11 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
               <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                 {checklistItems.interior.map((item) => (
                   <div key={item} className="flex items-center space-x-2">
-                    <Checkbox id={item} />
+                    <Checkbox 
+                        id={item} 
+                        checked={!!formData.checkedItems[item]}
+                        onCheckedChange={(checked) => handleCheckedChange(item, !!checked)}
+                    />
                     <Label htmlFor={item} className="font-normal text-sm">
                       {item}
                     </Label>
@@ -295,7 +322,11 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
               <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                 {checklistItems.mecanica.map((item) => (
                   <div key={item} className="flex items-center space-x-2">
-                    <Checkbox id={item} />
+                    <Checkbox 
+                        id={item} 
+                        checked={!!formData.checkedItems[item]}
+                        onCheckedChange={(checked) => handleCheckedChange(item, !!checked)}
+                    />
                     <Label htmlFor={item} className="font-normal text-sm">
                       {item}
                     </Label>

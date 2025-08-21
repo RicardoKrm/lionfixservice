@@ -31,9 +31,9 @@ import { ChecklistDialog } from "@/components/checklist-dialog";
 import type { Checklist } from "@/types";
 
 const initialChecklists: Checklist[] = [
-  { id: "CHK-001", type: "Recepción", vehiclePlate: "ABCD-12", date: "2024-07-28", completed: true, notes: "Cliente deja cargador de teléfono.", images: [] },
-  { id: "CHK-002", type: "Entrega", vehiclePlate: "EFGH-34", date: "2024-07-29", completed: true, notes: "Vehículo se entrega lavado.", images: [] },
-  { id: "CHK-003", type: "Recepción", vehiclePlate: "IJKL-56", date: "2024-07-30", completed: false, notes: "Revisar rayón en puerta trasera derecha.", images: [] },
+  { id: "CHK-001", type: "Recepción", vehiclePlate: "ABCD-12", date: "2024-07-28", completed: true, notes: "Cliente deja cargador de teléfono.", images: [], checkedItems: { "Luces Delanteras": true, "Nivel de Combustible": true } },
+  { id: "CHK-002", type: "Entrega", vehiclePlate: "EFGH-34", date: "2024-07-29", completed: true, notes: "Vehículo se entrega lavado.", images: [], checkedItems: { "Carrocería (Rayones/Abolladuras)": true } },
+  { id: "CHK-003", type: "Recepción", vehiclePlate: "IJKL-56", date: "2024-07-30", completed: false, notes: "Revisar rayón en puerta trasera derecha.", images: [], checkedItems: {} },
 ];
 
 
@@ -53,7 +53,7 @@ export default function ChecklistsPage() {
   }
 
   const handleSave = (data: Checklist) => {
-    if (selectedChecklist) {
+    if (selectedChecklist && data.id) {
         setChecklists(checklists.map(c => c.id === data.id ? data : c));
     } else {
         const newChecklist = { ...data, id: `CHK-${(checklists.length + 1).toString().padStart(3, '0')}`};

@@ -74,10 +74,11 @@ export type CalendarEvent = {
 
 export type Checklist = {
   id: string;
-  type: string;
+  type: 'Recepción' | 'Entrega';
   vehiclePlate: string;
   date: string;
   completed: boolean;
   notes: string;
   images: string[];
+  checkedItems: { [key: string]: boolean };
 };
