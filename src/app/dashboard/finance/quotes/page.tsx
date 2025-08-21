@@ -1,4 +1,7 @@
 
+"use client";
+
+import { useState } from "react";
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
@@ -8,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MoreHorizontal, FileText, ArrowRight } from "lucide-react";
+import { PlusCircle, ArrowRight } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -18,15 +21,37 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { quotes, clients, vehicles } from "@/lib/data";
+import { quotes as initialQuotes, clients, vehicles } from "@/lib/data";
 import Link from "next/link";
 import { getStatusVariant } from "@/lib/utils";
+import { QuoteFormDialog } from "@/components/quote-form-dialog";
+import type { Quote } from "@/types";
+import { useToast } from "@/hooks/use-toast";
 
 export default function QuotesPage() {
+  const [quotes, setQuotes] = useState<Quote[]>(initialQuotes);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleFormSubmit = (data: Omit<Quote, 'id' | 'status' | 'date'>) => {
+    const newQuote: Quote = {
+      id: `COT-2024-${(quotes.length + 1).toString().padStart(3, '0')}`,
+      date: new Date().toISOString(),
+      status: 'Enviada',
+      ...data,
+    };
+    setQuotes([newQuote, ...quotes]);
+    toast({
+      title: "Cotización Creada",
+      description: `Se ha creado la cotización ${newQuote.id}.`,
+    });
+    setIsFormOpen(false);
+  };
+
   return (
     <div className="flex flex-col h-full">
       <DashboardHeader title="Gestión de Cotizaciones">
-        <Button>
+        <Button onClick={() => setIsFormOpen(true)}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Nueva Cotización
         </Button>
@@ -83,6 +108,11 @@ export default function QuotesPage() {
           </CardContent>
         </Card>
       </main>
+      <QuoteFormDialog 
+        isOpen={isFormOpen}
+        onOpenChange={setIsFormOpen}
+        onSubmit={handleFormSubmit}
+      />
     </div>
   );
 }
