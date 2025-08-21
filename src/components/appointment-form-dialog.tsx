@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -85,7 +84,7 @@ export function AppointmentFormDialog({ isOpen, onOpenChange, onSubmit, event }:
           <DialogTitle>{event ? "Editar Cita" : "Nueva Cita"}</DialogTitle>
           <DialogDescription>
             {event ? "Actualice la información de la cita." : "Complete los datos para agendar una nueva cita."}
-          </Dialog-description>
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
