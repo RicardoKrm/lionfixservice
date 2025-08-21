@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -22,8 +23,10 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState, useRef, useEffect } from "react";
-import { Camera, Upload, Car, X } from "lucide-react";
+import { Camera, Upload, Car, X, Video } from "lucide-react";
 import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const checklistItems = {
   exterior: [
@@ -67,6 +70,12 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  const [isCameraOn, setIsCameraOn] = useState(false);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const { toast } = useToast();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -79,10 +88,60 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
   const removeImage = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
   }
+
+  const stopCamera = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+    setIsCameraOn(false);
+  }
+  
+  const startCamera = async () => {
+    if (isCameraOn) {
+      stopCamera();
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setHasCameraPermission(true);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      setIsCameraOn(true);
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+      setHasCameraPermission(false);
+      toast({
+        variant: "destructive",
+        title: "Acceso a Cámara Denegado",
+        description: "Por favor, habilita los permisos de cámara en tu navegador.",
+      });
+      setIsCameraOn(false);
+    }
+  }
+
+  const takePicture = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        const dataUrl = canvas.toDataURL('image/png');
+        setImages(prev => [...prev, dataUrl]);
+        stopCamera();
+      }
+    }
+  };
   
   useEffect(() => {
     if (!open) {
       setImages([]);
+      stopCamera();
     }
   }, [open]);
 
@@ -122,6 +181,28 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
             
             <div className="space-y-2">
                 <Label>Registro Fotográfico</Label>
+                
+                {isCameraOn && (
+                  <div className="space-y-2">
+                    <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay playsInline muted />
+                    <Button onClick={takePicture} className="w-full">
+                      <Camera className="mr-2 h-4 w-4" /> Capturar Foto
+                    </Button>
+                  </div>
+                )}
+                
+                {!isCameraOn && hasCameraPermission === false && (
+                    <Alert variant="destructive">
+                        <Video className="h-4 w-4" />
+                        <AlertTitle>Cámara no disponible</AlertTitle>
+                        <AlertDescription>
+                        No se pudo acceder a la cámara. Por favor, revisa los permisos en tu navegador.
+                        </AlertDescription>
+                    </Alert>
+                )}
+                
+                <canvas ref={canvasRef} className="hidden"></canvas>
+
                 <div className="grid grid-cols-3 gap-2">
                     {images.map((src, index) => (
                         <div key={index} className="relative group">
@@ -144,8 +225,8 @@ export function CreateChecklistDialog({ children, checklist }: CreateChecklistDi
                         accept="image/*"
                         multiple
                     />
-                    <Button variant="secondary">
-                        <Camera className="mr-2 h-4 w-4" /> Tomar Foto
+                    <Button variant="secondary" onClick={startCamera}>
+                        <Camera className="mr-2 h-4 w-4" /> {isCameraOn ? "Cerrar Cámara" : "Tomar Foto"}
                     </Button>
                 </div>
             </div>
