@@ -9,34 +9,48 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart, LineChart, DollarSign, Clock, Users, FileDown } from "lucide-react";
+import { BarChart, LineChart, DollarSign, Wrench, Package, Users, FileDown, CheckCircle, Percent, Clock } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
-import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart } from "recharts";
+import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { KpiCard } from "@/components/kpi-card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
+// --- Datos Simulados ---
 
+// Gráfico de Ingresos vs. Costos
 const monthlyRevenueData = [
-  { month: "Ene", revenue: 18600, costs: 12000 },
-  { month: "Feb", revenue: 30500, costs: 18000 },
-  { month: "Mar", revenue: 23700, costs: 15000 },
-  { month: "Abr", revenue: 17300, costs: 11000 },
-  { month: "May", revenue: 20900, costs: 13500 },
-  { month: "Jun", revenue: 21400, costs: 14000 },
-  { month: "Jul", revenue: 28400, costs: 17000 },
+  { month: "Ene", revenue: 1860000, costs: 1200000 },
+  { month: "Feb", revenue: 3050000, costs: 1800000 },
+  { month: "Mar", revenue: 2370000, costs: 1500000 },
+  { month: "Abr", revenue: 1730000, costs: 1100000 },
+  { month: "May", revenue: 2090000, costs: 1350000 },
+  { month: "Jun", revenue: 2140000, costs: 1400000 },
+  { month: "Jul", revenue: 2840000, costs: 1700000 },
+];
+const chartConfigRevenue = {
+  revenue: { label: "Ingresos", color: "hsl(var(--chart-1))" },
+  costs: { label: "Costos", color: "hsl(var(--chart-2))" }
+};
+
+// Gráfico de Estado de Órdenes de Trabajo (OTs)
+const workOrderStatusData = [
+  { name: 'Recibido', value: 4, fill: "hsl(var(--muted-foreground))" },
+  { name: 'En Reparación', value: 8, fill: "hsl(var(--chart-2))" },
+  { name: 'Esperando Repuestos', value: 2, fill: "hsl(var(--destructive))" },
+  { name: 'Completado', value: 15, fill: "hsl(var(--chart-1))" },
 ];
 
-const chartConfig = {
-  revenue: {
-    label: "Ingresos",
-    color: "hsl(var(--chart-1))",
-  },
-  costs: {
-    label: "Costos",
-     color: "hsl(var(--chart-2))",
-  }
+// Gráfico de Carga de Trabajo por Técnico
+const technicianWorkloadData = [
+  { name: "Pedro Pascal", ots: 12 },
+  { name: "Ricardo Milos", ots: 9 },
+  { name: "Otro Técnico", ots: 5 },
+];
+const chartConfigTechnician = {
+  ots: { label: "OTs Asignadas", color: "hsl(var(--chart-2))" }
 };
+
 
 export default function ReportsPage() {
   const { toast } = useToast();
@@ -50,7 +64,7 @@ export default function ReportsPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
-      <DashboardHeader title="Reportes Financieros y KPIs">
+      <DashboardHeader title="Dashboard de Business Intelligence">
         <Button onClick={handleExport} variant="outline">
           <FileDown className="mr-2 h-4 w-4"/>
           Exportar a CSV
@@ -58,81 +72,83 @@ export default function ReportsPage() {
       </DashboardHeader>
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
         
-        {/* KPI Cards */}
-        <div className="grid gap-6 md:grid-cols-3">
-             <KpiCard
-                title="Ingresos del Mes (Jul)"
-                value="$28,400"
-                description="+15% vs Jun"
-                icon={DollarSign}
-            />
-            <KpiCard
-                title="Costos del Mes (Jul)"
-                value="$17,000"
-                description="+12% vs Jun (Simulado)"
-                icon={DollarSign}
-            />
-            <KpiCard
-                title="Beneficio Neto (Jul)"
-                value="$11,400"
-                description="+20% vs Jun (Simulado)"
-                icon={DollarSign}
-            />
+        {/* --- Fila de KPIs --- */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+             <KpiCard title="Ingresos del Mes" value="$2,840,000" description="+15% vs mes anterior" icon={DollarSign} />
+             <KpiCard title="OTs Completadas (Mes)" value="15" description="+5% vs mes anterior" icon={CheckCircle} />
+             <KpiCard title="Tasa Aprobación Cotiz." value="78%" description="Promedio últimos 30 días" icon={Percent} />
+             <KpiCard title="Valor del Inventario" value="$12,580,000" description="3 repuestos con bajo stock" icon={Package} />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-          {/* Revenue Chart */}
-          <Card className="lg:col-span-3">
+          {/* --- Columna Principal (Gráfico Grande) --- */}
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <BarChart className="mr-2 h-5 w-5 text-accent" />
                 Ingresos vs. Costos Mensuales
               </CardTitle>
               <CardDescription>
-                Comparativa de ingresos brutos y costos operativos.
+                Comparativa de ingresos brutos y costos operativos en CLP.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-80 w-full">
+              <ChartContainer config={chartConfigRevenue} className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                    <RechartsBarChart data={monthlyRevenueData} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
                       <CartesianGrid vertical={false} strokeDasharray="3 3" />
                       <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${Number(value) / 1000}k`} />
-                      <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
+                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${Number(value) / 1000000}M`} />
+                      <ChartTooltip cursor={false} content={<ChartTooltipContent formatter={(value) => `$${Number(value).toLocaleString('es-CL')}`} />} />
                       <ChartLegend content={<ChartLegendContent />} />
-                      <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="costs" fill="var(--color-costs)" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} name="Ingresos" />
+                      <Bar dataKey="costs" fill="var(--color-costs)" radius={[4, 4, 0, 0]} name="Costos" />
                   </RechartsBarChart>
                 </ResponsiveContainer>
               </ChartContainer>
             </CardContent>
           </Card>
           
-          <div className="lg:col-span-2 space-y-6">
-              {/* Placeholder Cards */}
-               <Card>
+          {/* --- Columna Secundaria (Gráficos Pequeños) --- */}
+          <div className="space-y-6">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <LineChart className="mr-2 h-5 w-5 text-accent" />
-                    Rentabilidad por Servicio
-                  </CardTitle>
+                  <CardTitle className="flex items-center"><Wrench className="mr-2 h-5 w-5 text-accent" />Estado de OTs (Activas)</CardTitle>
                 </CardHeader>
-                 <CardContent>
-                   <p className="text-sm text-muted-foreground">Próximamente: Gráfico que desglosa la rentabilidad de cada tipo de servicio (ej: Mantención, Frenos, A/C).</p>
+                <CardContent>
+                    <ChartContainer config={{}} className="h-48 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
+                                <Pie data={workOrderStatusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} stroke="hsl(var(--border))">
+                                    {workOrderStatusData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                                    ))}
+                                </Pie>
+                                <ChartLegend content={<ChartLegendContent layout="vertical" align="right" verticalAlign="middle" />} />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </ChartContainer>
                  </CardContent>
               </Card>
 
                <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Users className="mr-2 h-5 w-5 text-accent" />
-                    Eficiencia de Técnicos
-                  </CardTitle>
+                  <CardTitle className="flex items-center"><Users className="mr-2 h-5 w-5 text-accent" />Carga de Trabajo por Técnico</CardTitle>
                 </CardHeader>
                  <CardContent>
-                   <p className="text-sm text-muted-foreground">Próximamente: Horas facturadas vs. horas trabajadas por cada técnico.</p>
+                   <ChartContainer config={chartConfigTechnician} className="h-48 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RechartsBarChart data={technicianWorkloadData} layout="vertical" margin={{left: 20, right: 20}}>
+                                <CartesianGrid horizontal={false} strokeDasharray="3 3"/>
+                                <XAxis type="number" hide />
+                                <YAxis type="category" dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} width={80} />
+                                <Tooltip cursor={{fill: 'hsl(var(--muted))'}} content={<ChartTooltipContent hideLabel />} />
+                                <Bar dataKey="ots" fill="var(--color-ots)" radius={[0, 4, 4, 0]}/>
+                            </RechartsBarChart>
+                        </ResponsiveContainer>
+                   </ChartContainer>
                  </CardContent>
               </Card>
           </div>
@@ -141,3 +157,4 @@ export default function ReportsPage() {
     </div>
   );
 }
+
