@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DollarSign, Wrench, Clock, Users, ArrowRight, CalendarCheck, CheckCircle } from "lucide-react";
+import { Wrench, CalendarCheck, CheckCircle, Users, ArrowRight } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { workOrders, calendarEvents } from "@/lib/data";
@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getStatusVariant } from "@/lib/utils";
 import { format, isToday } from "date-fns";
+import { es } from 'date-fns/locale';
 
 // --- Datos Simulados para el Dashboard ---
 
@@ -188,7 +189,7 @@ export default function DashboardPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Agenda para Hoy</CardTitle>
-                    <CardDescription>{format(new Date(), "eeee, dd 'de' MMMM")}</CardDescription>
+                    <CardDescription>{format(new Date(), "eeee, dd 'de' MMMM", { locale: es })}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {todayAppointments.length > 0 ? (

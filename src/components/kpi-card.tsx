@@ -1,8 +1,9 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 
 type KpiCardProps = {
   icon: LucideIcon;
@@ -14,20 +15,30 @@ type KpiCardProps = {
 
 export function KpiCard({ icon: Icon, title, value, description, href }: KpiCardProps) {
   const cardContent = (
-    <Card className={cn("transition-colors", href && "hover:bg-muted/50")}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-accent" />
+    <Card className={cn("transition-colors group", href && "hover:border-accent")}>
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+            <CardTitle className="text-base font-semibold text-muted-foreground">{title}</CardTitle>
+            <Icon className="h-6 w-6 text-accent" />
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {description && <p className="text-xs text-muted-foreground">{description}</p>}
+        <div className="text-3xl font-bold text-primary">{value}</div>
+        {description && <p className="text-sm text-muted-foreground pt-1">{description}</p>}
       </CardContent>
+       {href && (
+            <CardFooter className="p-0">
+                <div className="flex items-center justify-between w-full px-6 py-3 bg-muted/20 border-t group-hover:bg-accent/10 transition-colors duration-300">
+                    <span className="text-sm font-semibold">Ver detalle</span>
+                    <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
+                </div>
+            </CardFooter>
+        )}
     </Card>
   );
 
   if (href) {
-    return <Link href={href}>{cardContent}</Link>;
+    return <Link href={href} className="flex flex-col h-full">{cardContent}</Link>;
   }
 
   return cardContent;
