@@ -65,10 +65,34 @@ export default function DashboardPage() {
       
       {/* --- Fila de KPIs --- */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Órdenes Activas" value={workOrders.filter(wo => wo.status === 'En Reparación' || wo.status === 'Esperando Repuestos').length.toString()} description="En progreso o esperando repuestos" icon={Wrench} />
-        <KpiCard title="Citas para Hoy" value={todayAppointments.length.toString()} description="Agendado en el calendario" icon={CalendarCheck} />
-        <KpiCard title="OTs para Entrega" value={workOrders.filter(wo => wo.status === 'Completado').length.toString()} description="Listas para ser retiradas" icon={CheckCircle} />
-        <KpiCard title="Nuevos Clientes (Mes)" value="+23" description="+180.1% vs mes anterior" icon={Users} />
+        <KpiCard 
+            title="Órdenes Activas" 
+            value={workOrders.filter(wo => wo.status === 'En Reparación' || wo.status === 'Esperando Repuestos').length.toString()} 
+            description="En progreso o esperando repuestos" 
+            icon={Wrench}
+            href="/dashboard/work-orders"
+        />
+        <KpiCard 
+            title="Citas para Hoy" 
+            value={todayAppointments.length.toString()} 
+            description="Agendado en el calendario" 
+            icon={CalendarCheck}
+            href="/dashboard/calendar"
+        />
+        <KpiCard 
+            title="OTs para Entrega" 
+            value={workOrders.filter(wo => wo.status === 'Completado').length.toString()} 
+            description="Listas para ser retiradas" 
+            icon={CheckCircle} 
+            href="/dashboard/work-orders"
+        />
+        <KpiCard 
+            title="Nuevos Clientes (Mes)" 
+            value="+23" 
+            description="+180.1% vs mes anterior" 
+            icon={Users}
+            href="/dashboard/clients"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
