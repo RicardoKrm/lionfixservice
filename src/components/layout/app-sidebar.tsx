@@ -29,6 +29,7 @@ import {
   FileDigit,
   BarChart,
   Flame,
+  Briefcase,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -144,6 +145,11 @@ export function AppSidebar() {
                   <SidebarMenuSubButton isActive={isActive("/dashboard/management/checklists")}>Checklists</SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
+              <SidebarMenuSubItem>
+                 <Link href="/dashboard/management/contracts" passHref>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/contracts")}>Contratos de Flota</SidebarMenuSubButton>
+                </Link>
+              </SidebarMenuSubItem>
                <SidebarMenuSubItem>
                 <Link href="/dashboard/management/iso9001" passHref>
                   <SidebarMenuSubButton isActive={isActive("/dashboard/management/iso9001")}>Norma ISO 9001</SidebarMenuSubButton>
@@ -186,3 +192,5 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+    

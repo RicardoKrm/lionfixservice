@@ -114,3 +114,17 @@ export type Notification = {
   channel?: 'Email' | 'WhatsApp';
   lastServiceDate?: string;
 };
+
+export type FleetContractStatus = 'Activo' | 'Vencido' | 'En Negociación';
+
+export type FleetContract = {
+  id: string;
+  companyName: string;
+  vehicleCount: number;
+  planType: 'Básico' | 'Premium' | 'Personalizado';
+  status: FleetContractStatus;
+  startDate: string;
+  endDate: string;
+};
+
+    

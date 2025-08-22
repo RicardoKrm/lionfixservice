@@ -37,6 +37,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
+import { ObdScannerTool } from "@/components/obd-scanner-tool";
 
 
 export default function WorkOrderDetailPage({
@@ -283,6 +284,7 @@ export default function WorkOrderDetailPage({
           </Card>
           <ServiceNotificationTool workOrder={workOrder} client={client} vehicle={vehicle} />
           <LicensePlateLookup />
+          <ObdScannerTool onScan={(code) => setNewLogEntry(`Código OBD-II: ${code}`)} />
         </div>
       </main>
     </div>
@@ -295,3 +297,5 @@ export default function WorkOrderDetailPage({
     </>
   );
 }
+
+    

@@ -1,5 +1,5 @@
 
-import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry } from '@/types';
+import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry, FleetContract } from '@/types';
 
 export const vehicles: Vehicle[] = [
   { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG' },
@@ -154,3 +154,12 @@ export const quotes: Quote[] = [
     status: 'Rechazada',
   },
 ];
+
+
+export const fleetContracts: FleetContract[] = [
+    { id: "CON-001", companyName: "Transportes Andinos Ltda.", vehicleCount: 15, planType: "Premium", status: "Activo", startDate: "2024-01-01", endDate: "2024-12-31" },
+    { id: "CON-002", companyName: "Minería del Norte S.A.", vehicleCount: 32, planType: "Básico", status: "Activo", startDate: "2024-03-01", endDate: "2025-02-28" },
+    { id: "CON-003", companyName: "Constructora del Pacífico", vehicleCount: 8, planType: "Personalizado", status: "Vencido", startDate: "2023-05-01", endDate: "2024-04-30" },
+];
+
+    
