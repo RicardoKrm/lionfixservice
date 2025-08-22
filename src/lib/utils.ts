@@ -19,7 +19,6 @@ export const getStatusVariant = (status: Status): "default" | "secondary" | "des
       case "Activo":
         return "default";
       case "En Reparación":
-      case "Enviada":
       case "Programada":
       case "En Negociación":
         return "secondary";
@@ -29,6 +28,7 @@ export const getStatusVariant = (status: Status): "default" | "secondary" | "des
       case "Vencido":
         return "destructive";
       case "Recibido":
+      case "Esperando Aprobación":
       default:
         return "outline";
     }

@@ -14,10 +14,9 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock } from "lucide-react";
+import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock, FileCheck } from "lucide-react";
 import { getStatusVariant } from "@/lib/utils";
 import { ServiceNotificationTool } from "@/components/service-notification-tool";
-import { LicensePlateLookup } from "@/components/license-plate-lookup";
 import {
   Table,
   TableBody,
@@ -147,6 +146,7 @@ export default function WorkOrderDetailPage({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => handleUpdateStatus('Recibido')}>Recibido</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleUpdateStatus('Esperando Aprobación')}>Esperando Aprobación</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleUpdateStatus('En Reparación')}>En Reparación</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleUpdateStatus('Esperando Repuestos')}>Esperando Repuestos</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleUpdateStatus('Completado')}>Completado</DropdownMenuItem>
@@ -181,9 +181,12 @@ export default function WorkOrderDetailPage({
                         <p className="font-medium">{workOrder.technician}</p>
                     </div>
                 </div>
-                <div>
-                    <p className="text-sm text-muted-foreground">Estado Actual</p>
-                    <Badge variant={getStatusVariant(workOrder.status)}>{workOrder.status}</Badge>
+                 <div className="flex items-center">
+                    <FileCheck className="h-5 w-5 mr-3 text-accent" />
+                    <div>
+                        <p className="text-sm text-muted-foreground">Estado Actual</p>
+                        <Badge variant={getStatusVariant(workOrder.status)}>{workOrder.status}</Badge>
+                    </div>
                 </div>
               </div>
               <Separator />
@@ -305,7 +308,6 @@ export default function WorkOrderDetailPage({
             <SatisfactionSurveyTool workOrder={workOrder} onSurveySubmit={handleSurveySubmit} />
           )}
           <ServiceNotificationTool workOrder={workOrder} client={client} vehicle={vehicle} />
-          <LicensePlateLookup />
           <ObdScannerTool onScan={(code) => setNewLogEntry(`Código OBD-II: ${code}`)} />
         </div>
       </main>

@@ -26,7 +26,7 @@ export type Part = {
   alertThreshold: number;
 };
 
-export type WorkOrderStatus = 'Recibido' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
+export type WorkOrderStatus = 'Recibido' | 'Esperando Aprobación' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
 
 export type ServiceLogEntry = {
   timestamp: string;
