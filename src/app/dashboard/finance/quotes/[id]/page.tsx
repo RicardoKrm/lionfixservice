@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Calendar, FileText, CheckCircle, XCircle, Send, Printer, Wrench } from "lucide-react";
+import { User, Car, Calendar, FileText, CheckCircle, XCircle, Send, Printer, Wrench, Building, Flame } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -37,7 +37,6 @@ export default function QuoteDetailPage({
   const quote = quotes.find((q) => q.id === params.id);
   const { toast } = useToast();
   
-  // Local state to manage the status for simulation purposes
   const [status, setStatus] = useState<QuoteStatus>(quote?.status || 'Enviada');
 
 
@@ -89,41 +88,76 @@ export default function QuoteDetailPage({
         <div className="flex items-center gap-2">
             <Button variant="outline" onClick={handleSend}><Send className="mr-2 h-4 w-4"/> Enviar por Email</Button>
             <Button variant="outline"><Printer className="mr-2 h-4 w-4"/> Imprimir / PDF</Button>
+            {status === 'Aprobada' && (
+                <Button onClick={handleConvertToOT} variant="secondary">
+                    <Wrench className="mr-2 h-4 w-4"/>
+                    Convertir a OT
+                </Button>
+            )}
         </div>
       </DashboardHeader>
-      <main className="flex-1 p-6 grid md:grid-cols-3 gap-6 overflow-y-auto">
-        <div className="md:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Detalles de la Cotización</CardTitle>
-              <CardDescription>
-                Resumen de los servicios y repuestos cotizados.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Descripción</TableHead>
-                    <TableHead className="text-center">Cantidad</TableHead>
-                    <TableHead className="text-right">Precio Unitario</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {quote.items.map((item, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="font-medium">{item.description}</TableCell>
-                      <TableCell className="text-center">{item.quantity}</TableCell>
-                      <TableCell className="text-right">${item.unitPrice.toLocaleString('es-CL')}</TableCell>
-                      <TableCell className="text-right font-semibold">${item.total.toLocaleString('es-CL')}</TableCell>
+      <main className="flex-1 p-6 overflow-y-auto">
+        <Card className="max-w-4xl mx-auto p-8 shadow-lg">
+            {/* Header */}
+            <div className="flex justify-between items-start mb-8">
+                <div className="flex items-center gap-4">
+                     <Flame className="h-12 w-12 text-accent" />
+                     <div>
+                        <h2 className="text-2xl font-bold">LionFix Service SPA</h2>
+                        <p className="text-muted-foreground">Av. Siempreviva 742, Santiago</p>
+                        <p className="text-muted-foreground">contacto@lionfix.cl</p>
+                     </div>
+                </div>
+                <div className="text-right">
+                    <h1 className="text-3xl font-bold text-primary">COTIZACIÓN</h1>
+                    <p className="text-muted-foreground font-mono">{quote.id}</p>
+                    <Badge variant={getStatusVariant(status)} className="mt-2 text-base">{status}</Badge>
+                </div>
+            </div>
+            <Separator className="my-6"/>
+            {/* Client and Vehicle Info */}
+            <div className="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 className="font-semibold text-muted-foreground mb-2">CLIENTE</h3>
+                    <p className="font-bold">{client.name}</p>
+                    <p>{client.email}</p>
+                    <p>{client.phone}</p>
+                </div>
+                 <div>
+                    <h3 className="font-semibold text-muted-foreground mb-2">VEHÍCULO</h3>
+                    <p><strong>Patente:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
+                    <p><strong>Marca/Modelo:</strong> {vehicle.make} {vehicle.model} ({vehicle.year})</p>
+                    <p><strong>VIN:</strong> <span className="font-mono">{vehicle.vin}</span></p>
+                </div>
+            </div>
+
+            {/* Items Table */}
+            <Card>
+                <Table>
+                    <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[50%]">Descripción</TableHead>
+                        <TableHead className="text-center">Cantidad</TableHead>
+                        <TableHead className="text-right">Precio Unitario</TableHead>
+                        <TableHead className="text-right">Total</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <Separator className="my-4"/>
-              <div className="flex justify-end">
-                <div className="w-full max-w-xs space-y-2">
+                    </TableHeader>
+                    <TableBody>
+                    {quote.items.map((item, index) => (
+                        <TableRow key={index}>
+                        <TableCell className="font-medium">{item.description}</TableCell>
+                        <TableCell className="text-center">{item.quantity}</TableCell>
+                        <TableCell className="text-right">${item.unitPrice.toLocaleString('es-CL')}</TableCell>
+                        <TableCell className="text-right font-semibold">${item.total.toLocaleString('es-CL')}</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            </Card>
+
+            {/* Totals */}
+            <div className="flex justify-end mt-6">
+                <div className="w-full max-w-sm space-y-2">
                     <div className="flex justify-between">
                         <span className="text-muted-foreground">Subtotal</span>
                         <span>${(quote.total / 1.19).toLocaleString('es-CL', {maximumFractionDigits: 0})}</span>
@@ -133,74 +167,40 @@ export default function QuoteDetailPage({
                         <span>${(quote.total - quote.total / 1.19).toLocaleString('es-CL', {maximumFractionDigits: 0})}</span>
                     </div>
                     <Separator/>
-                     <div className="flex justify-between font-bold text-lg">
-                        <span>Total</span>
+                     <div className="flex justify-between font-bold text-2xl text-primary">
+                        <span>TOTAL</span>
                         <span>${quote.total.toLocaleString('es-CL')}</span>
                     </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-                <CardTitle>Acciones del Cliente</CardTitle>
-                <CardDescription>Simulación de la aprobación o rechazo por parte del cliente.</CardDescription>
-            </CardHeader>
-            <CardFooter className="flex gap-2">
-                <Button onClick={handleApprove} className="w-full bg-green-600 hover:bg-green-700"><CheckCircle className="mr-2"/> Aprobar</Button>
-                <Button onClick={handleReject} variant="destructive" className="w-full"><XCircle className="mr-2"/> Rechazar</Button>
-            </CardFooter>
-          </Card>
-          
-           <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg">Estado</CardTitle>
-              <Badge variant={getStatusVariant(status)} className="text-base">{status}</Badge>
-            </CardHeader>
-            <CardContent>
-              {status === 'Aprobada' && (
-                <div className="space-y-4">
-                  <p className="text-sm text-green-600 dark:text-green-400">El cliente ha aprobado el presupuesto.</p>
-                  <Button className="w-full" onClick={handleConvertToOT} variant="secondary">
-                    <Wrench className="mr-2 h-4 w-4"/>
-                    Convertir a Orden de Trabajo
-                  </Button>
+            </div>
+
+            <Separator className="my-8"/>
+
+            {/* Actions */}
+            {status === 'Enviada' && (
+                 <Card className="bg-muted/50 border-dashed">
+                    <CardHeader>
+                        <CardTitle className="text-lg">Acciones del Cliente</CardTitle>
+                        <CardDescription>Simulación de la aprobación o rechazo por parte del cliente.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col sm:flex-row gap-4">
+                        <Button onClick={handleApprove} className="w-full bg-green-600 hover:bg-green-700"><CheckCircle className="mr-2"/> Aprobar Cotización</Button>
+                        <Button onClick={handleReject} variant="destructive" className="w-full"><XCircle className="mr-2"/> Rechazar Cotización</Button>
+                    </CardContent>
+                </Card>
+            )}
+
+             {status === 'Aprobada' && (
+                <div className="text-center p-4 bg-green-900/50 border border-green-700 rounded-lg">
+                  <p className="text-green-300">El cliente ha aprobado el presupuesto.</p>
                 </div>
               )}
                {status === 'Rechazada' && (
-                <p className="text-sm text-destructive">El cliente ha rechazado el presupuesto.</p>
+                <div className="text-center p-4 bg-destructive/20 border border-destructive/50 rounded-lg">
+                    <p className="text-destructive">El cliente ha rechazado el presupuesto.</p>
+                </div>
               )}
-               {status === 'Enviada' && (
-                <p className="text-sm text-muted-foreground">Esperando la respuesta del cliente.</p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center"><User className="mr-2"/> Cliente</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-                <p><strong>Nombre:</strong> {client.name}</p>
-                <p><strong>Email:</strong> {client.email}</p>
-                <p><strong>Teléfono:</strong> {client.phone}</p>
-            </CardContent>
-          </Card>
-           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center"><Car className="mr-2"/> Vehículo</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-                <p><strong>Patente:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
-                <p><strong>Marca / Modelo:</strong> {vehicle.make} {vehicle.model}</p>
-                <p><strong>Año:</strong> {vehicle.year}</p>
-                <p><strong>VIN:</strong> <span className="font-code">{vehicle.vin}</span></p>
-                <p><strong>N° Motor:</strong> <span className="font-code">{vehicle.motorNumber}</span></p>
-            </CardContent>
-          </Card>
-        </div>
+        </Card>
       </main>
     </div>
   );
