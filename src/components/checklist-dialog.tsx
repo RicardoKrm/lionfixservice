@@ -214,10 +214,10 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>{checklist ? "Editar" : "Crear"} Checklist</DialogTitle>
+          <DialogTitle>{checklist ? "Editar" : "Crear"} Checklist / Informe Técnico</DialogTitle>
           <DialogDescription>
             {checklist
-              ? `Editando checklist para el vehículo ${checklist.vehiclePlate}`
+              ? `Editando checklist para el vehículo ${checklist.vehiclePlate}. Este formulario sirve como informe técnico.`
               : "Complete los detalles para un nuevo checklist de vehículo."}
           </DialogDescription>
         </DialogHeader>
@@ -313,29 +313,32 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
         <Separator />
         
         <div className="space-y-2">
-            <Label htmlFor="notes">Observaciones Adicionales</Label>
+            <Label htmlFor="notes">Observaciones Adicionales / Diagnóstico Técnico</Label>
             <Textarea
               id="notes"
-              placeholder="Anotar cualquier detalle relevante, como objetos de valor dejados por el cliente."
-              rows={2}
+              placeholder="Anotar cualquier detalle relevante, diagnóstico técnico, o trabajos realizados. Esta información aparecerá en el informe."
+              rows={3}
               value={formData.notes}
               onChange={(e) => setFormData({...formData, notes: e.target.value})}
             />
         </div>
 
-        <DialogFooter className="pt-4 border-t">
-          <div className="w-full flex justify-between items-center">
-            <div className="flex items-center space-x-2">
+        <DialogFooter className="pt-4 border-t flex-col sm:flex-row sm:justify-between gap-4">
+           <div className="flex items-center space-x-2">
                 <Checkbox id="completed-checkbox" checked={formData.completed} onCheckedChange={(checked) => setFormData({...formData, completed: !!checked})} />
                 <Label htmlFor="completed-checkbox" className="font-semibold">
                     Marcar como Completado
                 </Label>
             </div>
-            <div className="flex gap-2">
-                <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+                 <Button variant="outline" onClick={() => handleActionClick('sign')}>
+                    <Fingerprint className="mr-2"/> Firmar Informe (Jefe Taller)
+                </Button>
+                 <Button variant="outline" onClick={() => handleActionClick('pdf')}>
+                    <FileText className="mr-2"/> Generar PDF
+                </Button>
                 <Button type="submit" onClick={handleSaveClick}>Guardar Checklist</Button>
             </div>
-          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
