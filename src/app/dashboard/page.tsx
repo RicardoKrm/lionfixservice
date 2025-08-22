@@ -1,204 +1,160 @@
 
 "use client";
 
+import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter
 } from "@/components/ui/card";
-import { Wrench, CalendarCheck, CheckCircle, Users, ArrowRight, FileCheck, Clock } from "lucide-react";
+import { BarChart, LineChart, DollarSign, Wrench, Package, Users, FileDown, CheckCircle, Percent, Clock, Smile } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
-import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart } from "recharts";
-import { workOrders, calendarEvents } from "@/lib/data";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
+import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart, PieChart, Pie, Cell, Tooltip } from "recharts";
+import { KpiCard } from "@/components/kpi-card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { getStatusVariant } from "@/lib/utils";
-import { format, isToday } from "date-fns";
-import { es } from 'date-fns/locale';
+import { useToast } from "@/hooks/use-toast";
 
-// --- Datos Simulados para el Dashboard ---
+// --- Datos Simulados ---
 
-const weeklyActivityData = [
-  { day: "Lun", created: 4, completed: 2 },
-  { day: "Mar", created: 3, completed: 5 },
-  { day: "Mié", created: 6, completed: 4 },
-  { day: "Jue", created: 5, completed: 5 },
-  { day: "Vie", created: 7, completed: 6 },
-  { day: "Sáb", created: 2, completed: 3 },
+// Gráfico de Ingresos vs. Costos
+const monthlyRevenueData = [
+  { month: "Ene", revenue: 1860000, costs: 1200000 },
+  { month: "Feb", revenue: 3050000, costs: 1800000 },
+  { month: "Mar", revenue: 2370000, costs: 1500000 },
+  { month: "Abr", revenue: 1730000, costs: 1100000 },
+  { month: "May", revenue: 2090000, costs: 1350000 },
+  { month: "Jun", revenue: 2140000, costs: 1400000 },
+  { month: "Jul", revenue: 2840000, costs: 1700000 },
 ];
-const chartConfigActivity = {
-  created: { label: "Creadas", color: "hsl(var(--chart-2))" },
-  completed: { label: "Completadas", color: "hsl(var(--chart-1))" }
+const chartConfigRevenue = {
+  revenue: { label: "Ingresos", color: "hsl(var(--chart-1))" },
+  costs: { label: "Costos", color: "hsl(var(--chart-2))" }
 };
 
-const receivedCount = workOrders.filter(wo => wo.status === 'Recibido' || wo.status === 'Esperando Aprobación').length;
-const inProgressCount = workOrders.filter(wo => wo.status === 'En Reparación' || wo.status === 'Esperando Repuestos').length;
-const completedCount = workOrders.filter(wo => wo.status === 'Completado').length;
-const todayAppointments = calendarEvents.filter(event => isToday(new Date(event.start)));
-const recentWorkOrders = workOrders
-    .sort((a, b) => new Date(b.entryDate).getTime() - new Date(a.entryDate).getTime())
-    .slice(0, 5);
+// Gráfico de Estado de Órdenes de Trabajo (OTs)
+const workOrderStatusData = [
+  { name: 'Recibido', value: 4, fill: "hsl(var(--muted-foreground))" },
+  { name: 'En Reparación', value: 8, fill: "hsl(var(--chart-2))" },
+  { name: 'Esperando Repuestos', value: 2, fill: "hsl(var(--destructive))" },
+  { name: 'Completado', value: 15, fill: "hsl(var(--chart-1))" },
+];
+
+// Gráfico de Carga de Trabajo por Técnico
+const technicianWorkloadData = [
+  { name: "Pedro Pascal", ots: 12 },
+  { name: "Ricardo Milos", ots: 9 },
+  { name: "Otro Técnico", ots: 5 },
+];
+const chartConfigTechnician = {
+  ots: { label: "OTs Asignadas", color: "hsl(var(--chart-2))" }
+};
 
 
 export default function DashboardPage() {
-    
+  const { toast } = useToast();
+
+  const handleExport = () => {
+    toast({
+        title: "Exportación en Progreso",
+        description: "Se está generando el reporte en formato CSV (Simulación)."
+    })
+  }
+
   return (
-    <div className="flex-1 space-y-6 p-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-primary">Panel de Control</h1>
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
+      <DashboardHeader title="Dashboard de Business Intelligence">
+        <Button onClick={handleExport} variant="outline">
+          <FileDown className="mr-2 h-4 w-4"/>
+          Exportar a CSV
+        </Button>
+      </DashboardHeader>
+      <main className="flex-1 p-6 space-y-6 overflow-y-auto">
         
-        {/* --- Columna Principal --- */}
-        <div className="lg:col-span-2 space-y-6">
-           {/* --- Resumen de Flujo de Trabajo --- */}
-           <Card>
-                <CardHeader>
-                    <CardTitle>Resumen del Flujo de Trabajo</CardTitle>
-                    <CardDescription>Estado actual de las órdenes de trabajo en el taller.</CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <Card className="bg-muted/30 p-4">
-                        <Clock className="h-8 w-8 mx-auto text-accent"/>
-                        <p className="text-3xl font-bold mt-2">{receivedCount}</p>
-                        <p className="text-sm text-muted-foreground">Recibidas</p>
-                    </Card>
-                     <Card className="bg-muted/30 p-4">
-                        <Wrench className="h-8 w-8 mx-auto text-accent"/>
-                        <p className="text-3xl font-bold mt-2">{inProgressCount}</p>
-                        <p className="text-sm text-muted-foreground">En Reparación</p>
-                    </Card>
-                     <Card className="bg-muted/30 p-4">
-                        <CheckCircle className="h-8 w-8 mx-auto text-accent"/>
-                        <p className="text-3xl font-bold mt-2">{completedCount}</p>
-                        <p className="text-sm text-muted-foreground">Listas para Entrega</p>
-                    </Card>
-                </CardContent>
-                <CardFooter>
-                     <Button asChild variant="outline" className="w-full">
-                        <Link href="/dashboard/work-orders">
-                            Gestionar Todas las Órdenes <ArrowRight className="ml-2"/>
-                        </Link>
-                    </Button>
-                </CardFooter>
-           </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Órdenes de Trabajo Recientes</CardTitle>
-                    <CardDescription>Un vistazo rápido a los últimos 5 trabajos ingresados al taller.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                            <TableHead>OT</TableHead>
-                            <TableHead>Vehículo</TableHead>
-                            <TableHead>Servicio</TableHead>
-                            <TableHead>Estado</TableHead>
-                            <TableHead className="text-right">Acciones</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {recentWorkOrders.map((wo) => (
-                            <TableRow key={wo.id}>
-                                <TableCell className="font-medium">{wo.id}</TableCell>
-                                <TableCell>{wo.vehicleId}</TableCell>
-                                <TableCell>{wo.service}</TableCell>
-                                <TableCell>
-                                <Badge variant={getStatusVariant(wo.status)}>{wo.status}</Badge>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <Button asChild variant="ghost" size="sm">
-                                        <Link href={`/dashboard/work-orders/${wo.id}`}>Ver</Link>
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+        {/* --- Fila de KPIs --- */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+             <KpiCard title="Ingresos del Mes" value="$2,840,000" description="+15% vs mes anterior" icon={DollarSign} href="/dashboard/finance/reports"/>
+             <KpiCard title="OTs Completadas (Mes)" value="15" description="+5% vs mes anterior" icon={CheckCircle} href="/dashboard/work-orders"/>
+             <KpiCard title="Satisfacción Cliente" value="4.7 / 5" description="Promedio últimos 30 días" icon={Smile} href="/dashboard/clients"/>
+             <KpiCard title="Tasa Aprobación Cotiz." value="78%" description="Promedio últimos 30 días" icon={Percent} href="/dashboard/finance/quotes"/>
+             <KpiCard title="Valor del Inventario" value="$12,580,000" description="3 repuestos con bajo stock" icon={Package} href="/dashboard/inventory"/>
         </div>
         
-        {/* --- Columna Secundaria --- */}
-        <div className="space-y-6">
-            <Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+          {/* --- Columna Principal (Gráfico Grande) --- */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BarChart className="mr-2 h-5 w-5 text-accent" />
+                Ingresos vs. Costos Mensuales
+              </CardTitle>
+              <CardDescription>
+                Comparativa de ingresos brutos y costos operativos en CLP.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfigRevenue} className="h-80 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                   <RechartsBarChart data={monthlyRevenueData} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
+                      <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                      <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${Number(value) / 1000000}M`} />
+                      <ChartTooltip cursor={false} content={<ChartTooltipContent formatter={(value) => `$${Number(value).toLocaleString('es-CL')}`} />} />
+                      <ChartLegend content={<ChartLegendContent />} />
+                      <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} name="Ingresos" />
+                      <Bar dataKey="costs" fill="var(--color-costs)" radius={[4, 4, 0, 0]} name="Costos" />
+                  </RechartsBarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          
+          {/* --- Columna Secundaria (Gráficos Pequeños) --- */}
+          <div className="space-y-6">
+              <Card>
                 <CardHeader>
-                    <CardTitle>Agenda para Hoy</CardTitle>
-                    <CardDescription>{format(new Date(), "eeee, dd 'de' MMMM", { locale: es })}</CardDescription>
+                  <CardTitle className="flex items-center"><Wrench className="mr-2 h-5 w-5 text-accent" />Estado de OTs (Activas)</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex items-center justify-center gap-4 mb-4">
-                        <CalendarCheck className="h-10 w-10 text-accent"/>
-                        <div>
-                             <p className="text-4xl font-bold">{todayAppointments.length}</p>
-                             <p className="text-sm text-muted-foreground -mt-1">Citas Agendadas</p>
-                        </div>
-                    </div>
-                    {todayAppointments.length > 0 ? (
-                        <ul className="space-y-3 border-t pt-3">
-                            {todayAppointments.map(event => (
-                                <li key={event.id} className="flex items-center justify-between text-sm">
-                                    <div>
-                                        <p className="font-semibold">{event.title}</p>
-                                        <p className="text-muted-foreground">{event.vehicle}</p>
-                                    </div>
-                                    <Badge variant="outline">
-                                        {format(new Date(event.start), "HH:mm")}
-                                    </Badge>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="text-sm text-muted-foreground text-center py-4 border-t">No hay citas programadas.</p>
-                    )}
-                </CardContent>
-                 <CardFooter>
-                     <Button asChild variant="outline" className="w-full">
-                        <Link href="/dashboard/calendar">
-                            Ir al Calendario Completo
-                        </Link>
-                    </Button>
-                </CardFooter>
-            </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Actividad de la Semana</CardTitle>
-                    <CardDescription>OTs creadas vs. completadas.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfigActivity} className="h-64 w-full">
-                        <RechartsBarChart data={weeklyActivityData}>
-                        <CartesianGrid vertical={false} />
-                        <XAxis dataKey="day" tickLine={false} tickMargin={10} axisLine={false} fontSize={12} />
-                        <YAxis tickLine={false} axisLine={false} width={30} />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <ChartLegend content={<ChartLegendContent />} />
-                        <Bar dataKey="created" fill="var(--color-created)" radius={4} name="Creadas" />
-                        <Bar dataKey="completed" fill="var(--color-completed)" radius={4} name="Completadas" />
-                        </RechartsBarChart>
+                    <ChartContainer config={{}} className="h-48 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
+                                <Pie data={workOrderStatusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} stroke="hsl(var(--border))">
+                                    {workOrderStatusData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                                    ))}
+                                </Pie>
+                                <ChartLegend content={<ChartLegendContent layout="vertical" align="right" verticalAlign="middle" />} />
+                            </PieChart>
+                        </ResponsiveContainer>
                     </ChartContainer>
-                </CardContent>
-            </Card>
+                 </CardContent>
+              </Card>
+
+               <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center"><Users className="mr-2 h-5 w-5 text-accent" />Carga de Trabajo por Técnico</CardTitle>
+                </CardHeader>
+                 <CardContent>
+                   <ChartContainer config={chartConfigTechnician} className="h-48 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RechartsBarChart data={technicianWorkloadData} layout="vertical" margin={{left: 20, right: 20}}>
+                                <CartesianGrid horizontal={false} strokeDasharray="3 3"/>
+                                <XAxis type="number" hide />
+                                <YAxis type="category" dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} width={80} />
+                                <Tooltip cursor={{fill: 'hsl(var(--muted))'}} content={<ChartTooltipContent hideLabel />} />
+                                <Bar dataKey="ots" fill="var(--color-ots)" radius={[0, 4, 4, 0]}/>
+                            </RechartsBarChart>
+                        </ResponsiveContainer>
+                   </ChartContainer>
+                 </CardContent>
+              </Card>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
-
-    
