@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart, LineChart, DollarSign, Wrench, Package, Users, FileDown, CheckCircle, Percent, Clock } from "lucide-react";
+import { BarChart, LineChart, DollarSign, Wrench, Package, Users, FileDown, CheckCircle, Percent, Clock, Smile } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { KpiCard } from "@/components/kpi-card";
@@ -73,9 +73,10 @@ export default function ReportsPage() {
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
         
         {/* --- Fila de KPIs --- */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
              <KpiCard title="Ingresos del Mes" value="$2,840,000" description="+15% vs mes anterior" icon={DollarSign} />
              <KpiCard title="OTs Completadas (Mes)" value="15" description="+5% vs mes anterior" icon={CheckCircle} />
+             <KpiCard title="Satisfacción Cliente" value="4.7 / 5" description="Promedio últimos 30 días" icon={Smile} />
              <KpiCard title="Tasa Aprobación Cotiz." value="78%" description="Promedio últimos 30 días" icon={Percent} />
              <KpiCard title="Valor del Inventario" value="$12,580,000" description="3 repuestos con bajo stock" icon={Package} />
         </div>
@@ -157,4 +158,3 @@ export default function ReportsPage() {
     </div>
   );
 }
-

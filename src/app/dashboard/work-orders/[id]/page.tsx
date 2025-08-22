@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { notFound, useRouter } from "next/navigation";
@@ -38,6 +39,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import { ObdScannerTool } from "@/components/obd-scanner-tool";
+import { SatisfactionSurveyTool } from "@/components/satisfaction-survey-tool";
 
 
 export default function WorkOrderDetailPage({
@@ -102,6 +104,13 @@ export default function WorkOrderDetailPage({
       title: "Entrada Agregada",
       description: "Se ha añadido una nueva entrada a la bitácora de servicio.",
     });
+  };
+  
+  const handleSurveySubmit = (rating: number, comment: string) => {
+    const updatedWorkOrders = workOrders.map(wo => 
+      wo.id === workOrder.id ? { ...wo, satisfactionRating: rating, satisfactionComment: comment } : wo
+    );
+    setWorkOrders(updatedWorkOrders);
   };
 
 
@@ -282,6 +291,9 @@ export default function WorkOrderDetailPage({
                 <p><strong>VIN:</strong> <span className="font-mono">{vehicle.vin}</span></p>
             </CardContent>
           </Card>
+          {workOrder.status === 'Entregado' && (
+            <SatisfactionSurveyTool workOrder={workOrder} onSurveySubmit={handleSurveySubmit} />
+          )}
           <ServiceNotificationTool workOrder={workOrder} client={client} vehicle={vehicle} />
           <LicensePlateLookup />
           <ObdScannerTool onScan={(code) => setNewLogEntry(`Código OBD-II: ${code}`)} />
@@ -297,5 +309,3 @@ export default function WorkOrderDetailPage({
     </>
   );
 }
-
-    

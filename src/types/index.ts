@@ -44,6 +44,8 @@ export type WorkOrder = {
   completionDate?: string;
   serviceLog: ServiceLogEntry[];
   parts: { name: string; sku: string; quantity: number }[];
+  satisfactionRating?: number;
+  satisfactionComment?: string;
 };
 
 export type EnrichedWorkOrder = WorkOrder & {

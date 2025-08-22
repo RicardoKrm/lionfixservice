@@ -46,7 +46,9 @@ export const workOrders: WorkOrder[] = [
     parts: [
       { name: 'Aceite Sintético 5W-30', sku: 'OIL-SYN-5W30', quantity: 5 },
       { name: 'Filtro de Aceite Toyota Corolla \'19+', sku: 'FIL-TOY-COR-01', quantity: 1 },
-    ]
+    ],
+    satisfactionRating: 5,
+    satisfactionComment: "¡Excelente servicio, muy rápido y profesional!"
   },
   {
     id: 'OT-2024-002',
@@ -78,7 +80,9 @@ export const workOrders: WorkOrder[] = [
     ],
     parts: [
         { name: 'Compresor A/C Ford Focus', sku: 'AC-FOR-FOC-03', quantity: 1 }
-    ]
+    ],
+    satisfactionRating: 4,
+    satisfactionComment: "El diagnóstico fue certero, pero la espera por el repuesto fue un poco larga."
   },
   {
     id: 'OT-2024-004',
