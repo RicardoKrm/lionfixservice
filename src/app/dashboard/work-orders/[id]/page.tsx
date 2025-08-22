@@ -11,12 +11,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock, FileCheck } from "lucide-react";
+import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock, FileCheck, Upload, Download, FileText, Trash2 } from "lucide-react";
 import { getStatusVariant } from "@/lib/utils";
-import { ServiceNotificationTool } from "@/components/service-notification-tool";
 import {
   Table,
   TableBody,
@@ -50,6 +50,8 @@ export default function WorkOrderDetailPage({
   const [workOrders, setWorkOrders] = useState(initialWorkOrders);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [newLogEntry, setNewLogEntry] = useState("");
+  const [attachedFiles, setAttachedFiles] = useState(["Diagnostico_Inicial.pdf"]);
+
 
   const { toast } = useToast();
   const router = useRouter();
@@ -111,6 +113,22 @@ export default function WorkOrderDetailPage({
       wo.id === workOrder.id ? { ...wo, satisfactionRating: rating, satisfactionComment: comment } : wo
     );
     setWorkOrders(updatedWorkOrders);
+  };
+  
+   const handleUploadFile = () => {
+    toast({
+      title: "Adjuntar Archivo (Simulación)",
+      description: "En una aplicación real, aquí se abriría un diálogo para subir un archivo.",
+    });
+    const newFileName = `Evidencia_${Date.now()}.jpg`;
+    setAttachedFiles([...attachedFiles, newFileName]);
+  };
+
+  const handleDownloadFile = (fileName: string) => {
+    toast({
+      title: "Descarga Iniciada (Simulación)",
+      description: `Se está descargando el archivo: ${fileName}.`,
+    });
   };
 
 
@@ -249,6 +267,37 @@ export default function WorkOrderDetailPage({
             </CardContent>
           </Card>
 
+           <Card>
+            <CardHeader>
+              <CardTitle>Documentos Adjuntos y Evidencias</CardTitle>
+              <CardDescription>
+                Gestione los archivos asociados a esta Orden de Trabajo, como informes, fotos y certificados.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                {attachedFiles.map((file, index) => (
+                   <li key={index} className="flex items-center justify-between rounded-lg border p-3">
+                    <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 text-muted-foreground"/>
+                        <span className="font-medium">{file}</span>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => handleDownloadFile(file)}>
+                      <Download className="mr-2 h-4 w-4" />
+                      Descargar
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button variant="outline" onClick={handleUploadFile}>
+                <Upload className="mr-2 h-4 w-4" />
+                Adjuntar Nuevo Documento
+              </Button>
+            </CardFooter>
+          </Card>
+
           <Card>
             <CardHeader>
                 <CardTitle className="flex items-center"><Package className="mr-2"/> Repuestos y Materiales</CardTitle>
@@ -307,7 +356,6 @@ export default function WorkOrderDetailPage({
           {workOrder.status === 'Entregado' && (
             <SatisfactionSurveyTool workOrder={workOrder} onSurveySubmit={handleSurveySubmit} />
           )}
-          <ServiceNotificationTool workOrder={workOrder} client={client} vehicle={vehicle} />
           <ObdScannerTool onScan={(code) => setNewLogEntry(`Código OBD-II: ${code}`)} />
         </div>
       </main>
