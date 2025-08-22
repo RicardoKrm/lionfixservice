@@ -17,7 +17,7 @@ import {
   Car,
   FileText,
   LogOut,
-  Flame,
+  ShieldCheck,
   Briefcase,
   History,
 } from "lucide-react";
@@ -47,7 +47,7 @@ function ClientSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 bg-sidebar-primary flex items-center justify-center rounded-lg">
-             <Flame className="text-sidebar-primary-foreground" />
+             <ShieldCheck className="text-sidebar-primary-foreground" />
           </Avatar>
           <div className="flex flex-col">
             <h2 className="text-xl font-semibold text-sidebar-foreground">

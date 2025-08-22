@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Flame, User, HardHat, Building } from "lucide-react";
+import { ShieldCheck, User, HardHat, Building } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -15,7 +15,7 @@ export default function LoginPage() {
         <CardHeader className="text-center pb-8">
             <div className="flex justify-center items-center mb-4">
                  <div className="bg-primary text-primary-foreground p-3 rounded-lg">
-                     <Flame className="h-10 w-10" />
+                     <ShieldCheck className="h-10 w-10" />
                  </div>
             </div>
           <CardTitle className="text-4xl font-bold">Bienvenido a LionFix Cloud ERP</CardTitle>

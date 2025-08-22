@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Calendar, FileText, CheckCircle, XCircle, Send, Printer, Wrench, Building, Flame } from "lucide-react";
+import { User, Car, Calendar, FileText, CheckCircle, XCircle, Send, Printer, Wrench, Building, ShieldCheck } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -87,7 +87,7 @@ export default function QuoteDetailPage({
       <DashboardHeader title={`Detalle de Cotización: ${quote.id}`}>
         <div className="flex items-center gap-2">
              {status === 'Aprobada' && (
-                <Button onClick={handleConvertToOT} variant="secondary">
+                <Button onClick={handleConvertToOT}>
                     <Wrench className="mr-2 h-4 w-4"/>
                     Convertir a OT
                 </Button>
@@ -101,7 +101,9 @@ export default function QuoteDetailPage({
             {/* Header */}
             <div className="flex justify-between items-start pb-6 border-b">
                 <div className="flex items-center gap-4">
-                     <Flame className="h-10 w-10 text-accent" />
+                     <div className="bg-primary text-primary-foreground p-2 rounded-lg">
+                        <ShieldCheck className="h-8 w-8" />
+                    </div>
                      <div>
                         <h2 className="text-xl font-bold">LionFix Service SPA</h2>
                         <p className="text-muted-foreground text-sm">Av. Siempreviva 742, Santiago</p>
