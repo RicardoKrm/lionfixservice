@@ -344,5 +344,3 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
     </Dialog>
   );
 }
-
-    
