@@ -79,7 +79,7 @@ export default function ContractDetailPage({ params }: { params: { id: string } 
                   <TableRow>
                     <TableHead>Patente</TableHead>
                     <TableHead>Marca y Modelo</TableHead>
-                    <TableHead>Año</TableHead>
+                    <TableHead>N° Motor</TableHead>
                     <TableHead>Última Mantención</TableHead>
                     <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
@@ -89,7 +89,7 @@ export default function ContractDetailPage({ params }: { params: { id: string } 
                     <TableRow key={v.id}>
                       <TableCell className="font-mono">{v.licensePlate}</TableCell>
                       <TableCell>{v.make} {v.model}</TableCell>
-                      <TableCell>{v.year}</TableCell>
+                      <TableCell className="font-mono">{v.motorNumber}</TableCell>
                       <TableCell>{new Date(new Date().setMonth(new Date().getMonth() - Math.floor(Math.random() * 6))).toLocaleDateString()}</TableCell>
                       <TableCell className="text-right">
                          <Link href={`/dashboard/work-orders`}>

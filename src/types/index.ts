@@ -7,6 +7,7 @@ export type Vehicle = {
   model: string;
   year: number;
   vin: string;
+  motorNumber: string;
 };
 
 export type Client = {

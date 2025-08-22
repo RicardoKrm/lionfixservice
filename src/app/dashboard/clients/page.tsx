@@ -223,6 +223,7 @@ export default function ClientsPage() {
                                                             <TableHead>Marca y Modelo</TableHead>
                                                             <TableHead>Año</TableHead>
                                                             <TableHead>VIN</TableHead>
+                                                            <TableHead>N° Motor</TableHead>
                                                         </TableRow>
                                                     </TableHeader>
                                                     <TableBody>
@@ -232,6 +233,7 @@ export default function ClientsPage() {
                                                                 <TableCell>{vehicle.make} {vehicle.model}</TableCell>
                                                                 <TableCell>{vehicle.year}</TableCell>
                                                                 <TableCell className="font-mono">{vehicle.vin}</TableCell>
+                                                                <TableCell className="font-mono">{vehicle.motorNumber}</TableCell>
                                                             </TableRow>
                                                         ))}
                                                     </TableBody>

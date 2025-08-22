@@ -39,7 +39,7 @@ export function LicensePlateLookup() {
       <CardHeader>
         <CardTitle>Búsqueda por Patente</CardTitle>
         <CardDescription>
-          Ingrese una patente para buscar datos del vehículo desde una fuente externa.
+          Ingrese una patente para buscar datos del vehículo desde una fuente externa (simulado).
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -56,12 +56,12 @@ export function LicensePlateLookup() {
           </Button>
         </div>
         {vehicleData && (
-          <div className="mt-4 rounded-lg border bg-background/50 p-4 text-sm">
-            <h4 className="font-semibold">Detalles del Vehículo:</h4>
-            <p><strong>Marca:</strong> {vehicleData.make}</p>
-            <p><strong>Modelo:</strong> {vehicleData.model}</p>
+          <div className="mt-4 rounded-lg border bg-background/50 p-4 text-sm space-y-1">
+            <h4 className="font-semibold mb-2">Detalles del Vehículo:</h4>
+            <p><strong>Marca / Modelo:</strong> {vehicleData.make} {vehicleData.model}</p>
             <p><strong>Año:</strong> {vehicleData.year}</p>
             <p><strong>VIN:</strong> <span className="font-code">{vehicleData.vin}</span></p>
+            <p><strong>N° Motor:</strong> <span className="font-code">{vehicleData.motorNumber}</span></p>
           </div>
         )}
       </CardContent>

@@ -3,11 +3,11 @@
 import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry, FleetContract, MaintenancePlan } from '@/types';
 
 export const vehicles: Vehicle[] = [
-  { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG' },
-  { id: 'V002', licensePlate: 'EFGH-34', make: 'Honda', model: 'Civic', year: 2019, vin: '0987654321HGFEDCBA' },
-  { id: 'V003', licensePlate: 'IJKL-56', make: 'Ford', model: 'Focus', year: 2021, vin: '5432109876GFEDCBAH' },
-  { id: 'V004', licensePlate: 'MNOP-78', make: 'Chevrolet', model: 'Cruze', year: 2018, vin: '6789012345FEDCBAHG' },
-  { id: 'V005', licensePlate: 'QRST-90', make: 'Toyota', model: 'RAV4', year: 2022, vin: 'ABC123DEF456GHI789' },
+  { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG', motorNumber: '1NZ-FE-12345' },
+  { id: 'V002', licensePlate: 'EFGH-34', make: 'Honda', model: 'Civic', year: 2019, vin: '0987654321HGFEDCBA', motorNumber: 'R18Z1-67890' },
+  { id: 'V003', licensePlate: 'IJKL-56', make: 'Ford', model: 'Focus', year: 2021, vin: '5432109876GFEDCBAH', motorNumber: 'M8DA-11223' },
+  { id: 'V004', licensePlate: 'MNOP-78', make: 'Chevrolet', model: 'Cruze', year: 2018, vin: '6789012345FEDCBAHG', motorNumber: 'LUJ-44556' },
+  { id: 'V005', licensePlate: 'QRST-90', make: 'Toyota', model: 'RAV4', year: 2022, vin: 'ABC123DEF456GHI789', motorNumber: 'A25A-FKS-77889' },
 ];
 
 export const clients: Client[] = [

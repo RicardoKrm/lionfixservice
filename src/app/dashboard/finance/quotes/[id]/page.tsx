@@ -194,9 +194,10 @@ export default function QuoteDetailPage({
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
                 <p><strong>Patente:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
-                <p><strong>Marca:</strong> {vehicle.make}</p>
-                <p><strong>Modelo:</strong> {vehicle.model}</p>
-                 <p><strong>VIN:</strong> <span className="font-code">{vehicle.vin}</span></p>
+                <p><strong>Marca / Modelo:</strong> {vehicle.make} {vehicle.model}</p>
+                <p><strong>Año:</strong> {vehicle.year}</p>
+                <p><strong>VIN:</strong> <span className="font-code">{vehicle.vin}</span></p>
+                <p><strong>N° Motor:</strong> <span className="font-code">{vehicle.motorNumber}</span></p>
             </CardContent>
           </Card>
         </div>
