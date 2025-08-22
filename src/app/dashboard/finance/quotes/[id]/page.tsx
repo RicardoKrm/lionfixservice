@@ -84,7 +84,7 @@ export default function QuoteDetailPage({
 
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
-      <DashboardHeader title={`Cotización: ${quote.id}`}>
+      <DashboardHeader title={`Detalle de Cotización`}>
         <div className="flex items-center gap-2">
             <Button variant="outline" onClick={handleSend}><Send className="mr-2 h-4 w-4"/> Enviar por Email</Button>
             <Button variant="outline"><Printer className="mr-2 h-4 w-4"/> Imprimir / PDF</Button>
@@ -96,49 +96,47 @@ export default function QuoteDetailPage({
             )}
         </div>
       </DashboardHeader>
-      <main className="flex-1 p-6 overflow-y-auto">
-        <Card className="max-w-4xl mx-auto p-8 shadow-lg">
+      <main className="flex-1 p-6 overflow-y-auto bg-muted/30">
+        <div className="max-w-4xl mx-auto bg-card p-8 rounded-lg shadow-lg">
             {/* Header */}
-            <div className="flex justify-between items-start mb-8">
+            <div className="flex justify-between items-start pb-6 border-b">
                 <div className="flex items-center gap-4">
-                     <Flame className="h-12 w-12 text-accent" />
+                     <Flame className="h-10 w-10 text-accent" />
                      <div>
-                        <h2 className="text-2xl font-bold">LionFix Service SPA</h2>
-                        <p className="text-muted-foreground">Av. Siempreviva 742, Santiago</p>
-                        <p className="text-muted-foreground">contacto@lionfix.cl</p>
+                        <h2 className="text-xl font-bold">LionFix Service SPA</h2>
+                        <p className="text-muted-foreground text-sm">Av. Siempreviva 742, Santiago</p>
                      </div>
                 </div>
                 <div className="text-right">
-                    <h1 className="text-3xl font-bold text-primary">COTIZACIÓN</h1>
+                    <h1 className="text-2xl font-bold text-primary">COTIZACIÓN</h1>
                     <p className="text-muted-foreground font-mono">{quote.id}</p>
-                    <Badge variant={getStatusVariant(status)} className="mt-2 text-base">{status}</Badge>
                 </div>
             </div>
-            <Separator className="my-6"/>
+           
             {/* Client and Vehicle Info */}
-            <div className="grid grid-cols-2 gap-8 mb-8">
-                <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                <div className="space-y-1.5">
                     <h3 className="font-semibold text-muted-foreground mb-2">CLIENTE</h3>
-                    <p className="font-bold">{client.name}</p>
-                    <p>{client.email}</p>
-                    <p>{client.phone}</p>
+                    <p><strong className="w-20 inline-block">Nombre:</strong> {client.name}</p>
+                    <p><strong className="w-20 inline-block">Email:</strong> {client.email}</p>
+                    <p><strong className="w-20 inline-block">Teléfono:</strong> {client.phone}</p>
                 </div>
-                 <div>
+                 <div className="space-y-1.5">
                     <h3 className="font-semibold text-muted-foreground mb-2">VEHÍCULO</h3>
-                    <p><strong>Patente:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
-                    <p><strong>Marca/Modelo:</strong> {vehicle.make} {vehicle.model} ({vehicle.year})</p>
-                    <p><strong>VIN:</strong> <span className="font-mono">{vehicle.vin}</span></p>
+                    <p><strong className="w-28 inline-block">Patente:</strong> <span className="font-mono uppercase">{vehicle.licensePlate}</span></p>
+                    <p><strong className="w-28 inline-block">Marca/Modelo:</strong> {vehicle.make} {vehicle.model} ({vehicle.year})</p>
+                    <p><strong className="w-28 inline-block">VIN:</strong> <span className="font-mono">{vehicle.vin}</span></p>
                 </div>
             </div>
 
             {/* Items Table */}
-            <Card>
+            <div className="border rounded-lg overflow-hidden">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-muted/50">
                     <TableRow>
                         <TableHead className="w-[50%]">Descripción</TableHead>
                         <TableHead className="text-center">Cantidad</TableHead>
-                        <TableHead className="text-right">Precio Unitario</TableHead>
+                        <TableHead className="text-right">P. Unitario</TableHead>
                         <TableHead className="text-right">Total</TableHead>
                     </TableRow>
                     </TableHeader>
@@ -153,17 +151,17 @@ export default function QuoteDetailPage({
                     ))}
                     </TableBody>
                 </Table>
-            </Card>
+            </div>
 
             {/* Totals */}
             <div className="flex justify-end mt-6">
-                <div className="w-full max-w-sm space-y-2">
-                    <div className="flex justify-between">
-                        <span className="text-muted-foreground">Subtotal</span>
+                <div className="w-full max-w-sm space-y-3">
+                    <div className="flex justify-between text-muted-foreground">
+                        <span>Subtotal</span>
                         <span>${(quote.total / 1.19).toLocaleString('es-CL', {maximumFractionDigits: 0})}</span>
                     </div>
-                    <div className="flex justify-between">
-                        <span className="text-muted-foreground">IVA (19%)</span>
+                    <div className="flex justify-between text-muted-foreground">
+                        <span>IVA (19%)</span>
                         <span>${(quote.total - quote.total / 1.19).toLocaleString('es-CL', {maximumFractionDigits: 0})}</span>
                     </div>
                     <Separator/>
@@ -176,31 +174,33 @@ export default function QuoteDetailPage({
 
             <Separator className="my-8"/>
 
-            {/* Actions */}
-            {status === 'Enviada' && (
-                 <Card className="bg-muted/50 border-dashed">
-                    <CardHeader>
-                        <CardTitle className="text-lg">Acciones del Cliente</CardTitle>
-                        <CardDescription>Simulación de la aprobación o rechazo por parte del cliente.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-col sm:flex-row gap-4">
-                        <Button onClick={handleApprove} className="w-full bg-green-600 hover:bg-green-700"><CheckCircle className="mr-2"/> Aprobar Cotización</Button>
-                        <Button onClick={handleReject} variant="destructive" className="w-full"><XCircle className="mr-2"/> Rechazar Cotización</Button>
-                    </CardContent>
-                </Card>
-            )}
+            {/* Actions & Status */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                <div className="space-y-2">
+                    <h3 className="font-semibold text-muted-foreground">ESTADO ACTUAL</h3>
+                    <Badge variant={getStatusVariant(status)} className="text-base px-4 py-1">{status}</Badge>
+                    {status === 'Aprobada' && (
+                        <p className="text-sm text-green-400 pt-2">¡El cliente ha aprobado el presupuesto!</p>
+                    )}
+                    {status === 'Rechazada' && (
+                         <p className="text-sm text-destructive pt-2">El cliente ha rechazado el presupuesto.</p>
+                    )}
+                </div>
 
-             {status === 'Aprobada' && (
-                <div className="text-center p-4 bg-green-900/50 border border-green-700 rounded-lg">
-                  <p className="text-green-300">El cliente ha aprobado el presupuesto.</p>
-                </div>
-              )}
-               {status === 'Rechazada' && (
-                <div className="text-center p-4 bg-destructive/20 border border-destructive/50 rounded-lg">
-                    <p className="text-destructive">El cliente ha rechazado el presupuesto.</p>
-                </div>
-              )}
-        </Card>
+                {status === 'Enviada' && (
+                    <Card className="bg-muted/50 border-dashed">
+                        <CardHeader className="pb-4">
+                            <CardTitle className="text-lg">Acciones del Cliente</CardTitle>
+                            <CardDescription>Simulación de la aprobación o rechazo.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex flex-col sm:flex-row gap-4">
+                            <Button onClick={handleApprove} className="w-full bg-green-600 hover:bg-green-700"><CheckCircle className="mr-2"/> Aprobar</Button>
+                            <Button onClick={handleReject} variant="destructive" className="w-full"><XCircle className="mr-2"/> Rechazar</Button>
+                        </CardContent>
+                    </Card>
+                )}
+            </div>
+        </div>
       </main>
     </div>
   );
