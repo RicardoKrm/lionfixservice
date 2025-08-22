@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { Checklist } from "@/types";
 import { Separator } from "./ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 export const checklistItems = {
   exterior: [
@@ -191,9 +192,27 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
   
   if (!open || !formData) return null;
 
+  const ChecklistTabContent = ({ items }: { items: string[] }) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 p-2">
+      {items.map((item) => (
+        <div key={item} className="flex items-center space-x-3">
+          <Checkbox
+            id={item}
+            checked={!!formData.checkedItems[item]}
+            onCheckedChange={(checked) => handleCheckedChange(item, !!checked)}
+            className="h-5 w-5"
+          />
+          <Label htmlFor={item} className="font-normal text-sm cursor-pointer">
+            {item}
+          </Label>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>{checklist ? "Editar" : "Crear"} Checklist</DialogTitle>
           <DialogDescription>
@@ -202,31 +221,44 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
               : "Complete los detalles para un nuevo checklist de vehículo."}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 py-4">
-          {/* Columna Izquierda: Datos e Imágenes */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="vehicle-plate">Patente Vehículo</Label>
-                <Input id="vehicle-plate" value={formData.vehiclePlate} onChange={(e) => setFormData({...formData, vehiclePlate: e.target.value})} placeholder="ABCD-12" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="checklist-type">Tipo de Checklist</Label>
-                <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value as 'Recepción' | 'Entrega'})}>
-                  <SelectTrigger id="checklist-type">
-                    <SelectValue placeholder="Seleccionar tipo..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Recepción">Recepción</SelectItem>
-                    <SelectItem value="Entrega">Entrega</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-                <Label>Registro Fotográfico</Label>
-                
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 border-b pb-4">
+          <div className="space-y-2">
+            <Label htmlFor="vehicle-plate">Patente Vehículo</Label>
+            <Input id="vehicle-plate" value={formData.vehiclePlate} onChange={(e) => setFormData({...formData, vehiclePlate: e.target.value})} placeholder="ABCD-12" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="checklist-type">Tipo de Checklist</Label>
+            <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value as 'Recepción' | 'Entrega'})}>
+              <SelectTrigger id="checklist-type">
+                <SelectValue placeholder="Seleccionar tipo..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Recepción">Recepción</SelectItem>
+                <SelectItem value="Entrega">Entrega</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <Tabs defaultValue="exterior" className="flex-grow overflow-y-auto">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="exterior">Revisión Exterior</TabsTrigger>
+            <TabsTrigger value="interior">Revisión Interior</TabsTrigger>
+            <TabsTrigger value="mecanica">Revisión Mecánica</TabsTrigger>
+            <TabsTrigger value="fotos">Registro Fotográfico</TabsTrigger>
+          </TabsList>
+          <TabsContent value="exterior" className="mt-4">
+            <ChecklistTabContent items={checklistItems.exterior} />
+          </TabsContent>
+          <TabsContent value="interior" className="mt-4">
+            <ChecklistTabContent items={checklistItems.interior} />
+          </TabsContent>
+          <TabsContent value="mecanica" className="mt-4">
+            <ChecklistTabContent items={checklistItems.mecanica} />
+          </TabsContent>
+          <TabsContent value="fotos" className="mt-4">
+            <div className="space-y-4">
                 {isCameraOn && (
                   <div className="space-y-2">
                     <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay playsInline muted />
@@ -248,7 +280,7 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
                 
                 <canvas ref={canvasRef} className="hidden"></canvas>
 
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                     {formData.images.map((src, index) => (
                         <div key={index} className="relative group">
                             <Image src={src} alt={`evidencia ${index + 1}`} width={150} height={100} className="rounded-md object-cover w-full aspect-video"/>
@@ -275,96 +307,39 @@ export function ChecklistDialog({ open, onOpenChange, checklist, onSave }: Check
                     </Button>
                 </div>
             </div>
+          </TabsContent>
+        </Tabs>
+        
+        <Separator />
+        
+        <div className="space-y-2">
+            <Label htmlFor="notes">Observaciones Adicionales</Label>
+            <Textarea
+              id="notes"
+              placeholder="Anotar cualquier detalle relevante, como objetos de valor dejados por el cliente."
+              rows={2}
+              value={formData.notes}
+              onChange={(e) => setFormData({...formData, notes: e.target.value})}
+            />
+        </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="notes">Observaciones Adicionales</Label>
-              <Textarea
-                id="notes"
-                placeholder="Anotar cualquier detalle relevante no cubierto en el checklist, como objetos de valor dejados por el cliente."
-                rows={4}
-                value={formData.notes}
-                onChange={(e) => setFormData({...formData, notes: e.target.value})}
-              />
-            </div>
-          </div>
-
-          {/* Columna Derecha: Checklist */}
-          <div className="space-y-6">
-            <div>
-              <h4 className="font-semibold text-primary mb-2">Revisión Exterior</h4>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                {checklistItems.exterior.map((item) => (
-                  <div key={item} className="flex items-center space-x-2">
-                    <Checkbox 
-                        id={item} 
-                        checked={!!formData.checkedItems[item]}
-                        onCheckedChange={(checked) => handleCheckedChange(item, !!checked)}
-                    />
-                    <Label htmlFor={item} className="font-normal text-sm">
-                      {item}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold text-primary mb-2">Revisión Interior</h4>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                {checklistItems.interior.map((item) => (
-                  <div key={item} className="flex items-center space-x-2">
-                    <Checkbox 
-                        id={item} 
-                        checked={!!formData.checkedItems[item]}
-                        onCheckedChange={(checked) => handleCheckedChange(item, !!checked)}
-                    />
-                    <Label htmlFor={item} className="font-normal text-sm">
-                      {item}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold text-primary mb-2">Revisión Mecánica Básica</h4>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                {checklistItems.mecanica.map((item) => (
-                  <div key={item} className="flex items-center space-x-2">
-                    <Checkbox 
-                        id={item} 
-                        checked={!!formData.checkedItems[item]}
-                        onCheckedChange={(checked) => handleCheckedChange(item, !!checked)}
-                    />
-                    <Label htmlFor={item} className="font-normal text-sm">
-                      {item}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-             <Separator/>
-             <div className="flex items-center space-x-2 pt-4">
+        <DialogFooter className="pt-4 border-t">
+          <div className="w-full flex justify-between items-center">
+            <div className="flex items-center space-x-2">
                 <Checkbox id="completed-checkbox" checked={formData.completed} onCheckedChange={(checked) => setFormData({...formData, completed: !!checked})} />
                 <Label htmlFor="completed-checkbox" className="font-semibold">
-                    Marcar Checklist como Completado
+                    Marcar como Completado
                 </Label>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-                <Button variant="outline" className="w-full" onClick={() => handleActionClick('sign')}>
-                    <Fingerprint className="mr-2 h-4 w-4" />
-                    Firmar Digitalmente
-                </Button>
-                <Button variant="outline" className="w-full" onClick={() => handleActionClick('pdf')}>
-                    <FileText className="mr-2 h-4 w-4" />
-                    Generar PDF
-                </Button>
+            <div className="flex gap-2">
+                <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+                <Button type="submit" onClick={handleSaveClick}>Guardar Checklist</Button>
             </div>
           </div>
-        </div>
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button type="submit" onClick={handleSaveClick}>Guardar Checklist</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
+    
