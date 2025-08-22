@@ -109,9 +109,9 @@ export default function Iso9001Page() {
                   Gestión documental (Cláusula 7.5)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Centralización de documentos: informes técnicos, checklists.</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Versionamiento y acceso controlado a la información.</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Digitalización de registros para evitar pérdida de documentos físicos.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Control de documentos: informes técnicos, certificados, manuales.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Versionamiento y acceso controlado.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Digitalización de registros (evita pérdida de papeles).</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3">
