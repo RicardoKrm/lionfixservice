@@ -18,6 +18,7 @@ import {
   Calendar,
   LogOut,
   Flame,
+  ClipboardCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -65,14 +66,25 @@ function MechanicSidebar() {
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <Link href="/mechanic/dashboard" passHref>
+           <SidebarMenuItem>
+            <Link href="/dashboard/management/checklists" passHref>
                <SidebarMenuButton
-                isActive={false}
+                isActive={isActive("/dashboard/management/checklists")}
+                tooltip="Checklists"
+              >
+                <ClipboardCheck />
+                <span>Checklists</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <Link href="/dashboard/calendar" passHref>
+               <SidebarMenuButton
+                isActive={isActive("/dashboard/calendar")}
                 tooltip="Calendario"
               >
                 <Calendar />
-                <span>Calendario</span>
+                <span>Calendario Taller</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
