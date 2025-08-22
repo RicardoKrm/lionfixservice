@@ -9,7 +9,11 @@ export default function DashboardLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset>
+        <div className="bg-background/80 backdrop-blur-sm border-b">
+            {children}
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

@@ -32,12 +32,12 @@ const chartConfig = {
 
 export default function ReportsPage() {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Reportes Financieros y KPIs" />
-      <main className="flex-1 p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <main className="flex-1 p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-y-auto">
         
         {/* Revenue Chart */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 bg-white/70 backdrop-blur-sm dark:bg-card/70">
           <CardHeader>
             <CardTitle className="flex items-center">
               <DollarSign className="mr-2 h-5 w-5 text-primary" />
@@ -63,7 +63,7 @@ export default function ReportsPage() {
         </Card>
         
         {/* Placeholder Cards */}
-         <Card>
+         <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
           <CardHeader>
             <CardTitle className="flex items-center">
               <LineChart className="mr-2 h-5 w-5 text-primary" />
@@ -75,7 +75,7 @@ export default function ReportsPage() {
            </CardContent>
         </Card>
 
-         <Card>
+         <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Clock className="mr-2 h-5 w-5 text-primary" />

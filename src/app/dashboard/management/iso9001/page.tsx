@@ -17,10 +17,10 @@ import { CheckCircle, Users, HardHat, BarChart, TrendingUp } from "lucide-react"
 
 export default function Iso9001Page() {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Relación Software - Norma ISO 9001" />
-      <main className="flex-1 p-6">
-        <Card>
+      <main className="flex-1 p-6 overflow-y-auto">
+        <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
           <CardHeader>
             <CardTitle>Cómo LionFix ERP apoya la certificación ISO 9001</CardTitle>
             <CardDescription>

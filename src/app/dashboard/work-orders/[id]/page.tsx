@@ -114,16 +114,16 @@ export default function WorkOrderDetailPage({
 
   return (
     <>
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title={`Orden de Trabajo: ${workOrder.id}`}>
         <Button onClick={() => setIsFormOpen(true)}>
             <Edit className="mr-2 h-4 w-4" />
             Editar Orden
         </Button>
       </DashboardHeader>
-      <main className="flex-1 p-6 grid md:grid-cols-3 gap-6">
+      <main className="flex-1 p-6 grid md:grid-cols-3 gap-6 overflow-y-auto">
         <div className="md:col-span-2 space-y-6">
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
                <div className="flex justify-between items-start">
                  <CardTitle>Detalles del Servicio</CardTitle>
@@ -186,7 +186,7 @@ export default function WorkOrderDetailPage({
             </CardContent>
           </Card>
           
-           <Card>
+           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
                 <CardTitle className="flex items-center"><StickyNote className="mr-2"/> Bitácora de Diagnóstico y Servicio</CardTitle>
                 <CardDescription>Registro cronológico de todas las acciones y observaciones.</CardDescription>
@@ -226,7 +226,7 @@ export default function WorkOrderDetailPage({
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
                 <CardTitle className="flex items-center"><Package className="mr-2"/> Repuestos y Materiales</CardTitle>
                 <CardDescription>Trazabilidad de repuestos y materiales utilizados en esta orden.</CardDescription>
@@ -259,7 +259,7 @@ export default function WorkOrderDetailPage({
 
         </div>
         <div className="space-y-6">
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
               <CardTitle className="flex items-center"><User className="mr-2"/> Cliente</CardTitle>
             </CardHeader>
@@ -269,7 +269,7 @@ export default function WorkOrderDetailPage({
                 <p><strong>Teléfono:</strong> {client.phone}</p>
             </CardContent>
           </Card>
-           <Card>
+           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
               <CardTitle className="flex items-center"><Car className="mr-2"/> Vehículo</CardTitle>
             </CardHeader>

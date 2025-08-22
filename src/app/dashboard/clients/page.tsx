@@ -100,15 +100,15 @@ export default function ClientsPage() {
 
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Gestión de Clientes (CRM)">
         <Button onClick={handleNewClient}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Nuevo Cliente
         </Button>
       </DashboardHeader>
-      <main className="flex-1 p-6 space-y-6">
-        <Card>
+      <main className="flex-1 p-6 space-y-6 overflow-y-auto">
+        <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
            <CardHeader>
             <CardTitle>Listado de Clientes</CardTitle>
             <CardDescription>
@@ -123,7 +123,7 @@ export default function ClientsPage() {
             const clientWorkOrders = workOrders.filter(wo => wo.clientId === client.id);
             
             return (
-              <Card key={client.id} className="flex flex-col bg-white/70 backdrop-blur-sm dark:bg-card">
+              <Card key={client.id} className="flex flex-col bg-white/70 backdrop-blur-sm dark:bg-card/70">
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>

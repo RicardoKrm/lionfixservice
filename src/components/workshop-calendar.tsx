@@ -39,7 +39,7 @@ export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps
   };
 
   return (
-    <Card className="bg-white/70 backdrop-blur-sm dark:bg-card">
+    <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
       <CardHeader>
         <CardTitle>Agenda del Taller</CardTitle>
         <CardDescription>Vista de la planificación diaria por puesto de trabajo. Haga clic en una cita para editarla.</CardDescription>
@@ -58,7 +58,7 @@ export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps
           {/* Workstation Columns */}
           {WORKSTATIONS.map(ws => (
             <div key={ws} className="relative border-l border-dashed">
-              <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm py-2 text-center font-semibold text-primary border-b -mt-6 mb-2">
+              <div className="sticky top-0 z-10 bg-background/50 backdrop-blur-sm py-2 text-center font-semibold text-primary border-b -mt-6 mb-2">
                 Puesto {ws}
               </div>
               <div className="relative h-full">

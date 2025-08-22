@@ -13,25 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { EnrichedWorkOrder } from "@/types";
 import { Wrench, ArrowRight } from "lucide-react";
+import { getStatusVariant } from "@/lib/utils";
 
-const getStatusVariant = (status: EnrichedWorkOrder["status"]) => {
-  switch (status) {
-    case "Completado":
-    case "Entregado":
-      return "default";
-    case "En Reparación":
-      return "secondary";
-    case "Esperando Repuestos":
-      return "destructive";
-    case "Recibido":
-    default:
-      return "outline";
-  }
-};
 
 export function WorkOrderCard({ workOrder }: { workOrder: EnrichedWorkOrder }) {
   return (
-    <Card className="bg-white/70 backdrop-blur-sm dark:bg-card flex flex-col">
+    <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70 flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>

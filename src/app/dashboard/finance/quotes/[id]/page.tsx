@@ -84,16 +84,16 @@ export default function QuoteDetailPage({
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title={`Cotización: ${quote.id}`}>
         <div className="flex items-center gap-2">
             <Button variant="outline" onClick={handleSend}><Send className="mr-2 h-4 w-4"/> Enviar por Email</Button>
             <Button variant="outline"><Printer className="mr-2 h-4 w-4"/> Imprimir / PDF</Button>
         </div>
       </DashboardHeader>
-      <main className="flex-1 p-6 grid md:grid-cols-3 gap-6">
+      <main className="flex-1 p-6 grid md:grid-cols-3 gap-6 overflow-y-auto">
         <div className="md:col-span-2 space-y-6">
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
               <CardTitle>Detalles de la Cotización</CardTitle>
               <CardDescription>
@@ -143,7 +143,7 @@ export default function QuoteDetailPage({
           </Card>
         </div>
         <div className="space-y-6">
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
                 <CardTitle>Acciones del Cliente</CardTitle>
                 <CardDescription>Simulación de la aprobación o rechazo por parte del cliente.</CardDescription>
@@ -154,7 +154,7 @@ export default function QuoteDetailPage({
             </CardFooter>
           </Card>
           
-           <Card>
+           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-lg">Estado</CardTitle>
               <Badge variant={getStatusVariant(status)} className="text-base">{status}</Badge>
@@ -178,7 +178,7 @@ export default function QuoteDetailPage({
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
               <CardTitle className="flex items-center"><User className="mr-2"/> Cliente</CardTitle>
             </CardHeader>
@@ -188,7 +188,7 @@ export default function QuoteDetailPage({
                 <p><strong>Teléfono:</strong> {client.phone}</p>
             </CardContent>
           </Card>
-           <Card>
+           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
             <CardHeader>
               <CardTitle className="flex items-center"><Car className="mr-2"/> Vehículo</CardTitle>
             </CardHeader>

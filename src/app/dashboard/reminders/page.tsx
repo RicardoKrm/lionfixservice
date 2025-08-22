@@ -3,7 +3,7 @@ import { MaintenanceReminderForm } from "@/components/maintenance-reminder-form"
 
 export default function RemindersPage() {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Generador de Recordatorios con IA" />
       <main className="flex-1 p-6 flex items-center justify-center">
         <MaintenanceReminderForm />

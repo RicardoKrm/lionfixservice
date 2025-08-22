@@ -12,7 +12,7 @@ import { DollarSign, Wrench, Clock, Users, Sparkles } from "lucide-react";
 
 export default function DashboardPage() {
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6 bg-background">
+    <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight text-primary">Panel de Control</h2>
       </div>
@@ -43,7 +43,7 @@ export default function DashboardPage() {
         />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 bg-white/70 backdrop-blur-sm dark:bg-card">
+        <Card className="col-span-4 bg-white/70 backdrop-blur-sm dark:bg-card/70">
           <CardHeader>
             <CardTitle className="text-primary">¡Bienvenido a LionFix ERP!</CardTitle>
             <CardDescription>
@@ -58,7 +58,7 @@ export default function DashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="col-span-3 bg-primary/90 text-primary-foreground relative overflow-hidden">
+        <Card className="col-span-3 bg-primary/90 text-primary-foreground relative overflow-hidden backdrop-blur-sm">
           <CardHeader>
             <CardTitle>Potencia Tu Productividad</CardTitle>
             <CardDescription className="text-primary-foreground/80">

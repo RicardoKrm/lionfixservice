@@ -49,15 +49,15 @@ export default function QuotesPage() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Gestión de Cotizaciones">
         <Button onClick={() => setIsFormOpen(true)}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Nueva Cotización
         </Button>
       </DashboardHeader>
-      <main className="flex-1 p-6">
-        <Card>
+      <main className="flex-1 p-6 overflow-y-auto">
+        <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
           <CardHeader>
             <CardTitle>Listado de Cotizaciones</CardTitle>
             <CardDescription>
