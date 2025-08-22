@@ -18,8 +18,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Users, HardHat, BarChart, TrendingUp, Upload, Download, FileText } from "lucide-react";
+import { CheckCircle, Users, HardHat, BarChart, TrendingUp, Upload, Download, FileText, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Iso9001Page() {
   const { toast } = useToast();
@@ -28,6 +38,9 @@ export default function Iso9001Page() {
     "Procedimiento_Recepcion_Vehiculos_v2.pdf",
     "Informe_Auditoria_Interna_Q2_2024.pdf"
   ]);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
+
 
   const handleUpload = () => {
     toast({
@@ -45,8 +58,27 @@ export default function Iso9001Page() {
     });
   };
 
+  const handleDeleteClick = (docName: string) => {
+    setSelectedDoc(docName);
+    setIsAlertOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedDoc) {
+        setDocuments(documents.filter(doc => doc !== selectedDoc));
+        toast({
+            title: "Documento Eliminado",
+            description: `El documento ${selectedDoc} ha sido eliminado.`,
+            variant: "destructive"
+        });
+    }
+    setIsAlertOpen(false);
+    setSelectedDoc(null);
+  };
+
 
   return (
+    <>
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Relación Software - Norma ISO 9001" />
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
@@ -59,7 +91,7 @@ export default function Iso9001Page() {
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
+               <AccordionItem value="item-1">
                 <AccordionTrigger>
                   <HardHat className="h-5 w-5 mr-3 text-accent" />
                   Gestión de procesos y trazabilidad (Cláusula 4 y 8)
@@ -73,7 +105,7 @@ export default function Iso9001Page() {
               </AccordionItem>
               <AccordionItem value="item-2">
                 <AccordionTrigger>
-                  <CheckCircle className="h-5 w-5 mr-3 text-accent" />
+                  <FileText className="h-5 w-5 mr-3 text-accent" />
                   Gestión documental (Cláusula 7.5)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
@@ -134,10 +166,15 @@ export default function Iso9001Page() {
                                 <FileText className="h-5 w-5 text-muted-foreground"/>
                                 <span className="font-medium">{doc}</span>
                             </div>
-                            <Button variant="ghost" size="sm" onClick={() => handleDownload(doc)}>
-                            <Download className="mr-2 h-4 w-4" />
-                            Descargar
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" onClick={() => handleDownload(doc)}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Descargar
+                                </Button>
+                                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteClick(doc)}>
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
                         </li>
                     ))}
                 </ul>
@@ -151,5 +188,21 @@ export default function Iso9001Page() {
         </Card>
       </main>
     </div>
+
+     <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+            <AlertDialogTitle>¿Está seguro que desea eliminar este documento?</AlertDialogTitle>
+            <AlertDialogDescription>
+                Esta acción no se puede deshacer. El documento se eliminará permanentemente.
+            </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setSelectedDoc(null)}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">Eliminar</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }
