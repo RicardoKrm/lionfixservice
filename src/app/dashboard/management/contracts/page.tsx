@@ -75,8 +75,8 @@ export default function FleetContractsPage() {
               </CardContent>
               <CardFooter>
                  <Button variant="outline" className="w-full" asChild>
-                    <Link href="#">
-                        Administrar Flota <ArrowRight className="ml-2"/>
+                    <Link href={`/dashboard/management/contracts/${contract.id}`}>
+                        Administrar Contrato <ArrowRight className="ml-2"/>
                     </Link>
                  </Button>
               </CardFooter>

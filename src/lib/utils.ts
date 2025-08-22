@@ -1,14 +1,14 @@
 
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { QuoteStatus, WorkOrderStatus, NotificationStatus } from "@/types";
+import type { QuoteStatus, WorkOrderStatus, NotificationStatus, FleetContractStatus } from "@/types";
 
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-type Status = WorkOrderStatus | QuoteStatus | NotificationStatus;
+type Status = WorkOrderStatus | QuoteStatus | NotificationStatus | FleetContractStatus;
 
 export const getStatusVariant = (status: Status): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
@@ -16,14 +16,17 @@ export const getStatusVariant = (status: Status): "default" | "secondary" | "des
       case "Entregado":
       case "Aprobada":
       case "Enviada":
+      case "Activo":
         return "default";
       case "En Reparación":
       case "Enviada":
       case "Programada":
+      case "En Negociación":
         return "secondary";
       case "Esperando Repuestos":
       case "Rechazada":
       case "Fallida":
+      case "Vencido":
         return "destructive";
       case "Recibido":
       default:
