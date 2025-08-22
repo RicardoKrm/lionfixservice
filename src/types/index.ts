@@ -27,6 +27,7 @@ export type Part = {
 };
 
 export type WorkOrderStatus = 'Recibido' | 'Esperando Aprobación' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
+export type WorkOrderType = 'Mantención Preventiva' | 'Mantención Correctiva';
 
 export type ServiceLogEntry = {
   timestamp: string;
@@ -39,6 +40,7 @@ export type WorkOrder = {
   clientId: string;
   vehicleId: string;
   service: string;
+  type: WorkOrderType;
   status: WorkOrderStatus;
   technician: string;
   entryDate: string;

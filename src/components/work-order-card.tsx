@@ -21,8 +21,9 @@ export function WorkOrderCard({ workOrder }: { workOrder: EnrichedWorkOrder }) {
     <Card className="flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start">
-          <div>
+          <div className="space-y-1">
             <Badge variant={getStatusVariant(workOrder.status)}>{workOrder.status}</Badge>
+            <Badge variant="secondary" className="ml-2">{workOrder.type}</Badge>
             <CardTitle className="mt-2">{workOrder.id}</CardTitle>
           </div>
           <div className="text-right">

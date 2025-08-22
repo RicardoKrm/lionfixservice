@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import type { WorkOrder, Vehicle, WorkOrderStatus } from "@/types";
+import type { WorkOrder, Vehicle, WorkOrderStatus, WorkOrderType } from "@/types";
 import {
   Select,
   SelectContent,
@@ -46,6 +46,7 @@ const workOrderSchema = z.object({
   clientId: z.string().min(1, "Debe seleccionar un cliente."),
   vehicleId: z.string().min(1, "Debe seleccionar un vehículo."),
   service: z.string().min(3, "La descripción del servicio es requerida."),
+  type: z.custom<WorkOrderType>(),
   technician: z.string().min(1, "Debe seleccionar un técnico."),
   status: z.custom<WorkOrderStatus>().optional(),
   parts: z.array(partItemSchema).optional(),
@@ -72,6 +73,7 @@ export function WorkOrderFormDialog({
       clientId: "",
       vehicleId: "",
       service: "",
+      type: "Mantención Correctiva",
       technician: "",
       parts: [],
     },
@@ -102,6 +104,7 @@ export function WorkOrderFormDialog({
           clientId: "",
           vehicleId: "",
           service: "",
+          type: "Mantención Correctiva",
           technician: "",
           parts: [],
         });
@@ -198,6 +201,28 @@ export function WorkOrderFormDialog({
                 )}
                 />
             </div>
+            
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tipo de Orden</FormLabel>
+                   <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar tipo..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Mantención Correctiva">Mantención Correctiva</SelectItem>
+                      <SelectItem value="Mantención Preventiva">Mantención Preventiva</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
