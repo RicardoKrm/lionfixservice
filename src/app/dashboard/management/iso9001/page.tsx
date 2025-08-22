@@ -35,10 +35,10 @@ export default function Iso9001Page() {
                   Gestión de procesos y trazabilidad (Cláusula 4 y 8)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Registro digital de órdenes de trabajo (OT).</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Historial completo de reparaciones por cliente y vehículo.</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Control de repuestos y consumibles por cada OT.</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Checklists de recepción y entrega como evidencia de cumplimiento.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Registro de órdenes de trabajo (OT).</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Historial de reparaciones por cliente/vehículo.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Control de repuestos y consumos.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Evidencia de cumplimiento de procedimientos.</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
