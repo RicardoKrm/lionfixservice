@@ -30,6 +30,7 @@ import {
   ChevronDown,
   FileText,
   Send,
+  History,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,6 +40,8 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   const isActive = (path: string) => {
+    // Para las rutas con sub-rutas dinámicas como /contracts/[id],
+    // queremos que el item principal se mantenga activo.
     return pathname === path || pathname.startsWith(`${path}/`);
   };
 
@@ -220,3 +223,5 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+    

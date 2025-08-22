@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useMemo, Fragment } from "react";
+import Link from "next/link";
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
@@ -11,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, PlusCircle, Edit, Trash2, Search, User, ChevronDown, ChevronUp } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Edit, Trash2, Search, User, ChevronDown, ChevronUp, History } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -224,6 +225,7 @@ export default function ClientsPage() {
                                                             <TableHead>Año</TableHead>
                                                             <TableHead>VIN</TableHead>
                                                             <TableHead>N° Motor</TableHead>
+                                                            <TableHead className="text-right">Acciones</TableHead>
                                                         </TableRow>
                                                     </TableHeader>
                                                     <TableBody>
@@ -234,6 +236,14 @@ export default function ClientsPage() {
                                                                 <TableCell>{vehicle.year}</TableCell>
                                                                 <TableCell className="font-mono">{vehicle.vin}</TableCell>
                                                                 <TableCell className="font-mono">{vehicle.motorNumber}</TableCell>
+                                                                <TableCell className="text-right">
+                                                                    <Button asChild variant="outline" size="sm">
+                                                                        <Link href={`/dashboard/vehicles/${vehicle.id}/history`}>
+                                                                            <History className="mr-2 h-4 w-4" />
+                                                                            Ver Historial
+                                                                        </Link>
+                                                                    </Button>
+                                                                </TableCell>
                                                             </TableRow>
                                                         ))}
                                                     </TableBody>
@@ -291,3 +301,5 @@ export default function ClientsPage() {
     </div>
   );
 }
+
+    
