@@ -31,17 +31,29 @@ import {
   Flame,
   Briefcase,
   BookCheck,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const isActive = (path: string) => {
     return pathname === path || pathname.startsWith(`${path}/`);
   };
+
+  const toggleMenu = (menu: string) => {
+    setOpenMenus(prev => ({ ...prev, [menu]: !prev[menu] }));
+  };
+  
+  const isMenuOpen = (menu: string) => {
+    return !!openMenus[menu];
+  }
 
   return (
     <Sidebar>
@@ -117,11 +129,12 @@ export function AppSidebar() {
           </SidebarMenuItem>
           
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton onClick={() => toggleMenu('finanzas')} data-state={isMenuOpen('finanzas') ? 'open' : 'closed'}>
               <FileDigit />
               <span>Finanzas</span>
+              <ChevronDown className={cn("ml-auto h-4 w-4 shrink-0 transition-transform duration-200", isMenuOpen('finanzas') && "rotate-180")} />
             </SidebarMenuButton>
-            <SidebarMenuSub>
+            <SidebarMenuSub open={isMenuOpen('finanzas')}>
                <SidebarMenuSubItem>
                  <Link href="/dashboard/finance/quotes" passHref>
                   <SidebarMenuSubButton isActive={isActive("/dashboard/finance/quotes")} asChild>
@@ -140,11 +153,12 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton onClick={() => toggleMenu('gestion')} data-state={isMenuOpen('gestion') ? 'open' : 'closed'}>
               <ClipboardCheck />
               <span>Gestión y Comms</span>
+               <ChevronDown className={cn("ml-auto h-4 w-4 shrink-0 transition-transform duration-200", isMenuOpen('gestion') && "rotate-180")} />
             </SidebarMenuButton>
-            <SidebarMenuSub>
+            <SidebarMenuSub open={isMenuOpen('gestion')}>
               <SidebarMenuSubItem>
                  <Link href="/dashboard/management/checklists" passHref>
                   <SidebarMenuSubButton isActive={isActive("/dashboard/management/checklists")} asChild>

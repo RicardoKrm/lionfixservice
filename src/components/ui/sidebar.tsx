@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -684,18 +685,21 @@ SidebarMenuSkeleton.displayName = "SidebarMenuSkeleton"
 
 const SidebarMenuSub = React.forwardRef<
   HTMLUListElement,
-  React.ComponentProps<"ul">
->(({ className, ...props }, ref) => (
+  React.ComponentProps<"ul"> & { open?: boolean }
+>(({ className, open, children, ...props }, ref) => (
   <ul
     ref={ref}
     data-sidebar="menu-sub"
     className={cn(
       "mx-4 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border pl-4 py-1 mb-1",
       "group-data-[collapsible=icon]:hidden",
+      open ? "block" : "hidden",
       className
     )}
     {...props}
-  />
+  >
+    {children}
+  </ul>
 ))
 SidebarMenuSub.displayName = "SidebarMenuSub"
 
