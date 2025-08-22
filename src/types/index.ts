@@ -101,3 +101,16 @@ export type PurchaseOrder = {
     supplier: string;
     items: PurchaseOrderItem[];
 };
+
+export type NotificationStatus = 'Programada' | 'Enviada' | 'Fallida';
+
+export type Notification = {
+  id: string;
+  clientId: string;
+  vehicleId: string;
+  type: string;
+  sendDate: string;
+  status: NotificationStatus;
+  channel?: 'Email' | 'WhatsApp';
+  lastServiceDate?: string;
+};

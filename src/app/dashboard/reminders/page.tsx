@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { clients, vehicles } from "@/lib/data";
-import type { Client, Vehicle } from "@/types";
-import { Bot, Send, MessageSquare, Mail } from "lucide-react";
+import type { Client, Vehicle, Notification } from "@/types";
+import { Bot, Send, MessageSquare, Mail, PlusCircle, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { generateMaintenanceReminder } from "@/ai/flows/maintenance";
@@ -35,62 +35,84 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { NotificationFormDialog } from "@/components/notification-form-dialog";
+import { getStatusVariant } from "@/lib/utils";
 
-
-// Simulación de recordatorios que el sistema detectaría automáticamente.
-const upcomingReminders = [
+// Simulación de notificaciones que el sistema gestionaría.
+const initialNotifications: Notification[] = [
   {
+    id: "N001",
     clientId: "C001",
     vehicleId: "V001",
     type: "Mantención 20.000km",
-    dueDate: "2024-08-15",
+    sendDate: "2024-08-15",
     lastServiceDate: "hace 6 meses",
+    status: "Programada",
+    channel: "Email"
   },
   {
+    id: "N002",
     clientId: "C002",
     vehicleId: "V002",
     type: "Revisión de Frenos",
-    dueDate: "2024-08-20",
+    sendDate: "2024-08-20",
     lastServiceDate: "hace 1 año",
+    status: "Programada",
+    channel: "WhatsApp"
   },
   {
+    id: "N003",
     clientId: "C003",
     vehicleId: "V003",
     type: "Vencimiento Garantía A/C",
-    dueDate: "2024-09-01",
+    sendDate: "2024-07-25",
     lastServiceDate: "hace 11 meses",
+    status: "Enviada",
+    channel: "Email"
   },
 ];
 
-type Reminder = (typeof upcomingReminders)[0] & {
-  client: Client;
-  vehicle: Vehicle;
-};
 
 export default function RemindersPage() {
-  const [reminders] = useState<Reminder[]>(() =>
-    upcomingReminders.map((r) => ({
-      ...r,
-      client: clients.find((c) => c.id === r.clientId)!,
-      vehicle: vehicles.find((v) => v.id === r.vehicleId)!,
-    }))
-  );
-
-  const [selectedReminder, setSelectedReminder] = useState<Reminder | null>(null);
+  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
+  const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedMessage, setGeneratedMessage] = useState("");
   const { toast } = useToast();
 
-  const handleGenerateClick = async (reminder: Reminder) => {
-    setSelectedReminder(reminder);
+  const handleNew = () => {
+    setSelectedNotification(null);
+    setIsFormOpen(true);
+  };
+  
+  const handleEdit = (notification: Notification) => {
+    setSelectedNotification(notification);
+    setIsFormOpen(true);
+  };
+  
+  const handleDelete = (notification: Notification) => {
+    setSelectedNotification(notification);
+    setIsAlertOpen(true);
+  }
+
+  const handleGenerateClick = async (notification: Notification) => {
+    setSelectedNotification(notification);
     setGeneratedMessage("");
     setIsLoading(true);
 
     try {
       const result = await generateMaintenanceReminder({
-        customerName: reminder.client.name,
-        vehicle: `${reminder.vehicle.make} ${reminder.vehicle.model}`,
-        lastServiceDate: reminder.lastServiceDate,
+        customerName: clients.find(c => c.id === notification.clientId)?.name || "",
+        vehicle: `${vehicles.find(v => v.id === notification.vehicleId)?.make} ${vehicles.find(v => v.id === notification.vehicleId)?.model}`,
+        lastServiceDate: notification.lastServiceDate || 'hace poco',
       });
       setGeneratedMessage(result);
     } catch (error) {
@@ -106,27 +128,77 @@ export default function RemindersPage() {
   };
 
   const handleSend = (channel: 'WhatsApp' | 'Email') => {
-    if (!selectedReminder) return;
+    if (!selectedNotification) return;
+    
+    // Mark as sent
+    setNotifications(notifications.map(n => n.id === selectedNotification.id ? {...n, status: 'Enviada', channel} : n));
+
     toast({
         title: "Envío Simulado",
-        description: `El recordatorio para ${selectedReminder.client.name} ha sido enviado a la cola de ${channel}.`
+        description: `La notificación para ${clients.find(c => c.id === selectedNotification.clientId)?.name} ha sido enviada por ${channel}.`
     });
-    // Aquí iría la lógica de backend para enviar realmente el mensaje
-    setSelectedReminder(null);
+    
+    setSelectedNotification(null);
     setGeneratedMessage("");
+  }
+  
+  const handleProcessQueue = () => {
+    setIsLoading(true);
+    toast({
+      title: "Procesando Cola...",
+      description: "Simulando el envío de notificaciones programadas."
+    });
+
+    setTimeout(() => {
+      const programmedCount = notifications.filter(n => n.status === 'Programada').length;
+      setNotifications(notifications.map(n => n.status === 'Programada' ? { ...n, status: 'Enviada' } : n));
+      setIsLoading(false);
+      toast({
+        title: "Cola Procesada",
+        description: `${programmedCount} notificaciones han sido marcadas como 'Enviadas'.`
+      });
+    }, 1500);
+  };
+  
+  const handleFormSubmit = (data: Omit<Notification, 'id' | 'status'>) => {
+     if (selectedNotification) {
+        // Edit
+        setNotifications(notifications.map(n => n.id === selectedNotification.id ? { ...selectedNotification, ...data } : n));
+        toast({ title: "Notificación Actualizada" });
+     } else {
+        // Create
+        const newNotification: Notification = {
+            id: `N${(notifications.length + 1).toString().padStart(3, '0')}`,
+            status: 'Programada',
+            ...data
+        };
+        setNotifications([newNotification, ...notifications]);
+        toast({ title: "Notificación Creada" });
+     }
+     setIsFormOpen(false);
+     setSelectedNotification(null);
   }
 
 
   return (
     <>
     <div className="flex flex-col h-[calc(100vh-57px)]">
-      <DashboardHeader title="Panel de Recordatorios Automáticos" />
+      <DashboardHeader title="Panel de Notificaciones a Clientes">
+        <Button onClick={handleProcessQueue} disabled={isLoading || !notifications.some(n => n.status === 'Programada')}>
+          <Send className="mr-2 h-4 w-4" />
+          Procesar Cola de Envíos
+        </Button>
+        <Button onClick={handleNew} variant="secondary">
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Nueva Notificación
+        </Button>
+      </DashboardHeader>
       <main className="flex-1 p-6 overflow-y-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Recordatorios Pendientes</CardTitle>
+            <CardTitle>Cola de Comunicaciones</CardTitle>
             <CardDescription>
-              El sistema ha detectado los siguientes recordatorios basados en el historial de servicio.
+              Gestione y envíe recordatorios de mantenimiento, vencimientos de garantía y otras comunicaciones.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -135,41 +207,73 @@ export default function RemindersPage() {
                 <TableRow>
                   <TableHead>Cliente</TableHead>
                   <TableHead>Vehículo</TableHead>
-                  <TableHead>Tipo de Recordatorio</TableHead>
-                  <TableHead>Fecha Próxima</TableHead>
-                  <TableHead className="text-right">Acción</TableHead>
+                  <TableHead>Tipo de Notificación</TableHead>
+                  <TableHead>Fecha de Envío</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {reminders.map((reminder) => (
-                  <TableRow key={`${reminder.clientId}-${reminder.vehicleId}`}>
-                    <TableCell className="font-medium">{reminder.client.name}</TableCell>
-                    <TableCell>{`${reminder.vehicle.make} ${reminder.vehicle.model}`}</TableCell>
+                {notifications.map((notification) => {
+                  const client = clients.find(c => c.id === notification.clientId);
+                  const vehicle = vehicles.find(v => v.id === notification.vehicleId);
+
+                  return (
+                  <TableRow key={notification.id}>
+                    <TableCell className="font-medium">{client?.name}</TableCell>
+                    <TableCell>{vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A'}</TableCell>
+                    <TableCell>{notification.type}</TableCell>
+                    <TableCell>{new Date(notification.sendDate).toLocaleDateString()}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{reminder.type}</Badge>
+                      <Badge variant={getStatusVariant(notification.status)}>
+                        {notification.status}
+                      </Badge>
                     </TableCell>
-                    <TableCell>{new Date(reminder.dueDate).toLocaleDateString()}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="secondary" size="sm" onClick={() => handleGenerateClick(reminder)}>
-                        <Bot className="mr-2 h-4 w-4" />
-                        Generar Mensaje
-                      </Button>
+                       <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleGenerateClick(notification)}>
+                            <Bot className="mr-2 h-4 w-4" />
+                            Generar y Previsualizar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleEdit(notification)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(notification)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Eliminar
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                ))}
+                )})}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
       </main>
     </div>
+    
+    <NotificationFormDialog
+        isOpen={isFormOpen}
+        onOpenChange={setIsFormOpen}
+        onSubmit={handleFormSubmit}
+        notification={selectedNotification}
+    />
 
-    <Dialog open={!!selectedReminder} onOpenChange={(isOpen) => !isOpen && setSelectedReminder(null)}>
+    <Dialog open={!!selectedNotification && !!generatedMessage} onOpenChange={(isOpen) => !isOpen && setSelectedNotification(null)}>
         <DialogContent className="sm:max-w-xl">
              <DialogHeader>
                 <DialogTitle>Previsualización del Mensaje</DialogTitle>
                 <DialogDescription>
-                    Revisa el mensaje generado por la IA antes de enviarlo a {selectedReminder?.client.name}.
+                    Revisa el mensaje generado por la IA antes de enviarlo a {selectedNotification && clients.find(c => c.id === selectedNotification.clientId)?.name}.
                 </DialogDescription>
              </DialogHeader>
              <div className="py-4 space-y-4">
