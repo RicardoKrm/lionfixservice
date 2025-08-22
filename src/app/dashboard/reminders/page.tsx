@@ -43,6 +43,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NotificationFormDialog } from "@/components/notification-form-dialog";
 import { getStatusVariant } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
 
 // Simulación de notificaciones que el sistema gestionaría.
 const initialNotifications: Notification[] = [
@@ -86,6 +97,7 @@ export default function RemindersPage() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedMessage, setGeneratedMessage] = useState("");
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const { toast } = useToast();
 
   const handleNew = () => {
@@ -103,10 +115,24 @@ export default function RemindersPage() {
     setIsAlertOpen(true);
   }
 
+  const confirmDelete = () => {
+    if (selectedNotification) {
+      setNotifications(notifications.filter((n) => n.id !== selectedNotification.id));
+      toast({
+        title: "Notificación Eliminada",
+        description: `La notificación ha sido eliminada de la cola.`,
+        variant: "destructive",
+      });
+    }
+    setIsAlertOpen(false);
+    setSelectedNotification(null);
+  }
+
   const handleGenerateClick = async (notification: Notification) => {
     setSelectedNotification(notification);
     setGeneratedMessage("");
     setIsLoading(true);
+    setIsPreviewOpen(true);
 
     try {
       const result = await generateMaintenanceReminder({
@@ -122,6 +148,7 @@ export default function RemindersPage() {
         title: "Error de IA",
         description: "No se pudo generar el recordatorio. Intente de nuevo.",
       });
+      setIsPreviewOpen(false);
     } finally {
         setIsLoading(false);
     }
@@ -138,6 +165,7 @@ export default function RemindersPage() {
         description: `La notificación para ${clients.find(c => c.id === selectedNotification.clientId)?.name} ha sido enviada por ${channel}.`
     });
     
+    setIsPreviewOpen(false);
     setSelectedNotification(null);
     setGeneratedMessage("");
   }
@@ -161,7 +189,7 @@ export default function RemindersPage() {
   };
   
   const handleFormSubmit = (data: Omit<Notification, 'id' | 'status'>) => {
-     if (selectedNotification) {
+     if (selectedNotification && selectedNotification.id) {
         // Edit
         setNotifications(notifications.map(n => n.id === selectedNotification.id ? { ...selectedNotification, ...data } : n));
         toast({ title: "Notificación Actualizada" });
@@ -177,6 +205,12 @@ export default function RemindersPage() {
      }
      setIsFormOpen(false);
      setSelectedNotification(null);
+  }
+
+  const handleCloseDialog = () => {
+      setIsPreviewOpen(false);
+      setSelectedNotification(null);
+      setGeneratedMessage("");
   }
 
 
@@ -237,9 +271,9 @@ export default function RemindersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleGenerateClick(notification)}>
+                          <DropdownMenuItem onClick={() => handleGenerateClick(notification)} disabled={notification.status !== 'Programada'}>
                             <Bot className="mr-2 h-4 w-4" />
-                            Generar y Previsualizar
+                            Generar y Enviar
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleEdit(notification)}>
                             <Edit className="mr-2 h-4 w-4" />
@@ -268,7 +302,29 @@ export default function RemindersPage() {
         notification={selectedNotification}
     />
 
-    <Dialog open={!!selectedNotification && !!generatedMessage} onOpenChange={(isOpen) => !isOpen && setSelectedNotification(null)}>
+    <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Se eliminará la notificación de la cola de envíos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setSelectedNotification(null)}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+    <Dialog open={isPreviewOpen} onOpenChange={handleCloseDialog}>
         <DialogContent className="sm:max-w-xl">
              <DialogHeader>
                 <DialogTitle>Previsualización del Mensaje</DialogTitle>
@@ -283,17 +339,16 @@ export default function RemindersPage() {
                     value={isLoading ? "Generando..." : generatedMessage}
                     readOnly={isLoading}
                     rows={10}
+                    className="bg-muted"
                 />
              </div>
-             <DialogFooter className="justify-between sm:justify-between">
-                <div className="text-sm text-muted-foreground">
-                    Enviar a través de:
-                </div>
+             <DialogFooter className="sm:justify-between gap-4">
+                <Button variant="ghost" onClick={handleCloseDialog}>Cerrar</Button>
                 <div className="flex gap-2">
                      <Button variant="outline" onClick={() => handleSend('WhatsApp')} disabled={isLoading || !generatedMessage}>
                         <MessageSquare className="mr-2 h-4 w-4 text-green-500" /> WhatsApp
                     </Button>
-                    <Button variant="outline" onClick={() => handleSend('Email')} disabled={isLoading || !generatedMessage}>
+                    <Button variant="secondary" onClick={() => handleSend('Email')} disabled={isLoading || !generatedMessage}>
                         <Mail className="mr-2 h-4 w-4" /> Email
                     </Button>
                 </div>

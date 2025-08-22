@@ -95,7 +95,7 @@ export function NotificationFormDialog({
   }, [notification, form, isOpen]);
   
    useEffect(() => {
-      if(!notification) {
+      if(!notification || (notification && selectedClientId !== notification.clientId)) {
          form.setValue('vehicleId', '');
       }
   }, [selectedClientId, form, notification]);
