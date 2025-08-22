@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { WorkOrderFormDialog } from "@/components/work-order-form-dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LicensePlateLookup } from "@/components/license-plate-lookup";
 
 
 export default function WorkOrdersPage() {
@@ -147,6 +148,8 @@ export default function WorkOrdersPage() {
             </TabsList>
         </Tabs>
         
+        <LicensePlateLookup />
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredWorkOrders.map((wo) => (
             <WorkOrderCard key={wo.id} workOrder={wo} />
