@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import {
@@ -33,6 +34,7 @@ import {
   Send,
   History,
   HardHat,
+  UserSquare,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -163,6 +165,17 @@ export function AppSidebar() {
               >
                 <Briefcase />
                 <span>Contratos de Flota</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+           <SidebarMenuItem>
+            <Link href="/dashboard/management/technicians" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/management/technicians")}
+                tooltip="Gestión de Técnicos"
+              >
+                <UserSquare />
+                <span>Técnicos</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>

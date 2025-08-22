@@ -138,3 +138,16 @@ export type MaintenancePlan = {
   description: string;
   tasks: { description: string }[];
 };
+
+export type Technician = {
+    id: string;
+    name: string;
+    avatarUrl: string;
+    specialties: string[];
+    hireDate: string;
+    contact: string;
+    baseSalary: number;
+    extraHourRate: number;
+    extraHoursThisMonth: number;
+    maxExtraHours: number;
+};

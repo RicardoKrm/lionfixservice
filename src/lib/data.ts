@@ -1,6 +1,6 @@
 
 
-import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry, FleetContract, MaintenancePlan } from '@/types';
+import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry, FleetContract, MaintenancePlan, Technician } from '@/types';
 
 export const vehicles: Vehicle[] = [
   { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG', motorNumber: '1NZ-FE-12345' },
@@ -196,5 +196,44 @@ export const maintenancePlans: MaintenancePlan[] = [
             { description: "Inspección completa de sistema de frenos." },
             { description: "Revisión de correas y mangueras." },
         ]
+    }
+];
+
+export const technicians: Technician[] = [
+    {
+        id: "TECH-001",
+        name: "Pedro Pascal",
+        avatarUrl: "/avatars/pedro.png",
+        specialties: ["Motores Diesel", "Electrónica Avanzada", "Transmisiones Automáticas"],
+        hireDate: "2020-03-15",
+        contact: "+56911112222",
+        baseSalary: 1200000,
+        extraHourRate: 8000,
+        extraHoursThisMonth: 12,
+        maxExtraHours: 20
+    },
+    {
+        id: "TECH-002",
+        name: "Ricardo Milos",
+        avatarUrl: "/avatars/ricardo.png",
+        specialties: ["Frenos ABS", "Suspensiones", "Aire Acondicionado"],
+        hireDate: "2021-08-01",
+        contact: "+56933334444",
+        baseSalary: 950000,
+        extraHourRate: 7000,
+        extraHoursThisMonth: 5,
+        maxExtraHours: 25
+    },
+    {
+        id: "TECH-003",
+        name: "Otro Técnico",
+        avatarUrl: "/avatars/otro.png",
+        specialties: ["Mecánica General"],
+        hireDate: "2023-01-10",
+        contact: "+56955556666",
+        baseSalary: 800000,
+        extraHourRate: 6500,
+        extraHoursThisMonth: 0,
+        maxExtraHours: 15
     }
 ];
