@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, PlusCircle, Edit, Trash2, Search, User, ChevronDown, ChevronUp, History } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Edit, Trash2, Search, ChevronDown, History } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,7 +50,6 @@ import { ClientFormDialog } from "@/components/client-form-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 
 
 export default function ClientsPage() {
@@ -165,58 +164,60 @@ export default function ClientsPage() {
                     return (
                        <Collapsible asChild key={client.id} >
                            <>
-                                <CollapsibleTrigger asChild>
-                                    <TableRow className="cursor-pointer hover:bg-muted/50">
-                                        <TableCell className="px-4">
-                                            {clientVehicles.length > 0 ? (
-                                                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                                            ) : null}
-                                        </TableCell>
-                                        <TableCell>
+                                <TableRow>
+                                    <TableCell className="px-4">
+                                       <CollapsibleTrigger asChild>
+                                        <Button variant="ghost" size="icon" disabled={clientVehicles.length === 0}>
+                                            <ChevronDown className="h-4 w-4 transition-transform duration-200 data-[state=open]:-rotate-180" />
+                                            <span className="sr-only">Expandir</span>
+                                        </Button>
+                                       </CollapsibleTrigger>
+                                    </TableCell>
+                                    <TableCell>
                                         <div className="flex items-center gap-3">
                                             <Avatar>
                                                 <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div className="font-medium">{client.name}</div>
                                         </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div>{client.email}</div>
-                                            <div className="text-muted-foreground text-sm">{client.phone}</div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge variant="secondary">{clientVehicles.length} vehículo(s)</Badge>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="icon">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                                <span className="sr-only">Acciones</span>
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => handleEditClient(client)}>
-                                                <Edit className="mr-2 h-4 w-4" />
-                                                Editar
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                className="text-destructive"
-                                                onClick={() => handleDeleteClient(client)}
-                                                >
-                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                Eliminar
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
-                                </CollapsibleTrigger>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div>{client.email}</div>
+                                        <div className="text-muted-foreground text-sm">{client.phone}</div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="secondary">{clientVehicles.length} vehículo(s)</Badge>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                            <span className="sr-only">Acciones</span>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuItem onClick={() => handleEditClient(client)}>
+                                            <Edit className="mr-2 h-4 w-4" />
+                                            Editar
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                            className="text-destructive"
+                                            onClick={() => handleDeleteClient(client)}
+                                            >
+                                            <Trash2 className="mr-2 h-4 w-4" />
+                                            Eliminar
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                                {clientVehicles.length > 0 && (
                                 <CollapsibleContent asChild>
-                                    <TableRow className="bg-muted/50">
+                                    <TableRow className="bg-muted/50 hover:bg-muted">
                                         <TableCell colSpan={5} className="p-0">
-                                            <div className="p-4">
-                                                <h4 className="font-semibold mb-2 ml-2">Vehículos de {client.name}</h4>
+                                            <div className="p-6">
+                                                <h4 className="font-semibold mb-4 text-base">Vehículos de {client.name}</h4>
                                                 <Table>
                                                     <TableHeader>
                                                         <TableRow>
@@ -252,6 +253,7 @@ export default function ClientsPage() {
                                         </TableCell>
                                     </TableRow>
                                 </CollapsibleContent>
+                                )}
                            </>
                        </Collapsible>
                     )
