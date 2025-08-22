@@ -14,25 +14,20 @@ import {
 } from "@/components/ui/sidebar";
 import {
   Home,
-  Car,
-  FileText,
+  Wrench,
+  Calendar,
   LogOut,
   Flame,
-  Briefcase,
-  History,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { clients } from "@/lib/data";
 
-// Simulamos que el cliente logueado es 'C001'
-const LOGGED_IN_CLIENT_ID = 'C001';
+const LOGGED_IN_MECHANIC = 'Ricardo Milos';
 
-function ClientSidebar() {
+function MechanicSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const client = clients.find(c => c.id === LOGGED_IN_CLIENT_ID);
 
   const isActive = (path: string) => {
     return pathname === path || pathname.startsWith(`${path}/`);
@@ -51,7 +46,7 @@ function ClientSidebar() {
           </Avatar>
           <div className="flex flex-col">
             <h2 className="text-xl font-semibold text-sidebar-foreground">
-              Portal Cliente
+              Portal Mecánico
             </h2>
             <p className="text-sm text-sidebar-foreground/70">LionFix</p>
           </div>
@@ -60,35 +55,24 @@ function ClientSidebar() {
       <SidebarContent className="p-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href="/portal/dashboard" passHref>
+            <Link href="/mechanic/dashboard" passHref>
               <SidebarMenuButton
-                isActive={isActive("/portal/dashboard")}
-                tooltip="Inicio"
+                isActive={isActive("/mechanic/dashboard")}
+                tooltip="Mis Tareas"
               >
-                <Home />
-                <span>Inicio</span>
+                <Wrench />
+                <span>Mis Tareas</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <Link href="/portal/vehicles" passHref>
-              <SidebarMenuButton
-                isActive={isActive("/portal/vehicles")}
-                tooltip="Mis Vehículos"
+            <Link href="/mechanic/dashboard" passHref>
+               <SidebarMenuButton
+                isActive={false}
+                tooltip="Calendario"
               >
-                <Car />
-                <span>Mis Vehículos</span>
-              </SidebarMenuButton>
-            </Link>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <Link href="/portal/contracts" passHref>
-              <SidebarMenuButton
-                isActive={isActive("/portal/contracts")}
-                tooltip="Mis Contratos"
-              >
-                <Briefcase />
-                <span>Mis Contratos</span>
+                <Calendar />
+                <span>Calendario</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
@@ -100,12 +84,12 @@ function ClientSidebar() {
             <SidebarMenuButton tooltip="Perfil">
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://placehold.co/100x100.png" alt="Usuario" />
-                    <AvatarFallback>{client?.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src="https://placehold.co/100x100.png" alt="Mecánico" />
+                    <AvatarFallback>RM</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col text-left">
-                    <span className="text-sm font-medium text-sidebar-foreground">{client?.name}</span>
-                    <span className="text-xs text-sidebar-foreground/70">Cliente</span>
+                    <span className="text-sm font-medium text-sidebar-foreground">{LOGGED_IN_MECHANIC}</span>
+                    <span className="text-xs text-sidebar-foreground/70">Mecánico</span>
                 </div>
               </div>
             </SidebarMenuButton>
@@ -123,14 +107,14 @@ function ClientSidebar() {
 }
 
 
-export default function ClientPortalLayout({
+export default function MechanicPortalLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <SidebarProvider>
-      <ClientSidebar />
+      <MechanicSidebar />
       <SidebarInset>
             {children}
       </SidebarInset>

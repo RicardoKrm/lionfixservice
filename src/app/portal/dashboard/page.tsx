@@ -30,30 +30,7 @@ export default function ClientPortalDashboard() {
       <p className="text-muted-foreground">Este es su portal personal. Aquí puede gestionar sus vehículos y cotizaciones.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Mis Vehículos Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Car /> Mis Vehículos</CardTitle>
-            <CardDescription>Listado de sus vehículos registrados en nuestro taller.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {clientVehicles.map(vehicle => (
-              <div key={vehicle.id} className="flex items-center justify-between p-3 rounded-lg border">
-                <div>
-                  <p className="font-semibold">{vehicle.make} {vehicle.model}</p>
-                  <p className="text-sm text-muted-foreground">Año: {vehicle.year}</p>
-                </div>
-                <div className="font-mono text-lg uppercase tracking-wider bg-secondary text-secondary-foreground px-3 py-1 rounded-md">
-                  {vehicle.licensePlate}
-                </div>
-              </div>
-            ))}
-          </CardContent>
-          <CardFooter>
-            <Button variant="outline" className="w-full">Ver Historial de Servicios</Button>
-          </CardFooter>
-        </Card>
-
+        
         {/* Mis Cotizaciones Card */}
         <Card>
           <CardHeader>
@@ -77,6 +54,32 @@ export default function ClientPortalDashboard() {
               <p className="text-sm text-muted-foreground text-center py-8">No tiene cotizaciones pendientes.</p>
             )}
           </CardContent>
+        </Card>
+
+        {/* Mis Vehículos Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Car /> Mis Vehículos</CardTitle>
+            <CardDescription>Listado de sus vehículos registrados en nuestro taller.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {clientVehicles.map(vehicle => (
+              <div key={vehicle.id} className="flex items-center justify-between p-3 rounded-lg border">
+                <div>
+                  <p className="font-semibold">{vehicle.make} {vehicle.model}</p>
+                  <p className="text-sm text-muted-foreground">Año: {vehicle.year}</p>
+                </div>
+                <div className="font-mono text-lg uppercase tracking-wider bg-secondary text-secondary-foreground px-3 py-1 rounded-md">
+                  {vehicle.licensePlate}
+                </div>
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter>
+            <Link href="/portal/vehicles" className="w-full">
+              <Button variant="outline" className="w-full">Ver Historial de Servicios</Button>
+            </Link>
+          </CardFooter>
         </Card>
       </div>
     </div>
