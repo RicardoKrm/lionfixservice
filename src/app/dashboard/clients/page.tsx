@@ -58,7 +58,6 @@ export default function ClientsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [expandedClientId, setExpandedClientId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleNewClient = () => {
@@ -122,10 +121,6 @@ export default function ClientsPage() {
     ).sort((a,b) => a.name.localeCompare(b.name));
   }, [clients, searchTerm]);
   
-  const toggleRow = (clientId: string) => {
-    setExpandedClientId(expandedClientId === clientId ? null : clientId);
-  };
-
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Gestión de Clientes (CRM)">
@@ -166,86 +161,87 @@ export default function ClientsPage() {
                 <TableBody>
                   {filteredClients.length > 0 ? filteredClients.map((client) => {
                     const clientVehicles = vehicles.filter(v => client.vehicleIds.includes(v.id));
-                    const isExpanded = expandedClientId === client.id;
                     return (
-                       <Fragment key={client.id}>
-                            <CollapsibleTrigger asChild>
-                                <TableRow onClick={() => toggleRow(client.id)} className="cursor-pointer hover:bg-muted/50" data-state={isExpanded ? 'open' : 'closed'}>
-                                    <TableCell className="px-4">
-                                        {clientVehicles.length > 0 ? (
-                                           isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                                        ) : null}
-                                    </TableCell>
-                                    <TableCell>
-                                    <div className="flex items-center gap-3">
-                                        <Avatar>
-                                            <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
-                                        </Avatar>
-                                        <div className="font-medium">{client.name}</div>
-                                    </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div>{client.email}</div>
-                                        <div className="text-muted-foreground text-sm">{client.phone}</div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="secondary">{clientVehicles.length} vehículo(s)</Badge>
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <DropdownMenu>
-                                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="ghost" size="icon">
-                                            <MoreHorizontal className="h-4 w-4" />
-                                            <span className="sr-only">Acciones</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem onClick={(e) => {e.stopPropagation(); handleEditClient(client)}}>
-                                            <Edit className="mr-2 h-4 w-4" />
-                                            Editar
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                            className="text-destructive"
-                                            onClick={(e) => {e.stopPropagation(); handleDeleteClient(client)}}
-                                            >
-                                            <Trash2 className="mr-2 h-4 w-4" />
-                                            Eliminar
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
-                                </TableRow>
-                            </CollapsibleTrigger>
-                             <CollapsibleContent asChild>
-                                <TableRow className={cn("bg-muted/50", isExpanded ? 'animate-in fade-in-0' : 'animate-out fade-out-0')}>
-                                     <TableCell colSpan={5} className="p-0">
-                                        <div className="p-4">
-                                            <h4 className="font-semibold mb-2 ml-2">Vehículos de {client.name}</h4>
-                                             <Table>
-                                                <TableHeader>
-                                                    <TableRow>
-                                                        <TableHead>Patente</TableHead>
-                                                        <TableHead>Marca y Modelo</TableHead>
-                                                        <TableHead>Año</TableHead>
-                                                        <TableHead>VIN</TableHead>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody>
-                                                    {clientVehicles.map(vehicle => (
-                                                        <TableRow key={vehicle.id}>
-                                                            <TableCell className="font-mono">{vehicle.licensePlate}</TableCell>
-                                                            <TableCell>{vehicle.make} {vehicle.model}</TableCell>
-                                                            <TableCell>{vehicle.year}</TableCell>
-                                                            <TableCell className="font-mono">{vehicle.vin}</TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
+                       <Collapsible asChild key={client.id} >
+                           <>
+                                <CollapsibleTrigger asChild>
+                                    <TableRow className="cursor-pointer hover:bg-muted/50">
+                                        <TableCell className="px-4">
+                                            {clientVehicles.length > 0 ? (
+                                                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                                            ) : null}
+                                        </TableCell>
+                                        <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar>
+                                                <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
+                                            </Avatar>
+                                            <div className="font-medium">{client.name}</div>
                                         </div>
-                                     </TableCell>
-                                </TableRow>
-                            </CollapsibleContent>
-                       </Fragment>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div>{client.email}</div>
+                                            <div className="text-muted-foreground text-sm">{client.phone}</div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="secondary">{clientVehicles.length} vehículo(s)</Badge>
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon">
+                                                <MoreHorizontal className="h-4 w-4" />
+                                                <span className="sr-only">Acciones</span>
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onClick={() => handleEditClient(client)}>
+                                                <Edit className="mr-2 h-4 w-4" />
+                                                Editar
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                className="text-destructive"
+                                                onClick={() => handleDeleteClient(client)}
+                                                >
+                                                <Trash2 className="mr-2 h-4 w-4" />
+                                                Eliminar
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent asChild>
+                                    <TableRow className="bg-muted/50">
+                                        <TableCell colSpan={5} className="p-0">
+                                            <div className="p-4">
+                                                <h4 className="font-semibold mb-2 ml-2">Vehículos de {client.name}</h4>
+                                                <Table>
+                                                    <TableHeader>
+                                                        <TableRow>
+                                                            <TableHead>Patente</TableHead>
+                                                            <TableHead>Marca y Modelo</TableHead>
+                                                            <TableHead>Año</TableHead>
+                                                            <TableHead>VIN</TableHead>
+                                                        </TableRow>
+                                                    </TableHeader>
+                                                    <TableBody>
+                                                        {clientVehicles.map(vehicle => (
+                                                            <TableRow key={vehicle.id}>
+                                                                <TableCell className="font-mono">{vehicle.licensePlate}</TableCell>
+                                                                <TableCell>{vehicle.make} {vehicle.model}</TableCell>
+                                                                <TableCell>{vehicle.year}</TableCell>
+                                                                <TableCell className="font-mono">{vehicle.vin}</TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                </CollapsibleContent>
+                           </>
+                       </Collapsible>
                     )
                   }) : (
                      <TableRow>
