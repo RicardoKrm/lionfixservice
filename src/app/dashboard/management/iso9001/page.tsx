@@ -120,9 +120,9 @@ export default function Iso9001Page() {
                   Gestión de clientes y satisfacción (Cláusula 9.1.2)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Historial de comunicaciones con clientes (CRM).</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Capacidad para integrar encuestas de satisfacción y registrar reclamos.</p>
-                   <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Recordatorios automáticos que mejoran la experiencia del cliente.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Registro de reclamos y no conformidades.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Encuestas de satisfacción / seguimientos.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Historial de comunicaciones con clientes.</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-4">
