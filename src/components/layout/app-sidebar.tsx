@@ -41,7 +41,10 @@ import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
+  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({
+    finanzas: pathname.startsWith("/dashboard/finance"),
+    gestion: pathname.startsWith("/dashboard/management") || pathname.startsWith("/dashboard/reminders"),
+  });
 
   const isActive = (path: string) => {
     return pathname === path || pathname.startsWith(`${path}/`);
