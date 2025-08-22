@@ -1,21 +1,25 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { WorkOrderCard } from "@/components/work-order-card";
 import { workOrders as initialWorkOrders, clients, vehicles, parts as initialParts } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import type { EnrichedWorkOrder, WorkOrder, Part } from "@/types";
+import type { EnrichedWorkOrder, WorkOrder, Part, WorkOrderStatus } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { WorkOrderFormDialog } from "@/components/work-order-form-dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 export default function WorkOrdersPage() {
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>(initialWorkOrders);
   const [inventory, setInventory] = useState<Part[]>(initialParts);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder | null>(null);
+  const [statusFilter, setStatusFilter] = useState<"activas" | "finalizadas" | "todas">("activas");
   const { toast } = useToast();
 
   const handleNewOrder = () => {
@@ -33,6 +37,19 @@ export default function WorkOrdersPage() {
       (a, b) => new Date(b.entryDate).getTime() - new Date(a.entryDate).getTime()
     );
   
+  const filteredWorkOrders = useMemo(() => {
+    const activeStatuses: WorkOrderStatus[] = ['Recibido', 'Esperando Aprobación', 'En Reparación', 'Esperando Repuestos'];
+    const finishedStatuses: WorkOrderStatus[] = ['Completado', 'Entregado'];
+
+    if (statusFilter === "activas") {
+      return enrichedWorkOrders.filter(wo => activeStatuses.includes(wo.status));
+    }
+    if (statusFilter === "finalizadas") {
+      return enrichedWorkOrders.filter(wo => finishedStatuses.includes(wo.status));
+    }
+    return enrichedWorkOrders;
+  }, [enrichedWorkOrders, statusFilter]);
+
   const handleFormSubmit = (data: Omit<WorkOrder, 'id' | 'entryDate' | 'status'>) => {
       // Create new work order
       const newWorkOrder: WorkOrder = {
@@ -94,12 +111,30 @@ export default function WorkOrdersPage() {
           Nueva Orden
         </Button>
       </DashboardHeader>
-      <main className="flex-1 p-6 overflow-y-auto">
+      <main className="flex-1 p-6 overflow-y-auto space-y-6">
+        <Tabs value={statusFilter} onValueChange={(value) => setStatusFilter(value as any)} className="w-full">
+            <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto">
+                <TabsTrigger value="activas">Activas</TabsTrigger>
+                <TabsTrigger value="finalizadas">Finalizadas</TabsTrigger>
+                <TabsTrigger value="todas">Todas</TabsTrigger>
+            </TabsList>
+        </Tabs>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {enrichedWorkOrders.map((wo) => (
+          {filteredWorkOrders.map((wo) => (
             <WorkOrderCard key={wo.id} workOrder={wo} />
           ))}
         </div>
+        {filteredWorkOrders.length === 0 && (
+          <Card className="col-span-full">
+            <CardContent className="p-10">
+              <div className="text-center text-muted-foreground">
+                <p className="text-lg font-semibold">No se encontraron órdenes de trabajo</p>
+                <p>No hay órdenes que coincidan con el filtro "{statusFilter}".</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </main>
       <WorkOrderFormDialog
         isOpen={isFormOpen}
