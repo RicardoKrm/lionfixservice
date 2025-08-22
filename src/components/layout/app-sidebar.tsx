@@ -124,12 +124,16 @@ export function AppSidebar() {
             <SidebarMenuSub>
                <SidebarMenuSubItem>
                  <Link href="/dashboard/finance/quotes" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/quotes")}>Cotizaciones</SidebarMenuSubButton>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/quotes")} asChild>
+                    Cotizaciones
+                  </SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
               <SidebarMenuSubItem>
                  <Link href="/dashboard/finance/reports" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/reports")}>Reportes y KPIs</SidebarMenuSubButton>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/reports")} asChild>
+                    Reportes y KPIs
+                  </SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
             </SidebarMenuSub>
@@ -143,22 +147,30 @@ export function AppSidebar() {
             <SidebarMenuSub>
               <SidebarMenuSubItem>
                  <Link href="/dashboard/management/checklists" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/checklists")}>Checklists</SidebarMenuSubButton>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/checklists")} asChild>
+                    Checklists
+                  </SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
               <SidebarMenuSubItem>
                  <Link href="/dashboard/management/contracts" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/contracts")}>Contratos de Flota</SidebarMenuSubButton>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/contracts")} asChild>
+                    Contratos de Flota
+                  </SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
                <SidebarMenuSubItem>
                 <Link href="/dashboard/management/iso9001" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/iso9001")}>Norma ISO 9001</SidebarMenuSubButton>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/iso9001")} asChild>
+                    Norma ISO 9001
+                  </SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
               <SidebarMenuSubItem>
                 <Link href="/dashboard/reminders" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/reminders")}>Recordatorios IA</SidebarMenuSubButton>
+                  <SidebarMenuSubButton isActive={isActive("/dashboard/reminders")} asChild>
+                    Recordatorios IA
+                  </SidebarMenuSubButton>
                 </Link>
               </SidebarMenuSubItem>
             </SidebarMenuSub>
