@@ -54,7 +54,9 @@ const workOrderStatusData = [
 
 export default function DashboardPage() {
     
-  const recentWorkOrders = workOrders.slice(0, 5);
+  const recentWorkOrders = workOrders
+    .sort((a, b) => new Date(b.entryDate).getTime() - new Date(a.entryDate).getTime())
+    .slice(0, 5);
   const todayAppointments = calendarEvents.filter(event => isToday(new Date(event.start)));
 
   return (
