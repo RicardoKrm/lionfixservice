@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarContent,
   SidebarFooter,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import {
   Home,
@@ -31,6 +32,7 @@ import {
   FileText,
   Send,
   History,
+  HardHat,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -62,6 +64,9 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="p-4">
         <SidebarMenu>
+          <SidebarMenuItem>
+             <span className="px-2 text-xs font-medium text-sidebar-foreground/70">VISTA ADMINISTRADOR</span>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <Link href="/dashboard" passHref>
               <SidebarMenuButton
@@ -195,6 +200,68 @@ export function AppSidebar() {
             </Link>
           </SidebarMenuItem>
         </SidebarMenu>
+        
+        <SidebarSeparator className="my-4"/>
+
+        <SidebarMenu>
+             <SidebarMenuItem>
+                <span className="px-2 text-xs font-medium text-sidebar-foreground/70">VISTA CLIENTE</span>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+                <Link href="/portal/dashboard" passHref>
+                <SidebarMenuButton
+                    isActive={isActive("/portal/dashboard")}
+                    tooltip="Inicio Cliente"
+                >
+                    <UserCircle />
+                    <span>Inicio Cliente</span>
+                </SidebarMenuButton>
+                </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <Link href="/portal/vehicles" passHref>
+                <SidebarMenuButton
+                    isActive={isActive("/portal/vehicles")}
+                    tooltip="Mis Vehículos"
+                >
+                    <Car />
+                    <span>Mis Vehículos</span>
+                </SidebarMenuButton>
+                </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <Link href="/portal/contracts" passHref>
+                <SidebarMenuButton
+                    isActive={isActive("/portal/contracts")}
+                    tooltip="Mis Contratos"
+                >
+                    <Briefcase />
+                    <span>Mis Contratos</span>
+                </SidebarMenuButton>
+                </Link>
+            </SidebarMenuItem>
+        </SidebarMenu>
+
+        <SidebarSeparator className="my-4"/>
+
+        <SidebarMenu>
+            <SidebarMenuItem>
+                <span className="px-2 text-xs font-medium text-sidebar-foreground/70">VISTA MECÁNICO</span>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+                <Link href="/mechanic/dashboard" passHref>
+                <SidebarMenuButton
+                    isActive={isActive("/mechanic/dashboard")}
+                    tooltip="Mis Tareas"
+                >
+                    <HardHat />
+                    <span>Mis Tareas</span>
+                </SidebarMenuButton>
+                </Link>
+            </SidebarMenuItem>
+        </SidebarMenu>
+
+
       </SidebarContent>
       <SidebarFooter className="border-t border-sidebar-border p-4">
         <SidebarMenu>
@@ -223,5 +290,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-
-    
