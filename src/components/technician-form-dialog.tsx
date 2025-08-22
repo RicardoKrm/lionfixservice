@@ -44,7 +44,7 @@ type TechnicianFormData = z.infer<typeof technicianSchema>;
 // This helper converts between the form's string representation and the model's array
 const toFormValues = (technician: Technician | null) => ({
   name: technician?.name || "",
-  avatarUrl: technician?.avatarUrl || `https://placehold.co/100x100.png`,
+  avatarUrl: technician?.avatarUrl || ``,
   specialties: technician?.specialties.join(", ") || "",
   hireDate: technician ? new Date(technician.hireDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
   contact: technician?.contact || "",
@@ -57,6 +57,7 @@ const toFormValues = (technician: Technician | null) => ({
 const fromFormValues = (data: TechnicianFormData) => ({
     ...data,
     specialties: data.specialties.split(',').map(s => s.trim()).filter(Boolean),
+    avatarUrl: data.avatarUrl || `https://placehold.co/100x100.png`
 });
 
 type TechnicianFormDialogProps = {
@@ -118,8 +119,11 @@ export function TechnicianFormDialog({
                 <FormItem>
                   <FormLabel>URL de la Foto de Perfil</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://placehold.co/100x100.png" {...field} />
+                    <Input placeholder="https://..." {...field} />
                   </FormControl>
+                   <FormDescription>
+                    Pegue la URL de una imagen. Si lo deja vacío, se usará un placeholder.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
