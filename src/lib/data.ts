@@ -1,5 +1,6 @@
 
-import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry, FleetContract } from '@/types';
+
+import type { Client, Vehicle, WorkOrder, Quote, CalendarEvent, Part, ServiceLogEntry, FleetContract, MaintenancePlan } from '@/types';
 
 export const vehicles: Vehicle[] = [
   { id: 'V001', licensePlate: 'ABCD-12', make: 'Toyota', model: 'Corolla', year: 2020, vin: '1234567890ABCDEFG' },
@@ -162,4 +163,27 @@ export const fleetContracts: FleetContract[] = [
     { id: "CON-003", companyName: "Constructora del Pacífico", vehicleCount: 8, planType: "Personalizado", status: "Vencido", startDate: "2023-05-01", endDate: "2024-04-30" },
 ];
 
-    
+export const maintenancePlans: MaintenancePlan[] = [
+    {
+        id: "PLAN-001",
+        name: "Plan Básico - 10.000km",
+        description: "Revisión estándar para vehículos con bajo kilometraje.",
+        tasks: [
+            { description: "Cambio de aceite y filtro." },
+            { description: "Revisión de niveles (refrigerante, frenos, limpiaparabrisas)." },
+            { description: "Inspección de presión de neumáticos." },
+        ]
+    },
+    {
+        id: "PLAN-002",
+        name: "Plan Premium - 40.000km",
+        description: "Mantención completa para asegurar el óptimo funcionamiento del vehículo.",
+        tasks: [
+            { description: "Cambio de aceite y filtro." },
+            { description: "Cambio de filtro de aire y de cabina." },
+            { description: "Rotación y balanceo de neumáticos." },
+            { description: "Inspección completa de sistema de frenos." },
+            { description: "Revisión de correas y mangueras." },
+        ]
+    }
+];

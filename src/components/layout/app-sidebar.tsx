@@ -30,6 +30,7 @@ import {
   BarChart,
   Flame,
   Briefcase,
+  BookCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -162,7 +163,17 @@ export function AppSidebar() {
               </SidebarMenuSubItem>
             </SidebarMenuSub>
           </SidebarMenuItem>
-
+          <SidebarMenuItem>
+            <Link href="/dashboard/settings/maintenance-plans" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/settings/maintenance-plans")}
+                tooltip="Planes de Mantenimiento"
+              >
+                <BookCheck />
+                <span>Planes de Mantenimiento</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="border-t border-sidebar-border p-4">
@@ -192,5 +203,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-
-    

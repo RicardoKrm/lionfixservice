@@ -10,9 +10,7 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="border-b">
             {children}
-        </div>
       </SidebarInset>
     </SidebarProvider>
   );

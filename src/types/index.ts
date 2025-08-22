@@ -121,10 +121,15 @@ export type FleetContract = {
   id: string;
   companyName: string;
   vehicleCount: number;
-  planType: 'Básico' | 'Premium' | 'Personalizado';
+  planType: string; // Changed from enum to string to allow custom plans
   status: FleetContractStatus;
   startDate: string;
   endDate: string;
 };
 
-    
+export type MaintenancePlan = {
+  id: string;
+  name: string;
+  description: string;
+  tasks: { description: string }[];
+};
