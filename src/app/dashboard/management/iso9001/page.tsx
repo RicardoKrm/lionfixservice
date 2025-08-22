@@ -31,7 +31,7 @@ export default function Iso9001Page() {
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger>
-                  <HardHat className="h-5 w-5 mr-3 text-primary" />
+                  <HardHat className="h-5 w-5 mr-3 text-accent" />
                   Gestión de procesos y trazabilidad (Cláusula 4 y 8)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
@@ -43,7 +43,7 @@ export default function Iso9001Page() {
               </AccordionItem>
               <AccordionItem value="item-2">
                 <AccordionTrigger>
-                  <CheckCircle className="h-5 w-5 mr-3 text-primary" />
+                  <CheckCircle className="h-5 w-5 mr-3 text-accent" />
                   Gestión documental (Cláusula 7.5)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
@@ -54,7 +54,7 @@ export default function Iso9001Page() {
               </AccordionItem>
               <AccordionItem value="item-3">
                 <AccordionTrigger>
-                  <Users className="h-5 w-5 mr-3 text-primary" />
+                  <Users className="h-5 w-5 mr-3 text-accent" />
                   Gestión de clientes y satisfacción (Cláusula 9.1.2)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
@@ -65,7 +65,7 @@ export default function Iso9001Page() {
               </AccordionItem>
               <AccordionItem value="item-4">
                 <AccordionTrigger>
-                  <BarChart className="h-5 w-5 mr-3 text-primary" />
+                  <BarChart className="h-5 w-5 mr-3 text-accent" />
                   Control de recursos (Cláusula 7)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
@@ -76,7 +76,7 @@ export default function Iso9001Page() {
               </AccordionItem>
               <AccordionItem value="item-5">
                 <AccordionTrigger>
-                  <TrendingUp className="h-5 w-5 mr-3 text-primary" />
+                  <TrendingUp className="h-5 w-5 mr-3 text-accent" />
                   Mejora continua (Cláusula 10)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">

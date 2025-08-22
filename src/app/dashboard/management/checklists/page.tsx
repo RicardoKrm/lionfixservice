@@ -172,7 +172,7 @@ export default function ChecklistsPage() {
                 <Card key={checklist.id} className="flex flex-col">
                     <CardHeader>
                         <div className="flex justify-between items-center">
-                            <CardTitle className="flex items-center gap-2 text-primary">
+                            <CardTitle className="flex items-center gap-2 text-accent">
                                 <FileText className="h-5 w-5"/> {checklist.id}
                             </CardTitle>
                              <Badge variant={checklist.completed ? "default" : "secondary"}>

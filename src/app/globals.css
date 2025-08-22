@@ -13,8 +13,8 @@
     --popover: 224 71% 4%;
     --popover-foreground: 215 28% 92%;
 
-    --primary: 208 90% 55%; /* Azul brillante */
-    --primary-foreground: 0 0% 100%;
+    --primary: 215 28% 92%; /* Blanco/Gris muy claro para texto principal */
+    --primary-foreground: 224 71% 8%; /* Azul oscuro para texto sobre fondo primario */
 
     --secondary: 215 28% 25%; /* Gris azulado oscuro */
     --secondary-foreground: 0 0% 100%;
@@ -30,10 +30,10 @@
 
     --border: 215 28% 18%;
     --input: 215 28% 18%;
-    --ring: 208 90% 55%;
+    --ring: 25 95% 53%; /* Naranja para el anillo de foco */
 
-    --chart-1: 208 90% 55%;
-    --chart-2: 25 95% 53%;
+    --chart-1: 25 95% 53%; /* Naranja */
+    --chart-2: 208 90% 55%; /* Azul (usado con moderación) */
     --chart-3: 173 58% 39%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
@@ -59,8 +59,8 @@
     --card-foreground: 215 28% 92%;
     --popover: 224 71% 4%;
     --popover-foreground: 215 28% 92%;
-    --primary: 208 90% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 215 28% 92%;
+    --primary-foreground: 224 71% 8%;
     --secondary: 215 28% 25%;
     --secondary-foreground: 0 0% 100%;
     --muted: 215 28% 18%;
@@ -71,9 +71,9 @@
     --destructive-foreground: 0 0% 100%;
     --border: 215 28% 18%;
     --input: 215 28% 18%;
-    --ring: 208 90% 55%;
-    --chart-1: 208 90% 55%;
-    --chart-2: 25 95% 53%;
+    --ring: 25 95% 53%;
+    --chart-1: 25 95% 53%;
+    --chart-2: 208 90% 55%;
     --chart-3: 173 58% 39%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;

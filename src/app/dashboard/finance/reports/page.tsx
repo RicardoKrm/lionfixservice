@@ -26,7 +26,7 @@ const monthlyRevenueData = [
 const chartConfig = {
   revenue: {
     label: "Ingresos",
-    color: "hsl(var(--primary))",
+    color: "hsl(var(--accent))",
   },
 };
 
@@ -40,7 +40,7 @@ export default function ReportsPage() {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center">
-              <DollarSign className="mr-2 h-5 w-5 text-primary" />
+              <DollarSign className="mr-2 h-5 w-5 text-accent" />
               Ingresos Mensuales
             </CardTitle>
             <CardDescription>
@@ -66,7 +66,7 @@ export default function ReportsPage() {
          <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <LineChart className="mr-2 h-5 w-5 text-primary" />
+              <LineChart className="mr-2 h-5 w-5 text-accent" />
               Rentabilidad
             </CardTitle>
           </CardHeader>
@@ -78,7 +78,7 @@ export default function ReportsPage() {
          <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Clock className="mr-2 h-5 w-5 text-primary" />
+              <Clock className="mr-2 h-5 w-5 text-accent" />
               Tiempos Promedio
             </CardTitle>
           </CardHeader>

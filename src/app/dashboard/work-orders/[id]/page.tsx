@@ -146,7 +146,7 @@ export default function WorkOrderDetailPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center">
-                <Wrench className="h-5 w-5 mr-3 text-primary" />
+                <Wrench className="h-5 w-5 mr-3 text-accent" />
                 <div>
                   <p className="text-sm text-muted-foreground">Servicio Principal</p>
                   <p className="font-medium">{workOrder.service}</p>
@@ -155,7 +155,7 @@ export default function WorkOrderDetailPage({
               <Separator />
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
-                    <User className="h-5 w-5 mr-3 text-primary" />
+                    <User className="h-5 w-5 mr-3 text-accent" />
                     <div>
                         <p className="text-sm text-muted-foreground">Técnico</p>
                         <p className="font-medium">{workOrder.technician}</p>
@@ -169,14 +169,14 @@ export default function WorkOrderDetailPage({
               <Separator />
                <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
-                    <Calendar className="h-5 w-5 mr-3 text-primary" />
+                    <Calendar className="h-5 w-5 mr-3 text-accent" />
                     <div>
                         <p className="text-sm text-muted-foreground">Fecha de Ingreso</p>
                         <p className="font-medium">{new Date(workOrder.entryDate).toLocaleString()}</p>
                     </div>
                 </div>
                  {workOrder.completionDate && <div className="flex items-center">
-                    <Calendar className="h-5 w-5 mr-3 text-primary" />
+                    <Calendar className="h-5 w-5 mr-3 text-accent" />
                     <div>
                         <p className="text-sm text-muted-foreground">Fecha de Finalización</p>
                         <p className="font-medium">{new Date(workOrder.completionDate).toLocaleString()}</p>
@@ -196,7 +196,7 @@ export default function WorkOrderDetailPage({
                     {workOrder.serviceLog.map((log, index) => (
                         <div key={index} className="flex gap-3">
                             <div className="flex flex-col items-center">
-                                <div className="bg-primary rounded-full p-1.5 text-primary-foreground">
+                                <div className="bg-accent rounded-full p-1.5 text-accent-foreground">
                                     <Clock className="h-4 w-4" />
                                 </div>
                                 <div className="flex-grow w-px bg-border my-1"></div>

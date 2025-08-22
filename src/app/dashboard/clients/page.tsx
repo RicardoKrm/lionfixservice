@@ -152,7 +152,7 @@ export default function ClientsPage() {
                 </CardHeader>
                 <CardContent className="flex-grow space-y-4">
                   <div>
-                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Car className="h-5 w-5 text-primary"/> Vehículos ({clientVehicles.length})</h4>
+                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Car className="h-5 w-5 text-accent"/> Vehículos ({clientVehicles.length})</h4>
                     <div className="space-y-2">
                     {clientVehicles.length > 0 ? clientVehicles.map(vehicle => (
                       <div key={vehicle.id} className="text-sm p-2 rounded-md border bg-muted/50">
@@ -164,7 +164,7 @@ export default function ClientsPage() {
                   </div>
                    <Separator />
                    <div>
-                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Wrench className="h-5 w-5 text-primary"/> Historial de Trabajos ({clientWorkOrders.length})</h4>
+                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Wrench className="h-5 w-5 text-accent"/> Historial de Trabajos ({clientWorkOrders.length})</h4>
                      <div className="space-y-2">
                        {clientWorkOrders.length > 0 ? clientWorkOrders.map(wo => (
                          <Link key={wo.id} href={`/dashboard/work-orders/${wo.id}`} passHref>
