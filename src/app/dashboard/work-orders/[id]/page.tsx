@@ -40,6 +40,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ObdScannerTool } from "@/components/obd-scanner-tool";
 import { SatisfactionSurveyTool } from "@/components/satisfaction-survey-tool";
+import { WorkOrderStatusTracker } from "@/components/work-order-status-tracker";
 
 
 export default function WorkOrderDetailPage({
@@ -133,10 +134,10 @@ export default function WorkOrderDetailPage({
       </DashboardHeader>
       <main className="flex-1 p-6 grid md:grid-cols-3 gap-6 overflow-y-auto">
         <div className="md:col-span-2 space-y-6">
-          <Card>
+           <Card>
             <CardHeader>
                <div className="flex justify-between items-start">
-                 <CardTitle>Detalles del Servicio</CardTitle>
+                 <CardTitle>Seguimiento de la Orden</CardTitle>
                  <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
@@ -153,6 +154,15 @@ export default function WorkOrderDetailPage({
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
+            </CardHeader>
+            <CardContent>
+              <WorkOrderStatusTracker currentStatus={workOrder.status} />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+               <CardTitle>Detalles del Servicio</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center">
@@ -172,7 +182,7 @@ export default function WorkOrderDetailPage({
                     </div>
                 </div>
                 <div>
-                    <p className="text-sm text-muted-foreground">Estado</p>
+                    <p className="text-sm text-muted-foreground">Estado Actual</p>
                     <Badge variant={getStatusVariant(workOrder.status)}>{workOrder.status}</Badge>
                 </div>
               </div>
