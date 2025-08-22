@@ -84,11 +84,9 @@ export default function QuoteDetailPage({
 
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
-      <DashboardHeader title={`Detalle de Cotización`}>
+      <DashboardHeader title={`Detalle de Cotización: ${quote.id}`}>
         <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={handleSend}><Send className="mr-2 h-4 w-4"/> Enviar por Email</Button>
-            <Button variant="outline"><Printer className="mr-2 h-4 w-4"/> Imprimir / PDF</Button>
-            {status === 'Aprobada' && (
+             {status === 'Aprobada' && (
                 <Button onClick={handleConvertToOT} variant="secondary">
                     <Wrench className="mr-2 h-4 w-4"/>
                     Convertir a OT
@@ -96,8 +94,10 @@ export default function QuoteDetailPage({
             )}
         </div>
       </DashboardHeader>
-      <main className="flex-1 p-6 overflow-y-auto bg-muted/30">
-        <div className="max-w-4xl mx-auto bg-card p-8 rounded-lg shadow-lg">
+      <main className="flex-1 p-6 overflow-y-auto bg-muted/30 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Columna Principal - Documento */}
+        <div className="lg:col-span-2 bg-card p-8 rounded-lg shadow-lg flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-start pb-6 border-b">
                 <div className="flex items-center gap-4">
@@ -130,7 +130,7 @@ export default function QuoteDetailPage({
             </div>
 
             {/* Items Table */}
-            <div className="border rounded-lg overflow-hidden">
+            <div className="border rounded-lg overflow-hidden flex-grow">
                 <Table>
                     <TableHeader className="bg-muted/50">
                     <TableRow>
@@ -154,7 +154,7 @@ export default function QuoteDetailPage({
             </div>
 
             {/* Totals */}
-            <div className="flex justify-end mt-6">
+            <div className="flex justify-end mt-6 pt-6 border-t">
                 <div className="w-full max-w-sm space-y-3">
                     <div className="flex justify-between text-muted-foreground">
                         <span>Subtotal</span>
@@ -171,35 +171,45 @@ export default function QuoteDetailPage({
                     </div>
                 </div>
             </div>
+        </div>
 
-            <Separator className="my-8"/>
-
-            {/* Actions & Status */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                <div className="space-y-2">
-                    <h3 className="font-semibold text-muted-foreground">ESTADO ACTUAL</h3>
-                    <Badge variant={getStatusVariant(status)} className="text-base px-4 py-1">{status}</Badge>
+        {/* Columna Secundaria - Acciones y Estado */}
+        <div className="lg:col-span-1 space-y-6">
+             {status === 'Enviada' && (
+                <Card className="bg-muted/50 border-dashed">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Acciones del Cliente</CardTitle>
+                        <CardDescription>Simulación de la aprobación o rechazo del cliente.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-4">
+                        <Button onClick={handleApprove} className="w-full bg-green-600 hover:bg-green-700"><CheckCircle className="mr-2"/> Aprobar Presupuesto</Button>
+                        <Button onClick={handleReject} variant="destructive" className="w-full"><XCircle className="mr-2"/> Rechazar Presupuesto</Button>
+                    </CardContent>
+                </Card>
+             )}
+             <Card>
+                <CardHeader>
+                    <CardTitle>Estado Actual</CardTitle>
+                </CardHeader>
+                <CardContent>
+                     <Badge variant={getStatusVariant(status)} className="text-base px-4 py-1 w-full justify-center">{status}</Badge>
                     {status === 'Aprobada' && (
-                        <p className="text-sm text-green-400 pt-2">¡El cliente ha aprobado el presupuesto!</p>
+                        <p className="text-sm text-green-400 pt-2 text-center">¡El cliente ha aprobado el presupuesto!</p>
                     )}
                     {status === 'Rechazada' && (
-                         <p className="text-sm text-destructive pt-2">El cliente ha rechazado el presupuesto.</p>
+                         <p className="text-sm text-destructive pt-2 text-center">El cliente ha rechazado el presupuesto.</p>
                     )}
-                </div>
-
-                {status === 'Enviada' && (
-                    <Card className="bg-muted/50 border-dashed">
-                        <CardHeader className="pb-4">
-                            <CardTitle className="text-lg">Acciones del Cliente</CardTitle>
-                            <CardDescription>Simulación de la aprobación o rechazo.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row gap-4">
-                            <Button onClick={handleApprove} className="w-full bg-green-600 hover:bg-green-700"><CheckCircle className="mr-2"/> Aprobar</Button>
-                            <Button onClick={handleReject} variant="destructive" className="w-full"><XCircle className="mr-2"/> Rechazar</Button>
-                        </CardContent>
-                    </Card>
-                )}
-            </div>
+                </CardContent>
+             </Card>
+             <Card>
+                <CardHeader>
+                    <CardTitle>Opciones del Documento</CardTitle>
+                </CardHeader>
+                 <CardContent className="flex flex-col gap-3">
+                    <Button variant="outline" onClick={handleSend}><Send className="mr-2 h-4 w-4"/> Enviar por Email</Button>
+                    <Button variant="outline"><Printer className="mr-2 h-4 w-4"/> Imprimir / PDF</Button>
+                 </CardContent>
+             </Card>
         </div>
       </main>
     </div>
