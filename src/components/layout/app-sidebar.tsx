@@ -9,15 +9,11 @@ import {
   SidebarMenuButton,
   SidebarContent,
   SidebarFooter,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import {
   Home,
   Wrench,
   Calendar,
-  Send,
   Settings,
   UserCircle,
   Car,
@@ -32,31 +28,19 @@ import {
   Briefcase,
   BookCheck,
   ChevronDown,
+  FileText,
+  Send,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({
-    finanzas: pathname.startsWith("/dashboard/finance"),
-    gestion: pathname.startsWith("/dashboard/management") || pathname.startsWith("/dashboard/reminders"),
-  });
 
   const isActive = (path: string) => {
     return pathname === path || pathname.startsWith(`${path}/`);
   };
-
-  const toggleMenu = (menu: string) => {
-    setOpenMenus(prev => ({ ...prev, [menu]: !prev[menu] }));
-  };
-  
-  const isMenuOpen = (menu: string) => {
-    return !!openMenus[menu];
-  }
 
   return (
     <Sidebar>
@@ -130,67 +114,71 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
-          
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => toggleMenu('finanzas')} data-state={isMenuOpen('finanzas') ? 'open' : 'closed'}>
-              <FileDigit />
-              <span>Finanzas</span>
-              <ChevronDown className={cn("ml-auto h-4 w-4 shrink-0 transition-transform duration-200", isMenuOpen('finanzas') && "rotate-180")} />
-            </SidebarMenuButton>
-            <SidebarMenuSub open={isMenuOpen('finanzas')}>
-               <SidebarMenuSubItem>
-                 <Link href="/dashboard/finance/quotes" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/quotes")} asChild>
-                    Cotizaciones
-                  </SidebarMenuSubButton>
-                </Link>
-              </SidebarMenuSubItem>
-              <SidebarMenuSubItem>
-                 <Link href="/dashboard/finance/reports" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/finance/reports")} asChild>
-                    Reportes y KPIs
-                  </SidebarMenuSubButton>
-                </Link>
-              </SidebarMenuSubItem>
-            </SidebarMenuSub>
+            <Link href="/dashboard/finance/quotes" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/finance/quotes")}
+                tooltip="Cotizaciones"
+              >
+                <FileDigit />
+                <span>Cotizaciones</span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
-
+           <SidebarMenuItem>
+            <Link href="/dashboard/finance/reports" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/finance/reports")}
+                tooltip="Reportes y KPIs"
+              >
+                <BarChart />
+                <span>Reportes y KPIs</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+           <SidebarMenuItem>
+            <Link href="/dashboard/management/checklists" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/management/checklists")}
+                tooltip="Checklists"
+              >
+                <ClipboardCheck />
+                <span>Checklists</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+           <SidebarMenuItem>
+            <Link href="/dashboard/management/contracts" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/management/contracts")}
+                tooltip="Contratos de Flota"
+              >
+                <Briefcase />
+                <span>Contratos de Flota</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => toggleMenu('gestion')} data-state={isMenuOpen('gestion') ? 'open' : 'closed'}>
-              <ClipboardCheck />
-              <span>Gestión y Comms</span>
-               <ChevronDown className={cn("ml-auto h-4 w-4 shrink-0 transition-transform duration-200", isMenuOpen('gestion') && "rotate-180")} />
-            </SidebarMenuButton>
-            <SidebarMenuSub open={isMenuOpen('gestion')}>
-              <SidebarMenuSubItem>
-                 <Link href="/dashboard/management/checklists" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/checklists")} asChild>
-                    Checklists
-                  </SidebarMenuSubButton>
-                </Link>
-              </SidebarMenuSubItem>
-              <SidebarMenuSubItem>
-                 <Link href="/dashboard/management/contracts" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/contracts")} asChild>
-                    Contratos de Flota
-                  </SidebarMenuSubButton>
-                </Link>
-              </SidebarMenuSubItem>
-               <SidebarMenuSubItem>
-                <Link href="/dashboard/management/iso9001" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/management/iso9001")} asChild>
-                    Norma ISO 9001
-                  </SidebarMenuSubButton>
-                </Link>
-              </SidebarMenuSubItem>
-              <SidebarMenuSubItem>
-                <Link href="/dashboard/reminders" passHref>
-                  <SidebarMenuSubButton isActive={isActive("/dashboard/reminders")} asChild>
-                    Recordatorios IA
-                  </SidebarMenuSubButton>
-                </Link>
-              </SidebarMenuSubItem>
-            </SidebarMenuSub>
+            <Link href="/dashboard/management/iso9001" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/management/iso9001")}
+                tooltip="Norma ISO 9001"
+              >
+                <ShieldCheck />
+                <span>Norma ISO 9001</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <Link href="/dashboard/reminders" passHref>
+              <SidebarMenuButton
+                isActive={isActive("/dashboard/reminders")}
+                tooltip="Recordatorios IA"
+              >
+                <Send />
+                <span>Recordatorios IA</span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <Link href="/dashboard/settings/maintenance-plans" passHref>
