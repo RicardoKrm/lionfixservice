@@ -1,4 +1,7 @@
 
+"use client";
+
+import { useState } from "react";
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
@@ -6,6 +9,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from "@/components/ui/card";
 import {
   Accordion,
@@ -13,13 +17,39 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CheckCircle, Users, HardHat, BarChart, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Users, HardHat, BarChart, TrendingUp, Upload, Download, FileText } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Iso9001Page() {
+  const { toast } = useToast();
+  const [documents, setDocuments] = useState([
+    "Manual_de_Calidad_v3.1.pdf",
+    "Procedimiento_Recepcion_Vehiculos_v2.pdf",
+    "Informe_Auditoria_Interna_Q2_2024.pdf"
+  ]);
+
+  const handleUpload = () => {
+    toast({
+      title: "Adjuntar Archivo (Simulación)",
+      description: "En una aplicación real, aquí se abriría un diálogo para subir un archivo.",
+    });
+    const newDoc = `Documento_Subido_${(documents.length + 1)}.pdf`;
+    setDocuments([...documents, newDoc]);
+  };
+
+  const handleDownload = (docName: string) => {
+    toast({
+      title: "Descarga Iniciada (Simulación)",
+      description: `Descargando: ${docName}`,
+    });
+  };
+
+
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Relación Software - Norma ISO 9001" />
-      <main className="flex-1 p-6 overflow-y-auto">
+      <main className="flex-1 p-6 space-y-6 overflow-y-auto">
         <Card>
           <CardHeader>
             <CardTitle>Cómo LionFix ERP apoya la certificación ISO 9001</CardTitle>
@@ -87,6 +117,37 @@ export default function Iso9001Page() {
               </AccordionItem>
             </Accordion>
           </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Gestión Documental para Auditorías</CardTitle>
+                <CardDescription>
+                    Centralice los documentos clave para el cumplimiento de la norma ISO 9001, como certificados, informes y procedimientos.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ul className="space-y-3">
+                    {documents.map((doc, index) => (
+                         <li key={index} className="flex items-center justify-between rounded-lg border p-3">
+                            <div className="flex items-center gap-3">
+                                <FileText className="h-5 w-5 text-muted-foreground"/>
+                                <span className="font-medium">{doc}</span>
+                            </div>
+                            <Button variant="ghost" size="sm" onClick={() => handleDownload(doc)}>
+                            <Download className="mr-2 h-4 w-4" />
+                            Descargar
+                            </Button>
+                        </li>
+                    ))}
+                </ul>
+            </CardContent>
+            <CardFooter>
+                <Button variant="outline" onClick={handleUpload}>
+                    <Upload className="mr-2 h-4 w-4"/>
+                    Adjuntar Documento
+                </Button>
+            </CardFooter>
         </Card>
       </main>
     </div>
