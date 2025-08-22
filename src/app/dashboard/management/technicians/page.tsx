@@ -13,30 +13,93 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PlusCircle, User, Calendar, MoreHorizontal } from "lucide-react";
+import { PlusCircle, User, Calendar, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { technicians as initialTechnicians } from "@/lib/data";
 import type { Technician } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { TechnicianFormDialog } from "@/components/technician-form-dialog";
 
 
 export default function TechniciansPage() {
   const [technicians, setTechnicians] = useState<Technician[]>(initialTechnicians);
+  const [selectedTechnician, setSelectedTechnician] = useState<Technician | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const { toast } = useToast();
 
   const handleNewTechnician = () => {
-    // Logic to open a form dialog would go here
-    toast({ title: "Acción no implementada", description: "El formulario para añadir técnicos aún no está disponible."})
+    setSelectedTechnician(null);
+    setIsFormOpen(true);
   };
   
-  const handleAddExtraHours = (techId: string) => {
-    // Logic to open a dialog to add hours
-    toast({ title: "Acción no implementada", description: `Aquí se abriría un modal para añadir horas a ${techId}.`})
-  }
+  const handleEditTechnician = (technician: Technician) => {
+    setSelectedTechnician(technician);
+    setIsFormOpen(true);
+  };
+  
+  const handleDeleteTechnician = (technician: Technician) => {
+    setSelectedTechnician(technician);
+    setIsAlertOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedTechnician) {
+      setTechnicians(technicians.filter((t) => t.id !== selectedTechnician.id));
+      toast({
+        title: "Técnico Eliminado",
+        description: `El técnico ${selectedTechnician.name} ha sido eliminado.`,
+      });
+    }
+    setIsAlertOpen(false);
+    setSelectedTechnician(null);
+  };
+
+  const handleFormSubmit = (data: Omit<Technician, "id">) => {
+    if (selectedTechnician) {
+      // Edit
+      setTechnicians(technicians.map((t) =>
+        t.id === selectedTechnician.id ? { ...t, ...data } : t
+      ));
+      toast({
+        title: "Técnico Actualizado",
+        description: "Los datos del técnico han sido actualizados.",
+      });
+    } else {
+      // Create
+      const newTechnician: Technician = {
+        id: `TECH-${(technicians.length + 1).toString().padStart(3, '0')}`,
+        ...data,
+      };
+      setTechnicians([...technicians, newTechnician]);
+       toast({
+        title: "Técnico Creado",
+        description: "El nuevo técnico ha sido añadido al equipo.",
+      });
+    }
+    setIsFormOpen(false);
+    setSelectedTechnician(null);
+  };
 
   return (
+    <>
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Gestión de Técnicos">
         <Button onClick={handleNewTechnician} variant="secondary">
@@ -61,7 +124,7 @@ export default function TechniciansPage() {
                 <div className="flex justify-between items-start">
                     <div className="flex items-center gap-4">
                         <Avatar className="h-16 w-16">
-                            <AvatarImage src={`https://placehold.co/100x100.png`} data-ai-hint="mechanic portrait" />
+                            <AvatarImage src={tech.avatarUrl} data-ai-hint="mechanic portrait" />
                             <AvatarFallback>{tech.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <div>
@@ -69,9 +132,26 @@ export default function TechniciansPage() {
                              <CardDescription>ID: {tech.id}</CardDescription>
                         </div>
                     </div>
-                     <Button variant="ghost" size="icon">
-                        <MoreHorizontal className="h-4 w-4" />
-                    </Button>
+                     <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                           <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                           </Button>
+                        </DropdownMenuTrigger>
+                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleEditTechnician(tech)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive"
+                            onClick={() => handleDeleteTechnician(tech)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Eliminar
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                 </div>
               </CardHeader>
               <CardContent className="flex-grow space-y-4">
@@ -99,10 +179,7 @@ export default function TechniciansPage() {
               </CardContent>
               <CardFooter className="flex gap-2">
                  <Button variant="outline" className="w-full">
-                    <User className="mr-2 h-4 w-4"/> Ver Perfil Completo
-                 </Button>
-                  <Button variant="secondary" className="w-full" onClick={() => handleAddExtraHours(tech.id)}>
-                    Añadir Horas
+                    <User className="mr-2 h-4 w-4"/> Ver Perfil
                  </Button>
               </CardFooter>
             </Card>
@@ -110,5 +187,35 @@ export default function TechniciansPage() {
         </div>
       </main>
     </div>
+
+    <TechnicianFormDialog
+      isOpen={isFormOpen}
+      onOpenChange={setIsFormOpen}
+      onSubmit={handleFormSubmit}
+      technician={selectedTechnician}
+    />
+
+    <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Se eliminará al técnico del sistema.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setSelectedTechnician(null)}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
