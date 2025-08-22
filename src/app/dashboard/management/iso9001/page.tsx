@@ -131,9 +131,9 @@ export default function Iso9001Page() {
                   Control de recursos (Cláusula 7)
                 </AccordionTrigger>
                 <AccordionContent className="space-y-2 pl-8">
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Módulo de inventario para gestionar repuestos y herramientas.</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Planificación y registro de mantenimiento de equipos del taller.</p>
-                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Fichas de personal para registrar capacitaciones y competencias.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Mantenimiento de equipos (ej. scanner, elevador, máquina A/C).</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Registro de calibraciones y verificaciones.</p>
+                  <p className="flex items-center"><CheckCircle className="h-4 w-4 mr-2 text-green-500" /> Competencia del personal (capacitaciones registradas).</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-5">
