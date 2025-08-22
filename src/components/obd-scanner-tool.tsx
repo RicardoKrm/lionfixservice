@@ -81,5 +81,4 @@ export function ObdScannerTool({ onScan }: ObdScannerToolProps) {
     </Card>
   );
 }
-
     
