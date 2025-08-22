@@ -28,6 +28,7 @@ import {
   LineChart,
   FileDigit,
   BarChart,
+  Flame,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -44,8 +45,8 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 bg-primary flex items-center justify-center rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-foreground"><path d="M15 5h5v5"/><path d="M20 15v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h2"/><path d="M12 12L20 4"/><path d="M16 8L12 12"/><path d="M9 4v2"/><path d="M9 10v2"/><path d="M4 9h2"/><path d="M10 9h2"/><path d="m2.2 2.2 1.4 1.4"/><path d="M20.4 20.4 19 19"/></svg>
+          <Avatar className="h-12 w-12 bg-sidebar-primary flex items-center justify-center rounded-lg">
+             <Flame className="text-sidebar-primary-foreground" />
           </Avatar>
           <div className="flex flex-col">
             <h2 className="text-xl font-semibold text-sidebar-foreground">

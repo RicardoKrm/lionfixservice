@@ -18,12 +18,12 @@ import { getStatusVariant } from "@/lib/utils";
 
 export function WorkOrderCard({ workOrder }: { workOrder: EnrichedWorkOrder }) {
   return (
-    <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70 flex flex-col">
+    <Card className="flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
             <Badge variant={getStatusVariant(workOrder.status)}>{workOrder.status}</Badge>
-            <CardTitle className="mt-2 text-primary">{workOrder.id}</CardTitle>
+            <CardTitle className="mt-2">{workOrder.id}</CardTitle>
           </div>
           <div className="text-right">
             <div className="font-mono text-lg uppercase tracking-wider bg-secondary text-secondary-foreground px-3 py-1 rounded-md">
@@ -55,7 +55,7 @@ export function WorkOrderCard({ workOrder }: { workOrder: EnrichedWorkOrder }) {
       </CardContent>
       <CardFooter>
         <Link href={`/dashboard/work-orders/${workOrder.id}`} className="w-full">
-            <Button className="w-full">
+            <Button className="w-full" variant="secondary">
                 Ver Detalles
                 <ArrowRight className="ml-2 h-4 w-4"/>
             </Button>

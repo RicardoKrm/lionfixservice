@@ -102,13 +102,13 @@ export default function ClientsPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Gestión de Clientes (CRM)">
-        <Button onClick={handleNewClient}>
+        <Button onClick={handleNewClient} variant="secondary">
           <PlusCircle className="mr-2 h-4 w-4" />
           Nuevo Cliente
         </Button>
       </DashboardHeader>
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
-        <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+        <Card>
            <CardHeader>
             <CardTitle>Listado de Clientes</CardTitle>
             <CardDescription>
@@ -123,7 +123,7 @@ export default function ClientsPage() {
             const clientWorkOrders = workOrders.filter(wo => wo.clientId === client.id);
             
             return (
-              <Card key={client.id} className="flex flex-col bg-white/70 backdrop-blur-sm dark:bg-card/70">
+              <Card key={client.id} className="flex flex-col">
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
@@ -155,7 +155,7 @@ export default function ClientsPage() {
                     <h4 className="font-semibold flex items-center gap-2 mb-2"><Car className="h-5 w-5 text-primary"/> Vehículos ({clientVehicles.length})</h4>
                     <div className="space-y-2">
                     {clientVehicles.length > 0 ? clientVehicles.map(vehicle => (
-                      <div key={vehicle.id} className="text-sm p-2 rounded-md border bg-background/50">
+                      <div key={vehicle.id} className="text-sm p-2 rounded-md border bg-muted/50">
                         <p className="font-semibold">{vehicle.make} {vehicle.model} ({vehicle.year})</p>
                         <p className="font-mono text-muted-foreground uppercase">{vehicle.licensePlate}</p>
                       </div>
@@ -168,7 +168,7 @@ export default function ClientsPage() {
                      <div className="space-y-2">
                        {clientWorkOrders.length > 0 ? clientWorkOrders.map(wo => (
                          <Link key={wo.id} href={`/dashboard/work-orders/${wo.id}`} passHref>
-                           <div className="text-sm p-2 rounded-md border bg-background/50 hover:bg-muted transition-colors cursor-pointer">
+                           <div className="text-sm p-2 rounded-md border bg-muted/50 hover:bg-accent/10 transition-colors cursor-pointer">
                               <p className="font-semibold">{wo.id} - <span className="font-normal">{wo.service}</span></p>
                               <p className="text-muted-foreground">{new Date(wo.entryDate).toLocaleDateString()}</p>
                            </div>
@@ -208,5 +208,3 @@ export default function ClientsPage() {
     </div>
   );
 }
-
-    

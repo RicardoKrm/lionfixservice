@@ -14,7 +14,7 @@ export default function DashboardPage() {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight text-primary">Panel de Control</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-foreground">Panel de Control</h2>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard
@@ -43,14 +43,14 @@ export default function DashboardPage() {
         />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 bg-white/70 backdrop-blur-sm dark:bg-card/70">
+        <Card className="col-span-4">
           <CardHeader>
-            <CardTitle className="text-primary">¡Bienvenido a LionFix ERP!</CardTitle>
+            <CardTitle className="text-foreground">¡Bienvenido a LionFix ERP!</CardTitle>
             <CardDescription>
               Tu centro de mando para gestionar todas las operaciones del taller.
             </CardDescription>
           </CardHeader>
-          <CardContent className="pl-2">
+          <CardContent className="pl-6">
             <p>
               Desde aquí puedes agendar citas, gestionar órdenes de trabajo, controlar
               tu inventario y comunicarte con tus clientes. Usa el menú de la
@@ -58,7 +58,7 @@ export default function DashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="col-span-3 bg-primary/90 text-primary-foreground relative overflow-hidden backdrop-blur-sm">
+        <Card className="col-span-3 bg-primary/90 text-primary-foreground relative overflow-hidden">
           <CardHeader>
             <CardTitle>Potencia Tu Productividad</CardTitle>
             <CardDescription className="text-primary-foreground/80">

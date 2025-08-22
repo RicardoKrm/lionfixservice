@@ -76,7 +76,7 @@ export function ServiceNotificationTool({
   };
 
   return (
-    <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+    <Card>
       <CardHeader>
         <CardTitle>Notificaciones de Servicio</CardTitle>
         <CardDescription>

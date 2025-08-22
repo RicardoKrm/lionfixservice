@@ -95,14 +95,14 @@ export default function ChecklistsPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Checklists de Vehículos">
-          <Button onClick={handleNew}>
+          <Button onClick={handleNew} variant="secondary">
             <PlusCircle />
             Nuevo Checklist
           </Button>
       </DashboardHeader>
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
          {/* Filter Section */}
-        <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+        <Card>
             <CardHeader>
                 <CardTitle>Filtros de Búsqueda</CardTitle>
                 <CardDescription>Utilice los filtros para encontrar checklists específicos.</CardDescription>
@@ -169,7 +169,7 @@ export default function ChecklistsPage() {
         {/* Checklist Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredChecklists.map((checklist) => (
-                <Card key={checklist.id} className="flex flex-col bg-white/70 backdrop-blur-sm dark:bg-card/70">
+                <Card key={checklist.id} className="flex flex-col">
                     <CardHeader>
                         <div className="flex justify-between items-center">
                             <CardTitle className="flex items-center gap-2 text-primary">

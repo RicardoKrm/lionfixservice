@@ -10,7 +10,7 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="bg-background/80 backdrop-blur-sm border-b">
+        <div className="border-b">
             {children}
         </div>
       </SidebarInset>

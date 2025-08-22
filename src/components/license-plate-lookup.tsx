@@ -35,7 +35,7 @@ export function LicensePlateLookup() {
   };
 
   return (
-    <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+    <Card>
       <CardHeader>
         <CardTitle>Búsqueda por Patente</CardTitle>
         <CardDescription>

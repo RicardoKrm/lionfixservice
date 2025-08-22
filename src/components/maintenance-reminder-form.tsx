@@ -71,7 +71,7 @@ export function MaintenanceReminderForm() {
   };
 
   return (
-    <Card className="w-full max-w-2xl bg-white/70 backdrop-blur-sm dark:bg-card/70">
+    <Card className="w-full max-w-2xl">
         <CardHeader>
             <CardTitle>Recordatorios de Mantenimiento con IA</CardTitle>
             <CardDescription>

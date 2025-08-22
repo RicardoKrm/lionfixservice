@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 
 type Status = WorkOrderStatus | QuoteStatus;
 
-export const getStatusVariant = (status: Status) => {
+export const getStatusVariant = (status: Status): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
       case "Completado":
       case "Entregado":

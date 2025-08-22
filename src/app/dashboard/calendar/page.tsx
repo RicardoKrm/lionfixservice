@@ -68,7 +68,7 @@ export default function CalendarPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Calendario Digital del Taller">
-        <Button onClick={handleNewAppointment}>
+        <Button onClick={handleNewAppointment} variant="secondary">
           <PlusCircle className="mr-2 h-4 w-4" />
           Nueva Cita
         </Button>

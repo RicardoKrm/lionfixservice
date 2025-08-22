@@ -116,14 +116,14 @@ export default function WorkOrderDetailPage({
     <>
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title={`Orden de Trabajo: ${workOrder.id}`}>
-        <Button onClick={() => setIsFormOpen(true)}>
+        <Button onClick={() => setIsFormOpen(true)} variant="secondary">
             <Edit className="mr-2 h-4 w-4" />
             Editar Orden
         </Button>
       </DashboardHeader>
       <main className="flex-1 p-6 grid md:grid-cols-3 gap-6 overflow-y-auto">
         <div className="md:col-span-2 space-y-6">
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+          <Card>
             <CardHeader>
                <div className="flex justify-between items-start">
                  <CardTitle>Detalles del Servicio</CardTitle>
@@ -146,7 +146,7 @@ export default function WorkOrderDetailPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center">
-                <Wrench className="h-5 w-5 mr-3 text-accent" />
+                <Wrench className="h-5 w-5 mr-3 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground">Servicio Principal</p>
                   <p className="font-medium">{workOrder.service}</p>
@@ -155,7 +155,7 @@ export default function WorkOrderDetailPage({
               <Separator />
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
-                    <User className="h-5 w-5 mr-3 text-accent" />
+                    <User className="h-5 w-5 mr-3 text-primary" />
                     <div>
                         <p className="text-sm text-muted-foreground">Técnico</p>
                         <p className="font-medium">{workOrder.technician}</p>
@@ -169,14 +169,14 @@ export default function WorkOrderDetailPage({
               <Separator />
                <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
-                    <Calendar className="h-5 w-5 mr-3 text-accent" />
+                    <Calendar className="h-5 w-5 mr-3 text-primary" />
                     <div>
                         <p className="text-sm text-muted-foreground">Fecha de Ingreso</p>
                         <p className="font-medium">{new Date(workOrder.entryDate).toLocaleString()}</p>
                     </div>
                 </div>
                  {workOrder.completionDate && <div className="flex items-center">
-                    <Calendar className="h-5 w-5 mr-3 text-accent" />
+                    <Calendar className="h-5 w-5 mr-3 text-primary" />
                     <div>
                         <p className="text-sm text-muted-foreground">Fecha de Finalización</p>
                         <p className="font-medium">{new Date(workOrder.completionDate).toLocaleString()}</p>
@@ -186,7 +186,7 @@ export default function WorkOrderDetailPage({
             </CardContent>
           </Card>
           
-           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+           <Card>
             <CardHeader>
                 <CardTitle className="flex items-center"><StickyNote className="mr-2"/> Bitácora de Diagnóstico y Servicio</CardTitle>
                 <CardDescription>Registro cronológico de todas las acciones y observaciones.</CardDescription>
@@ -218,7 +218,7 @@ export default function WorkOrderDetailPage({
                         onChange={(e) => setNewLogEntry(e.target.value)}
                         rows={3}
                     />
-                    <Button onClick={handleAddLogEntry} size="sm" className="self-end">
+                    <Button onClick={handleAddLogEntry} size="sm" className="self-end" variant="secondary">
                         <MessageSquarePlus className="mr-2 h-4 w-4" />
                         Agregar Entrada
                     </Button>
@@ -226,7 +226,7 @@ export default function WorkOrderDetailPage({
             </CardContent>
           </Card>
 
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+          <Card>
             <CardHeader>
                 <CardTitle className="flex items-center"><Package className="mr-2"/> Repuestos y Materiales</CardTitle>
                 <CardDescription>Trazabilidad de repuestos y materiales utilizados en esta orden.</CardDescription>
@@ -259,7 +259,7 @@ export default function WorkOrderDetailPage({
 
         </div>
         <div className="space-y-6">
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center"><User className="mr-2"/> Cliente</CardTitle>
             </CardHeader>
@@ -269,7 +269,7 @@ export default function WorkOrderDetailPage({
                 <p><strong>Teléfono:</strong> {client.phone}</p>
             </CardContent>
           </Card>
-           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+           <Card>
             <CardHeader>
               <CardTitle className="flex items-center"><Car className="mr-2"/> Vehículo</CardTitle>
             </CardHeader>

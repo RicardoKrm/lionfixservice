@@ -93,7 +93,7 @@ export default function QuoteDetailPage({
       </DashboardHeader>
       <main className="flex-1 p-6 grid md:grid-cols-3 gap-6 overflow-y-auto">
         <div className="md:col-span-2 space-y-6">
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+          <Card>
             <CardHeader>
               <CardTitle>Detalles de la Cotización</CardTitle>
               <CardDescription>
@@ -143,7 +143,7 @@ export default function QuoteDetailPage({
           </Card>
         </div>
         <div className="space-y-6">
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+          <Card>
             <CardHeader>
                 <CardTitle>Acciones del Cliente</CardTitle>
                 <CardDescription>Simulación de la aprobación o rechazo por parte del cliente.</CardDescription>
@@ -154,7 +154,7 @@ export default function QuoteDetailPage({
             </CardFooter>
           </Card>
           
-           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-lg">Estado</CardTitle>
               <Badge variant={getStatusVariant(status)} className="text-base">{status}</Badge>
@@ -163,7 +163,7 @@ export default function QuoteDetailPage({
               {status === 'Aprobada' && (
                 <div className="space-y-4">
                   <p className="text-sm text-green-600 dark:text-green-400">El cliente ha aprobado el presupuesto.</p>
-                  <Button className="w-full" onClick={handleConvertToOT}>
+                  <Button className="w-full" onClick={handleConvertToOT} variant="secondary">
                     <Wrench className="mr-2 h-4 w-4"/>
                     Convertir a Orden de Trabajo
                   </Button>
@@ -178,7 +178,7 @@ export default function QuoteDetailPage({
             </CardContent>
           </Card>
 
-          <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center"><User className="mr-2"/> Cliente</CardTitle>
             </CardHeader>
@@ -188,7 +188,7 @@ export default function QuoteDetailPage({
                 <p><strong>Teléfono:</strong> {client.phone}</p>
             </CardContent>
           </Card>
-           <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+           <Card>
             <CardHeader>
               <CardTitle className="flex items-center"><Car className="mr-2"/> Vehículo</CardTitle>
             </CardHeader>

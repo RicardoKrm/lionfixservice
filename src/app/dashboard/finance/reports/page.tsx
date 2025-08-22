@@ -37,7 +37,7 @@ export default function ReportsPage() {
       <main className="flex-1 p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-y-auto">
         
         {/* Revenue Chart */}
-        <Card className="lg:col-span-2 bg-white/70 backdrop-blur-sm dark:bg-card/70">
+        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center">
               <DollarSign className="mr-2 h-5 w-5 text-primary" />
@@ -55,7 +55,7 @@ export default function ReportsPage() {
                     <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value / 1000}k`} />
                     <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
-                    <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
                 </RechartsBarChart>
               </ResponsiveContainer>
             </ChartContainer>
@@ -63,7 +63,7 @@ export default function ReportsPage() {
         </Card>
         
         {/* Placeholder Cards */}
-         <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
               <LineChart className="mr-2 h-5 w-5 text-primary" />
@@ -75,7 +75,7 @@ export default function ReportsPage() {
            </CardContent>
         </Card>
 
-         <Card className="bg-white/70 backdrop-blur-sm dark:bg-card/70">
+         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
               <Clock className="mr-2 h-5 w-5 text-primary" />
