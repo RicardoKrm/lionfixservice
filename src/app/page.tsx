@@ -42,12 +42,12 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-3 bg-background/80 backdrop-blur-sm border-b border-border">
-        <Link href="/" className="flex items-center gap-3">
+      <header className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 py-3 bg-background/80 backdrop-blur-sm border-b border-border">
+        <Link href="/" className="flex items-center gap-2">
            <Image src="/logo.png" alt="LionFix Logo" width={48} height={48} />
            <span className="text-xl font-bold text-primary tracking-tight">LionFix Service</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-2">
+        <nav className="hidden md:flex items-center gap-1">
             <Button variant="ghost" asChild>
                 <Link href="#services">Servicios</Link>
             </Button>
@@ -68,8 +68,8 @@ export default function LandingPage() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative flex flex-col items-center justify-center text-center h-[80vh] min-h-[600px] py-20 px-4 text-white overflow-hidden">
-             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent z-10"/>
+        <section className="relative flex flex-col items-center justify-center text-center h-[90vh] min-h-[650px] py-20 px-4 text-white overflow-hidden">
+             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent z-10"/>
              <Image 
                 src="https://placehold.co/1920x1080.png" 
                 alt="Taller mecánico profesional para camiones en Iquique" 
@@ -78,20 +78,20 @@ export default function LandingPage() {
                 className="object-cover z-0"
                 data-ai-hint="mechanic garage truck dark"
               />
-            <div className="z-20 flex flex-col items-center">
-                 <Image src="/logo.png" alt="LionFix Logo" width={180} height={180} className="mb-6 drop-shadow-lg" />
-                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-primary drop-shadow-md max-w-4xl">
-                    Servicio Técnico Profesional para Camiones, Buses y Sprinter en Iquique
+            <div className="z-20 flex flex-col items-center max-w-4xl">
+                 <Image src="/logo.png" alt="LionFix Logo" width={160} height={160} className="mb-6 drop-shadow-lg" />
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-primary drop-shadow-md">
+                    Tu Flota No Puede Parar. Nosotros Tampoco.
                 </h1>
-                <p className="mt-4 max-w-3xl text-lg md:text-xl text-neutral-200">
-                    Soluciones integrales de mecánica y diagnóstico electrónico para el motor de su negocio. Maximizamos la operatividad de su flota con tecnología de punta y un equipo experto.
+                <p className="mt-4 text-lg md:text-xl text-neutral-200">
+                    Somos el servicio técnico especialista en Iquique para <strong className="text-primary">camiones, buses y flotas Sprinter</strong>. Maximizamos la operatividad de tu negocio con diagnóstico de punta y un equipo experto.
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-4">
                     <Button size="lg" asChild>
-                        <Link href="/login">Agendar Mantención <ArrowRight className="ml-2"/></Link>
+                        <Link href="#contact">Agendar Mantención <ArrowRight className="ml-2"/></Link>
                     </Button>
                     <Button size="lg" variant="secondary" asChild>
-                        <Link href="#contact">Contactar un Asesor</Link>
+                        <Link href="/login">Portal Clientes</Link>
                     </Button>
                 </div>
             </div>
@@ -101,26 +101,14 @@ export default function LandingPage() {
         <section id="services" className="py-16 sm:py-24 bg-muted/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-primary">Nuestros Servicios Especializados</h2>
-              <p className="mt-2 text-lg text-muted-foreground">Enfocados en la productividad de su flota en Iquique y la región.</p>
+              <h2 className="text-4xl font-bold text-primary">Servicios de Precisión para tu Negocio</h2>
+              <p className="mt-2 text-lg text-muted-foreground max-w-3xl mx-auto">Soluciones integrales para mantener tu operación en movimiento, desde un vehículo individual hasta flotas completas.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <Card>
-                <CardHeader icon={TruckIcon} title="Mantenimiento de Flotas" />
-                <CardContent>Planes de mantenimiento preventivo y correctivo para flotas de camiones y buses, garantizando su operatividad.</CardContent>
-              </Card>
-              <Card>
-                <CardHeader icon={Cpu} title="Diagnóstico Electrónico" />
-                <CardContent>Scanner multimarca de última generación para un diagnóstico preciso de fallas en motores, ABS, y más.</CardContent>
-              </Card>
-              <Card>
-                <CardHeader icon={Wrench} title="Mecánica de Motores Diesel" />
-                <CardContent>Reparación y ajuste de motores Cummins, Scania, Volvo, y otros. Experiencia en sistemas de inyección Common Rail.</CardContent>
-              </Card>
-              <Card>
-                <CardHeader icon={SprinterIcon} title="Servicio MB Sprinter" />
-                <CardContent>Somos especialistas en el mantenimiento y reparación de la línea Mercedes-Benz Sprinter para empresas y transporte.</CardContent>
-              </Card>
+              <ServiceCard icon={TruckIcon} title="Mantenimiento de Flotas" description="Planes preventivos y correctivos que garantizan la máxima disponibilidad y rendimiento de tus camiones y buses." />
+              <ServiceCard icon={Cpu} title="Diagnóstico Electrónico Avanzado" description="Scanner multimarca y software oficial para detectar fallas con precisión en motores, ABS, transmisiones y más." />
+              <ServiceCard icon={Wrench} title="Mecánica de Motores Diesel" description="Reparación y ajuste de motores Cummins, Scania, Volvo, y otros. Expertos en sistemas de inyección Common Rail." />
+              <ServiceCard icon={SprinterIcon} title="Especialistas en MB Sprinter" description="Servicio técnico dedicado para la línea Mercedes-Benz Sprinter, asegurando la confiabilidad de tu herramienta de trabajo." />
             </div>
           </div>
         </section>
@@ -129,13 +117,13 @@ export default function LandingPage() {
         <section id="about" className="py-16 sm:py-24">
             <div className="container mx-auto px-4">
                  <div className="text-center mb-12">
-                  <h2 className="text-4xl font-bold text-primary">La Confianza que Mueve su Negocio</h2>
-                  <p className="mt-2 text-lg text-muted-foreground">Nuestra prioridad es su tranquilidad y la continuidad de su operación.</p>
+                  <h2 className="text-4xl font-bold text-primary">La Confianza que Mueve tu Negocio</h2>
+                  <p className="mt-2 text-lg text-muted-foreground max-w-3xl mx-auto">Nuestra prioridad es tu tranquilidad y la continuidad de tu operación en Iquique.</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    <Feature icon={Users} title="Técnicos Expertos" description="Nuestro personal está certificado y en constante capacitación para atender las últimas tecnologías en vehículos pesados." />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                    <Feature icon={Users} title="Técnicos Certificados" description="Nuestro equipo está en constante capacitación para dominar las últimas tecnologías en vehículos pesados y comerciales." />
                     <Feature icon={BadgeCheck} title="Repuestos de Calidad" description="Utilizamos repuestos originales y alternativos de alta gama para garantizar la durabilidad y rendimiento de cada reparación." />
-                    <Feature icon={Clock} title="Transparencia y Garantía" description="Presupuestos detallados y sin sorpresas. Todos nuestros trabajos están garantizados para su total confianza." />
+                    <Feature icon={ShieldCheck} title="Transparencia y Garantía" description="Presupuestos detallados a través de nuestro portal de cliente. Todos nuestros trabajos están garantizados para tu total confianza." />
                 </div>
             </div>
         </section>
@@ -148,7 +136,7 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
                 <div>
                     <h3 className="text-lg font-semibold text-primary">LionFix Service Iquique</h3>
-                    <p className="mt-2 text-muted-foreground">Su socio estratégico en el mantenimiento y reparación de flotas de vehículos pesados.</p>
+                    <p className="mt-2 text-muted-foreground">Tu socio estratégico en el mantenimiento y reparación de flotas de vehículos pesados en la Región de Tarapacá.</p>
                 </div>
                 <div>
                      <h3 className="text-lg font-semibold text-primary">Contacto Directo</h3>
@@ -167,7 +155,7 @@ export default function LandingPage() {
                 </div>
             </div>
             <div className="mt-8 border-t border-border pt-6 text-center text-sm text-muted-foreground">
-                <p>&copy; {new Date().getFullYear()} LionFix Service. Todos los derechos reservados.</p>
+                <p>&copy; {new Date().getFullYear()} LionFix Service. Todos los derechos reservados. Un servicio para Iquique, Chile.</p>
             </div>
          </div>
       </footer>
@@ -175,30 +163,28 @@ export default function LandingPage() {
   );
 }
 
-// Helper components for the landing page
-function Card({ children }: { children: React.ReactNode }) {
-    return <div className="bg-card p-8 rounded-lg shadow-lg border border-border/50 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-primary/20 flex flex-col">{children}</div>;
-}
-
-function CardHeader({ icon: Icon, title }: { icon: React.ElementType, title: string }) {
+// Helper components for the landing page for better structure and reusability
+function ServiceCard({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) {
     return (
-        <div className="flex flex-col items-center text-center mb-4">
-            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4">
+        <div className="bg-card p-6 rounded-lg shadow-lg border border-border/50 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-primary/20 flex flex-col items-center text-center">
+             <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4">
                 <Icon className="h-8 w-8" />
             </div>
-            <h3 className="text-xl font-bold">{title}</h3>
+            <h3 className="text-xl font-bold mb-2">{title}</h3>
+            <p className="text-muted-foreground flex-grow">{description}</p>
         </div>
     );
 }
 
-function CardContent({ children }: { children: React.ReactNode }) {
-    return <p className="text-muted-foreground text-center flex-grow">{children}</p>;
-}
 
 function Feature({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) {
     return (
         <div>
-            <Icon className="h-12 w-12 text-primary mx-auto mb-4" />
+            <div className="flex justify-center mb-4">
+                <div className="p-4 bg-primary/10 rounded-full">
+                    <Icon className="h-10 w-10 text-primary" />
+                </div>
+            </div>
             <h3 className="text-xl font-bold">{title}</h3>
             <p className="mt-2 text-muted-foreground">{description}</p>
         </div>
