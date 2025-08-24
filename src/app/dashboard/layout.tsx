@@ -16,21 +16,27 @@ export default function DashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/');
+    if (!loading) {
+      if (!user) {
+        router.push('/');
+      } else if (user.role !== 'admin') {
+        // If the user is logged in but not an admin, redirect them.
+        // You could redirect to their specific dashboard or just the login page.
+        router.push('/');
+      }
     }
   }, [user, loading, router]);
 
-  if (loading || !user) {
+  if (loading || !user || user.role !== 'admin') {
     return (
-        <div className="flex items-center justify-center h-screen">
-            <Skeleton className="w-64 h-8" />
+        <div className="flex items-center justify-center h-screen bg-background">
+            <div className="text-center">
+                <p className="text-lg text-muted-foreground">Verificando acceso de administrador...</p>
+                <Skeleton className="w-64 h-8 mt-4 mx-auto" />
+            </div>
         </div>
     );
   }
-
-  // Se podría añadir una comprobación de rol aquí
-  // if (user.role !== 'admin') { router.push('/'); return null; }
 
   return (
     <SidebarProvider>

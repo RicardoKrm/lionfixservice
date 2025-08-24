@@ -96,7 +96,7 @@ function ClientSidebar() {
             <SidebarMenuButton tooltip="Perfil">
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
-                    <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                    <AvatarImage src={user?.avatarUrl} alt={user?.name || ''} />
                     <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col text-left">
@@ -128,21 +128,25 @@ export default function ClientPortalLayout({
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/');
+     if (!loading) {
+      if (!user) {
+        router.push('/');
+      } else if (user.role !== 'client') {
+        router.push('/');
+      }
     }
   }, [user, loading, router]);
 
-  if (loading || !user) {
+  if (loading || !user || user.role !== 'client') {
     return (
-        <div className="flex items-center justify-center h-screen">
-            <Skeleton className="w-64 h-8" />
+        <div className="flex items-center justify-center h-screen bg-background">
+             <div className="text-center">
+                <p className="text-lg text-muted-foreground">Verificando acceso de cliente...</p>
+                <Skeleton className="w-64 h-8 mt-4 mx-auto" />
+            </div>
         </div>
     );
   }
-
-   // Se podría añadir una comprobación de rol aquí
-  // if (user.role !== 'client') { router.push('/'); return null; }
 
   return (
     <SidebarProvider>
