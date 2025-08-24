@@ -26,7 +26,6 @@ import {
   LineChart,
   FileDigit,
   BarChart,
-  Flame,
   Briefcase,
   BookCheck,
   ChevronDown,
@@ -228,28 +227,6 @@ export function AppSidebar() {
                 >
                     <UserCircle />
                     <span>Inicio Cliente</span>
-                </SidebarMenuButton>
-                </Link>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <Link href="/portal/vehicles" passHref>
-                <SidebarMenuButton
-                    isActive={isActive("/portal/vehicles")}
-                    tooltip="Mis Vehículos"
-                >
-                    <Car />
-                    <span>Mis Vehículos</span>
-                </SidebarMenuButton>
-                </Link>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <Link href="/portal/contracts" passHref>
-                <SidebarMenuButton
-                    isActive={isActive("/portal/contracts")}
-                    tooltip="Mis Contratos"
-                >
-                    <Briefcase />
-                    <span>Mis Contratos</span>
                 </SidebarMenuButton>
                 </Link>
             </SidebarMenuItem>

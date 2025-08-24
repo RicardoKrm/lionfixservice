@@ -20,11 +20,10 @@ import { es } from 'date-fns/locale';
 
 
 export function WorkOrderCard({ workOrder }: { workOrder: EnrichedWorkOrder }) {
-  const [platePrefix, plateSuffix] = workOrder.vehicle.licensePlate.split('-');
 
   return (
-    <Card className="flex flex-col group overflow-hidden border-2 border-transparent hover:border-accent transition-all duration-300">
-        <div className="relative aspect-video w-full overflow-hidden">
+    <Card className="flex flex-col group overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-primary">
+        <div className="relative aspect-[16/10] w-full overflow-hidden">
             <Image 
                 src={`https://placehold.co/600x400.png`}
                 alt={`${workOrder.vehicle.make} ${workOrder.vehicle.model}`}
@@ -41,20 +40,20 @@ export function WorkOrderCard({ workOrder }: { workOrder: EnrichedWorkOrder }) {
                         {workOrder.client.name} / <span className="font-mono">{workOrder.vehicle.licensePlate}</span>
                     </CardDescription>
                 </div>
-                <Badge variant={getStatusVariant(workOrder.status)}>{workOrder.status}</Badge>
+                <Badge variant={getStatusVariant(workOrder.status)} className="flex-shrink-0">{workOrder.status}</Badge>
             </div>
             
             <div className="flex items-start gap-3 pt-4 flex-grow">
                 <Wrench className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
                 <div>
-                    <p className="font-semibold leading-tight">{workOrder.id}</p>
+                    <p className="font-semibold leading-tight text-primary">{workOrder.id}</p>
                     <p className="text-sm text-muted-foreground">{workOrder.service}</p>
                 </div>
             </div>
         </CardContent>
         <CardFooter className="p-0">
             <Link href={`/dashboard/work-orders/${workOrder.id}`} className="w-full">
-                <div className="flex items-center justify-between w-full px-4 py-3 bg-muted/50 group-hover:bg-accent/20 transition-colors duration-300">
+                <div className="flex items-center justify-between w-full px-4 py-3 bg-muted/30 group-hover:bg-primary/10 transition-colors duration-300">
                     <span className="text-sm font-semibold">Ver Orden de Trabajo</span>
                     <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
                 </div>

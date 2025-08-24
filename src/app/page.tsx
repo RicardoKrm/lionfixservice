@@ -11,14 +11,14 @@ export default function LoginPage() {
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-background p-4">
-      <Card className="w-full max-w-6xl mx-auto">
-        <CardHeader className="text-center pb-8">
+      <Card className="w-full max-w-6xl mx-auto shadow-2xl">
+        <CardHeader className="text-center pb-8 pt-10">
             <div className="flex justify-center items-center mb-4">
-                 <div className="bg-primary text-primary-foreground p-3 rounded-lg">
+                 <div className="bg-primary text-primary-foreground p-3 rounded-lg shadow-lg">
                      <ShieldCheck className="h-10 w-10" />
                  </div>
             </div>
-          <CardTitle className="text-4xl font-bold">Bienvenido a LionFix Cloud ERP</CardTitle>
+          <CardTitle className="text-4xl font-bold text-primary">Bienvenido a LionFix Cloud ERP</CardTitle>
           <CardDescription className="text-xl text-muted-foreground mt-2">
               Seleccione un rol para explorar la vista correspondiente del sistema.
           </CardDescription>
@@ -27,9 +27,9 @@ export default function LoginPage() {
             
             {/* Vista Administrador */}
             <div className="flex flex-col">
-                 <Card className="flex-grow flex flex-col border-accent border-2">
+                 <Card className="flex-grow flex flex-col border-primary border-2 shadow-lg hover:shadow-xl transition-shadow duration-300">
                     <CardHeader>
-                        <User className="mx-auto h-10 w-10 text-accent mb-2"/>
+                        <User className="mx-auto h-12 w-12 text-primary mb-2"/>
                         <CardTitle className="text-2xl">Administrador</CardTitle>
                         <CardDescription>Acceso completo al sistema</CardDescription>
                     </CardHeader>
@@ -45,7 +45,7 @@ export default function LoginPage() {
                             <li>Configuración del Sistema</li>
                         </ul>
                     </CardContent>
-                    <CardFooter>
+                    <CardFooter className="p-4">
                         <Button onClick={() => router.push("/dashboard")} className="w-full" size="lg">
                             Explorar Vista Administrador
                         </Button>
@@ -55,9 +55,9 @@ export default function LoginPage() {
             
             {/* Vista Mecánico */}
             <div className="flex flex-col">
-                <Card className="flex-grow flex flex-col">
+                <Card className="flex-grow flex flex-col hover:shadow-xl transition-shadow duration-300">
                     <CardHeader>
-                        <HardHat className="mx-auto h-10 w-10 text-accent mb-2"/>
+                        <HardHat className="mx-auto h-12 w-12 text-accent mb-2"/>
                         <CardTitle className="text-2xl">Mecánico</CardTitle>
                          <CardDescription>Enfocado en la productividad</CardDescription>
                     </CardHeader>
@@ -66,9 +66,10 @@ export default function LoginPage() {
                         <ul className="list-disc list-inside text-sm">
                             <li>Mis Tareas (OTs Asignadas)</li>
                             <li>Calendario del Taller</li>
+                            <li>Checklists de Vehículos</li>
                         </ul>
                     </CardContent>
-                     <CardFooter>
+                     <CardFooter className="p-4">
                          <Button onClick={() => router.push("/mechanic/dashboard")} className="w-full" size="lg" variant="secondary">
                             Explorar Vista Mecánico
                         </Button>
@@ -78,9 +79,9 @@ export default function LoginPage() {
 
             {/* Vista Cliente */}
              <div className="flex flex-col">
-                <Card className="flex-grow flex flex-col">
+                <Card className="flex-grow flex flex-col hover:shadow-xl transition-shadow duration-300">
                     <CardHeader>
-                        <Building className="mx-auto h-10 w-10 text-accent mb-2"/>
+                        <Building className="mx-auto h-12 w-12 text-accent mb-2"/>
                         <CardTitle className="text-2xl">Cliente / Flota</CardTitle>
                         <CardDescription>Portal de autogestión</CardDescription>
                     </CardHeader>
@@ -93,7 +94,7 @@ export default function LoginPage() {
                             <li>Mis Contratos de Flota</li>
                         </ul>
                     </CardContent>
-                     <CardFooter>
+                     <CardFooter className="p-4">
                         <Button onClick={() => router.push("/portal/dashboard")} className="w-full" size="lg" variant="secondary">
                             Explorar Vista Cliente
                         </Button>

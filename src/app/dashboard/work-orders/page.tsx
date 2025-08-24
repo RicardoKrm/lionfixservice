@@ -133,7 +133,7 @@ export default function WorkOrdersPage() {
                     startIcon={Search}
                 />
             </div>
-            <Button onClick={handleNewOrder}>
+            <Button onClick={handleNewOrder} variant="default">
             <PlusCircle className="mr-2 h-4 w-4" />
             Nueva Orden
             </Button>

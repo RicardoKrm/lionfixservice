@@ -102,21 +102,12 @@ export default function TechniciansPage() {
     <>
     <div className="flex flex-col h-[calc(100vh-57px)]">
       <DashboardHeader title="Gestión de Técnicos">
-        <Button onClick={handleNewTechnician} variant="secondary">
+        <Button onClick={handleNewTechnician} variant="default">
           <PlusCircle className="mr-2 h-4 w-4" />
           Nuevo Técnico
         </Button>
       </DashboardHeader>
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
-        <Card>
-           <CardHeader>
-            <CardTitle>Equipo de Mecánicos</CardTitle>
-            <CardDescription>
-              Administre la información, especialidades y carga de trabajo de su equipo técnico.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {technicians.map((tech) => (
             <Card key={tech.id} className="flex flex-col">
@@ -177,11 +168,6 @@ export default function TechniciansPage() {
                     <Progress value={(tech.extraHoursThisMonth / tech.maxExtraHours) * 100} />
                 </div>
               </CardContent>
-              <CardFooter className="flex gap-2">
-                 <Button variant="outline" className="w-full">
-                    <User className="mr-2 h-4 w-4"/> Ver Perfil
-                 </Button>
-              </CardFooter>
             </Card>
           ))}
         </div>

@@ -15,7 +15,7 @@ type KpiCardProps = {
 
 export function KpiCard({ icon: Icon, title, value, description, href }: KpiCardProps) {
   const cardContent = (
-    <Card className={cn("transition-colors group flex flex-col h-full", href && "hover:border-accent")}>
+    <Card className={cn("transition-all duration-300 group flex flex-col h-full", href && "hover:border-primary hover:shadow-lg")}>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
             <CardTitle className="text-base font-semibold text-muted-foreground">{title}</CardTitle>
@@ -28,7 +28,7 @@ export function KpiCard({ icon: Icon, title, value, description, href }: KpiCard
       </CardContent>
        {href && (
             <CardFooter className="p-0 mt-auto">
-                <div className="flex items-center justify-between w-full px-6 py-3 bg-muted/20 border-t group-hover:bg-accent/10 transition-colors duration-300">
+                <div className="flex items-center justify-between w-full px-6 py-3 bg-muted/30 border-t group-hover:bg-primary/10 transition-colors duration-300">
                     <span className="text-sm font-semibold">Ver detalle</span>
                     <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
                 </div>

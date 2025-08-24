@@ -58,7 +58,7 @@ export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps
           {/* Workstation Columns */}
           {WORKSTATIONS.map(ws => (
             <div key={ws} className="relative border-l border-dashed">
-              <div className="sticky top-0 z-10 bg-card/80 backdrop-blur-sm py-2 text-center font-semibold text-accent border-b -mt-6 mb-2">
+              <div className="sticky top-0 z-10 bg-card/80 backdrop-blur-sm py-2 text-center font-semibold text-primary border-b -mt-6 mb-2">
                 Puesto {ws}
               </div>
               <div className="relative h-full">
@@ -74,8 +74,8 @@ export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps
                     <div
                       key={event.id}
                       className={cn(
-                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer shadow-md transition-all hover:ring-2 hover:ring-accent",
-                        ws % 2 === 0 ? "bg-accent/80 text-accent-foreground" : "bg-secondary text-secondary-foreground"
+                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer shadow-md transition-all hover:ring-2 hover:ring-primary",
+                        "bg-primary/80 text-primary-foreground"
                       )}
                       style={{ top, height }}
                       title={`${event.title} - ${event.vehicle}`}
@@ -84,7 +84,7 @@ export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps
                       <p className="font-bold truncate">{event.title}</p>
                       <p className="truncate font-mono">{event.vehicle}</p>
                       <div className="mt-auto">
-                        <Badge variant="outline" className="text-xs bg-background/20 border-none px-1.5 py-0.5 font-normal">
+                        <Badge variant="secondary" className="text-xs bg-background/20 border-none px-1.5 py-0.5 font-normal">
                             {event.technician}
                         </Badge>
                       </div>
