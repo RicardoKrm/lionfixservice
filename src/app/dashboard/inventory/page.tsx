@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PlusCircle, MoreHorizontal, Edit, Trash2, ShoppingCart } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Edit, Trash2, ShoppingCart, Search, DollarSign, Package, AlertTriangle, Truck } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +42,8 @@ import type { Part, PurchaseOrder } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { parts as initialInventory } from "@/lib/data";
 import { PurchaseOrderDialog } from "@/components/purchase-order-dialog";
+import { KpiCard } from "@/components/kpi-card";
+import { Input } from "@/components/ui/input";
 
 
 export default function InventoryPage() {
@@ -50,6 +52,7 @@ export default function InventoryPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isPurchaseOrderOpen, setIsPurchaseOrderOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
 
   const handleNewPart = () => {
@@ -80,8 +83,7 @@ export default function InventoryPage() {
   };
 
   const handleFormSubmit = (data: Part) => {
-    // Check if SKU already exists when creating a new part
-    if (!part && inventory.some(p => p.sku === data.sku)) {
+    if (!selectedPart && inventory.some(p => p.sku === data.sku)) {
         toast({
             variant: "destructive",
             title: "Error de SKU",
@@ -91,7 +93,6 @@ export default function InventoryPage() {
     }
 
     if (selectedPart) {
-      // Edit existing part
       const updatedInventory = inventory.map((p) =>
         p.sku === selectedPart.sku ? data : p
       );
@@ -101,7 +102,6 @@ export default function InventoryPage() {
         description: "Los datos del repuesto han sido actualizados.",
       });
     } else {
-      // Create new part
       setInventory([...inventory, data]);
       toast({
         title: "Repuesto Creado",
@@ -121,10 +121,24 @@ export default function InventoryPage() {
     setIsPurchaseOrderOpen(false);
   };
 
+  const inventoryKpis = useMemo(() => {
+    const totalValue = inventory.reduce((acc, part) => acc + (part.cost * part.stock), 0);
+    const lowStockCount = inventory.filter(p => p.stock <= p.alertThreshold).length;
+    const totalSkus = inventory.length;
+    return { totalValue, lowStockCount, totalSkus };
+  }, [inventory]);
+
+  const filteredInventory = useMemo(() => {
+    return inventory.filter(part =>
+        part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.sku.toLowerCase().includes(searchTerm.toLowerCase())
+    ).sort((a,b) => a.sku.localeCompare(b.sku));
+  }, [inventory, searchTerm]);
+
 
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
-      <DashboardHeader title="Control de Inventario">
+      <DashboardHeader title="Dashboard de Inventario">
         <Button variant="outline" onClick={() => setIsPurchaseOrderOpen(true)}>
           <ShoppingCart className="mr-2 h-4 w-4" />
           Nueva Orden de Compra
@@ -134,14 +148,32 @@ export default function InventoryPage() {
           Nuevo Repuesto
         </Button>
       </DashboardHeader>
-      <main className="flex-1 p-6 overflow-y-auto">
+      <main className="flex-1 p-6 space-y-6 overflow-y-auto">
+        
+        {/* KPIs */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+             <KpiCard title="Valor Total Inventario" value={`$${inventoryKpis.totalValue.toLocaleString('es-CL')}`} description="Basado en costo de compra" icon={DollarSign} />
+             <KpiCard title="Repuestos con Bajo Stock" value={inventoryKpis.lowStockCount.toString()} description="Ítems que necesitan reorden" icon={AlertTriangle} />
+             <KpiCard title="SKUs Totales" value={inventoryKpis.totalSkus.toString()} description="Tipos de productos únicos" icon={Package}/>
+             <KpiCard title="Proveedor Principal" value="Repuestos Express" description="Basado en volumen de compra" icon={Truck}/>
+        </div>
+
         <Card>
           <CardHeader>
             <CardTitle>Gestión de Repuestos e Insumos</CardTitle>
-            <CardDescription>
-              Controla tu stock en tiempo real, define alertas y gestiona tus
-              productos.
-            </CardDescription>
+            <div className="flex justify-between items-center">
+                <CardDescription>
+                    Controla tu stock en tiempo real, define alertas y gestiona tus productos.
+                </CardDescription>
+                 <div className="w-full max-w-sm">
+                    <Input
+                        placeholder="Buscar por nombre o SKU..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        startIcon={Search}
+                    />
+                </div>
+            </div>
           </CardHeader>
           <CardContent>
             <Table>
@@ -157,8 +189,8 @@ export default function InventoryPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {inventory.map((item) => (
-                  <TableRow key={item.sku}>
+                {filteredInventory.map((item) => (
+                  <TableRow key={item.sku} className={item.stock <= item.alertThreshold ? 'bg-destructive/10' : ''}>
                     <TableCell className="font-mono">{item.sku}</TableCell>
                     <TableCell className="font-medium">{item.name}</TableCell>
                     <TableCell>
@@ -198,6 +230,11 @@ export default function InventoryPage() {
                 ))}
               </TableBody>
             </Table>
+             {filteredInventory.length === 0 && (
+                <div className="text-center p-10 text-muted-foreground">
+                    No se encontraron repuestos con ese criterio de búsqueda.
+                </div>
+             )}
           </CardContent>
         </Card>
       </main>
