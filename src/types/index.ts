@@ -24,6 +24,8 @@ export type Part = {
   stock: number;
   location: string;
   alertThreshold: number;
+  cost: number; // Costo de compra para el taller
+  price: number; // Precio de venta al cliente
 };
 
 export type WorkOrderStatus = 'Recibido' | 'Esperando Aprobación' | 'En Reparación' | 'Esperando Repuestos' | 'Completado' | 'Entregado';
@@ -34,6 +36,14 @@ export type ServiceLogEntry = {
   technician: string;
   entry: string;
 };
+
+export type WorkOrderPart = {
+    name: string; 
+    sku: string; 
+    quantity: number;
+    cost: number; // Costo del repuesto al momento de la OT
+    price: number; // Precio de venta al momento de la OT
+}
 
 export type WorkOrder = {
   id: string;
@@ -46,7 +56,8 @@ export type WorkOrder = {
   entryDate: string;
   completionDate?: string;
   serviceLog: ServiceLogEntry[];
-  parts: { name: string; sku: string; quantity: number }[];
+  parts: WorkOrderPart[];
+  laborHours: number; // Horas de mano de obra
   satisfactionRating?: number;
   satisfactionComment?: string;
   finalReport?: string;

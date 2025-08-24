@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import type { WorkOrder, Vehicle, WorkOrderStatus, WorkOrderType } from "@/types";
+import type { WorkOrder, Vehicle, WorkOrderStatus, WorkOrderType, WorkOrderPart } from "@/types";
 import {
   Select,
   SelectContent,
@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { clients, vehicles, parts as inventoryParts } from "@/lib/data";
+import { clients, vehicles, parts as inventoryParts, technicians } from "@/lib/data";
 import { Trash2, PlusCircle } from "lucide-react";
 import { Separator } from "./ui/separator";
 
@@ -40,6 +40,8 @@ const partItemSchema = z.object({
   sku: z.string().min(1, "Debe seleccionar un repuesto."),
   name: z.string(),
   quantity: z.coerce.number().min(1, "La cantidad debe ser al menos 1."),
+  cost: z.number(),
+  price: z.number(),
 });
 
 const workOrderSchema = z.object({
@@ -48,6 +50,7 @@ const workOrderSchema = z.object({
   service: z.string().min(3, "La descripción del servicio es requerida."),
   type: z.custom<WorkOrderType>(),
   technician: z.string().min(1, "Debe seleccionar un técnico."),
+  laborHours: z.coerce.number().min(0, "Las horas deben ser un número positivo."),
   status: z.custom<WorkOrderStatus>().optional(),
   parts: z.array(partItemSchema).optional(),
   finalReport: z.string().optional(),
@@ -76,6 +79,7 @@ export function WorkOrderFormDialog({
       service: "",
       type: "Mantención Correctiva",
       technician: "",
+      laborHours: 0,
       parts: [],
       finalReport: "",
     },
@@ -109,6 +113,7 @@ export function WorkOrderFormDialog({
           service: "",
           type: "Mantención Correctiva",
           technician: "",
+          laborHours: 0,
           parts: [],
           finalReport: "",
         });
@@ -136,6 +141,8 @@ export function WorkOrderFormDialog({
       if (part) {
           form.setValue(`parts.${index}.sku`, part.sku);
           form.setValue(`parts.${index}.name`, part.name);
+          form.setValue(`parts.${index}.cost`, part.cost);
+          form.setValue(`parts.${index}.price`, part.price);
       }
   }
 
@@ -244,32 +251,46 @@ export function WorkOrderFormDialog({
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="technician"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Técnico Asignado</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar técnico..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Pedro Pascal">Pedro Pascal</SelectItem>
-                      <SelectItem value="Ricardo Milos">Ricardo Milos</SelectItem>
-                      <SelectItem value="Otro Técnico">Otro Técnico</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+                 <FormField
+                  control={form.control}
+                  name="technician"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Técnico Asignado</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar técnico..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {technicians.map(tech => (
+                             <SelectItem key={tech.id} value={tech.name}>{tech.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="laborHours"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Horas de Mano de Obra</FormLabel>
+                       <FormControl>
+                         <Input type="number" step="0.5" placeholder="Ej: 2.5" {...field} />
+                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+            </div>
 
             <Separator />
 
@@ -328,7 +349,7 @@ export function WorkOrderFormDialog({
                 variant="outline"
                 size="sm"
                 onClick={() =>
-                  append({ sku: "", name: "", quantity: 1 })
+                  append({ sku: "", name: "", quantity: 1, cost: 0, price: 0 })
                 }
               >
                 <PlusCircle className="mr-2 h-4 w-4" />

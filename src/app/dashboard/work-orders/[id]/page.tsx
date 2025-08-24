@@ -2,7 +2,7 @@
 "use client";
 
 import { notFound, useRouter } from "next/navigation";
-import { workOrders as initialWorkOrders, clients, vehicles, parts as inventory } from "@/lib/data";
+import { workOrders as initialWorkOrders, clients, vehicles, parts as inventory, technicians } from "@/lib/data";
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   Card,
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock, FileCheck, Upload, Download, FileText, Trash2, FileSignature } from "lucide-react";
+import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock, FileCheck, Upload, Download, FileText, Trash2, FileSignature, DollarSign, TrendingUp, TrendingDown } from "lucide-react";
 import { getStatusVariant } from "@/lib/utils";
 import {
   Table,
@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { WorkOrderFormDialog } from "@/components/work-order-form-dialog";
 import { useToast } from "@/hooks/use-toast";
 import type { WorkOrder, WorkOrderStatus, ServiceLogEntry } from "@/types";
@@ -133,6 +133,28 @@ export default function WorkOrderDetailPage({
 
   const client = clients.find((c) => c.id === workOrder.clientId);
   const vehicle = vehicles.find((v) => v.id === workOrder.vehicleId);
+  const technician = technicians.find((t) => t.name === workOrder.technician);
+
+
+  const financialSummary = useMemo(() => {
+    const partsCost = workOrder.parts.reduce((acc, part) => acc + (part.cost * part.quantity), 0);
+    const laborCost = (technician?.baseSalary || 0) / 160 * workOrder.laborHours; // Simplified monthly salary to hourly rate
+    
+    const totalCost = partsCost + laborCost;
+
+    const partsRevenue = workOrder.parts.reduce((acc, part) => acc + (part.price * part.quantity), 0);
+    // Simplified labor revenue: assume 2.5x markup on cost
+    const laborRevenue = laborCost * 2.5; 
+    
+    const totalRevenue = partsRevenue + laborRevenue;
+
+    const profit = totalRevenue - totalCost;
+    const margin = totalRevenue > 0 ? (profit / totalRevenue) * 100 : 0;
+
+    return { partsCost, laborCost, totalCost, partsRevenue, laborRevenue, totalRevenue, profit, margin };
+
+  }, [workOrder, technician]);
+
 
   if (!client || !vehicle) {
     // Handle cases where related data might be missing
@@ -221,7 +243,49 @@ export default function WorkOrderDetailPage({
                         <p><strong>N° Motor:</strong> <span className="font-mono">{vehicle.motorNumber}</span></p>
                     </CardContent>
                 </Card>
-                
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center"><DollarSign className="mr-2"/> Resumen Financiero (Interno)</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3 text-sm">
+                       <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Costo Repuestos</span>
+                            <span className="font-medium">${financialSummary.partsCost.toLocaleString('es-CL')}</span>
+                       </div>
+                       <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Costo Mano Obra ({workOrder.laborHours}h)</span>
+                            <span className="font-medium">${Math.round(financialSummary.laborCost).toLocaleString('es-CL')}</span>
+                       </div>
+                        <Separator/>
+                        <div className="flex justify-between items-center font-bold text-base">
+                            <span className="flex items-center"><TrendingDown className="mr-2 text-destructive"/> Costo Total</span>
+                            <span>${Math.round(financialSummary.totalCost).toLocaleString('es-CL')}</span>
+                       </div>
+                    </CardContent>
+                    <CardContent className="space-y-3 text-sm pt-0">
+                       <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Ingreso Repuestos</span>
+                            <span className="font-medium">${financialSummary.partsRevenue.toLocaleString('es-CL')}</span>
+                       </div>
+                       <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Ingreso Mano Obra</span>
+                            <span className="font-medium">${Math.round(financialSummary.laborRevenue).toLocaleString('es-CL')}</span>
+                       </div>
+                        <Separator/>
+                        <div className="flex justify-between items-center font-bold text-base">
+                            <span className="flex items-center"><TrendingUp className="mr-2 text-green-500"/> Ingreso Total</span>
+                            <span>${Math.round(financialSummary.totalRevenue).toLocaleString('es-CL')}</span>
+                       </div>
+                       <Separator />
+                       <div className="flex justify-between items-center font-bold text-lg text-primary">
+                            <span>Ganancia Bruta</span>
+                            <div className="text-right">
+                                <span>${Math.round(financialSummary.profit).toLocaleString('es-CL')}</span>
+                                <p className="text-xs font-normal text-muted-foreground">Margen: {financialSummary.margin.toFixed(1)}%</p>
+                            </div>
+                       </div>
+                    </CardContent>
+                </Card>
                 <ObdScannerTool onScan={(code) => setNewLogEntry(`Código OBD-II: ${code}`)} />
                 {workOrder.status === 'Entregado' && (
                   <SatisfactionSurveyTool workOrder={workOrder} onSurveySubmit={handleSurveySubmit} />
@@ -295,6 +359,8 @@ export default function WorkOrderDetailPage({
                                     <TableHead>Nombre del Repuesto</TableHead>
                                     <TableHead>SKU</TableHead>
                                     <TableHead className="text-right">Cantidad</TableHead>
+                                    <TableHead className="text-right">Precio Venta</TableHead>
+                                    <TableHead className="text-right">Total</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -303,10 +369,12 @@ export default function WorkOrderDetailPage({
                                         <TableCell className="font-medium">{part.name}</TableCell>
                                         <TableCell className="font-mono">{part.sku}</TableCell>
                                         <TableCell className="text-right">{part.quantity}</TableCell>
+                                        <TableCell className="text-right">${part.price.toLocaleString('es-CL')}</TableCell>
+                                        <TableCell className="text-right font-semibold">${(part.price * part.quantity).toLocaleString('es-CL')}</TableCell>
                                     </TableRow>
                                 )) : (
                                     <TableRow>
-                                        <TableCell colSpan={3} className="text-center text-muted-foreground h-24">No se registraron repuestos para esta orden.</TableCell>
+                                        <TableCell colSpan={5} className="text-center text-muted-foreground h-24">No se registraron repuestos para esta orden.</TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>

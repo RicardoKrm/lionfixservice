@@ -18,11 +18,11 @@ export const clients: Client[] = [
 ];
 
 export const parts: Part[] = [
-  { sku: "OIL-SYN-5W30", name: "Aceite Sintético 5W-30 (Litro)", stock: 50, location: "Estante A-1", alertThreshold: 10 },
-  { sku: "FIL-TOY-COR-01", name: "Filtro de Aceite Toyota Corolla '19+", stock: 12, location: "Cajón B-3", alertThreshold: 5 },
-  { sku: "PAD-HON-CIV-F", name: "Pastillas de Freno Delanteras Honda Civic", stock: 8, location: "Estante C-2", alertThreshold: 5 },
-  { sku: "AC-FOR-FOC-03", name: "Compresor A/C Ford Focus", stock: 2, location: "Bodega", alertThreshold: 2 },
-  { sku: "BULB-H4", name: "Ampolleta Halógena H4", stock: 25, location: "Cajón D-1", alertThreshold: 10 },
+  { sku: "OIL-SYN-5W30", name: "Aceite Sintético 5W-30 (Litro)", stock: 50, location: "Estante A-1", alertThreshold: 10, cost: 4500, price: 9000 },
+  { sku: "FIL-TOY-COR-01", name: "Filtro de Aceite Toyota Corolla '19+", stock: 12, location: "Cajón B-3", alertThreshold: 5, cost: 6000, price: 12000 },
+  { sku: "PAD-HON-CIV-F", name: "Pastillas de Freno Delanteras Honda Civic", stock: 8, location: "Estante C-2", alertThreshold: 5, cost: 22000, price: 45000 },
+  { sku: "AC-FOR-FOC-03", name: "Compresor A/C Ford Focus", stock: 2, location: "Bodega", alertThreshold: 2, cost: 150000, price: 250000 },
+  { sku: "BULB-H4", name: "Ampolleta Halógena H4", stock: 25, location: "Cajón D-1", alertThreshold: 10, cost: 1000, price: 3000 },
 ];
 
 const initialServiceLog: ServiceLogEntry[] = [
@@ -45,9 +45,10 @@ export const workOrders: WorkOrder[] = [
     completionDate: '2024-07-15T16:30:00Z',
     serviceLog: initialServiceLog,
     parts: [
-      { name: 'Aceite Sintético 5W-30', sku: 'OIL-SYN-5W30', quantity: 5 },
-      { name: 'Filtro de Aceite Toyota Corolla \'19+', sku: 'FIL-TOY-COR-01', quantity: 1 },
+      { name: 'Aceite Sintético 5W-30', sku: 'OIL-SYN-5W30', quantity: 5, cost: 4500, price: 9000 },
+      { name: 'Filtro de Aceite Toyota Corolla \'19+', sku: 'FIL-TOY-COR-01', quantity: 1, cost: 6000, price: 12000 },
     ],
+    laborHours: 2.5,
     satisfactionRating: 5,
     satisfactionComment: "¡Excelente servicio, muy rápido y profesional!",
     finalReport: "Se realizó la mantención de 10.000km según pauta del fabricante. Se cambió aceite de motor y filtro. Se revisaron y rellenaron todos los niveles. No se encontraron otras fallas o puntos de atención. Se recomienda próxima mantención en 10.000km o 1 año."
@@ -66,8 +67,9 @@ export const workOrders: WorkOrder[] = [
       { timestamp: '2024-07-20T12:00:00Z', technician: 'Ricardo Milos', entry: 'Se desarma tren delantero. Pastillas de freno con 90% de desgaste. Discos con surcos leves.' },
     ],
     parts: [
-        { name: 'Pastillas de Freno Delanteras Honda Civic', sku: 'PAD-HON-CIV-F', quantity: 2 }
-    ]
+        { name: 'Pastillas de Freno Delanteras Honda Civic', sku: 'PAD-HON-CIV-F', quantity: 1, cost: 22000, price: 45000 }
+    ],
+    laborHours: 2,
   },
   {
     id: 'OT-2024-003',
@@ -83,8 +85,9 @@ export const workOrders: WorkOrder[] = [
       { timestamp: '2024-07-22T15:00:00Z', technician: 'Pedro Pascal', entry: 'Se detecta fuga en el sello del compresor usando tinte UV. Se cotiza y ordena compresor nuevo.' },
     ],
     parts: [
-        { name: 'Compresor A/C Ford Focus', sku: 'AC-FOR-FOC-03', quantity: 1 }
+        { name: 'Compresor A/C Ford Focus', sku: 'AC-FOR-FOC-03', quantity: 1, cost: 150000, price: 250000 }
     ],
+    laborHours: 1.5,
     satisfactionRating: 4,
     satisfactionComment: "El diagnóstico fue certero, pero la espera por el repuesto fue un poco larga."
   },
@@ -101,7 +104,8 @@ export const workOrders: WorkOrder[] = [
       { timestamp: '2024-07-25T10:35:00Z', technician: 'Ricardo Milos', entry: 'Vehículo ingresa por luz de Check Engine encendida. Se conectará scanner para obtener códigos de falla.' },
       { timestamp: '2024-07-25T11:00:00Z', technician: 'Ricardo Milos', entry: 'Código P0420 detectado. Se genera cotización para cambio de catalizador.' },
     ],
-    parts: []
+    parts: [],
+    laborHours: 1,
   },
    {
     id: 'OT-2024-005',
@@ -117,6 +121,7 @@ export const workOrders: WorkOrder[] = [
       { timestamp: '2024-07-28T11:05:00Z', technician: 'Pedro Pascal', entry: 'Revisión inicial, mantención básica de 5.000km.' },
     ],
     parts: [],
+    laborHours: 2,
     finalReport: "Se realizó chequeo básico de 5.000km. No se observan fugas ni fallas. Niveles y presiones correctos. El vehículo se encuentra en óptimas condiciones."
   },
 ];
