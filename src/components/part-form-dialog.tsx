@@ -24,6 +24,8 @@ const partSchema = z.object({
     stock: z.coerce.number().int().min(0, "El stock no puede ser negativo."),
     location: z.string().min(1, "La ubicación es requerida."),
     alertThreshold: z.coerce.number().int().min(0, "El umbral no puede ser negativo."),
+    cost: z.coerce.number().min(0, "El costo no puede ser negativo."),
+    price: z.coerce.number().min(0, "El precio no puede ser negativo."),
 });
 
 type PartFormData = z.infer<typeof partSchema>;
@@ -45,6 +47,8 @@ export function PartFormDialog({ isOpen, onOpenChange, onSubmit, part }: PartFor
       stock: 0,
       location: "",
       alertThreshold: 5,
+      cost: 0,
+      price: 0,
     },
   });
   
@@ -61,6 +65,8 @@ export function PartFormDialog({ isOpen, onOpenChange, onSubmit, part }: PartFor
               stock: 0,
               location: "",
               alertThreshold: 5,
+              cost: 0,
+              price: 0,
             });
         }
     }
@@ -145,6 +151,34 @@ export function PartFormDialog({ isOpen, onOpenChange, onSubmit, part }: PartFor
                         </FormItem>
                     )}
                 />
+                 <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="cost"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Costo Unitario (CLP)</FormLabel>
+                            <FormControl>
+                                <Input type="number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="price"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Precio Venta (CLP)</FormLabel>
+                            <FormControl>
+                                <Input type="number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                  <DialogFooter>
                     <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
                     <Button type="submit">Guardar</Button>

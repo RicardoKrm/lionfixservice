@@ -80,10 +80,20 @@ export default function InventoryPage() {
   };
 
   const handleFormSubmit = (data: Part) => {
+    // Check if SKU already exists when creating a new part
+    if (!part && inventory.some(p => p.sku === data.sku)) {
+        toast({
+            variant: "destructive",
+            title: "Error de SKU",
+            description: "El SKU ya existe. Por favor, utilice uno diferente.",
+        });
+        return;
+    }
+
     if (selectedPart) {
       // Edit existing part
       const updatedInventory = inventory.map((p) =>
-        p.sku === selectedPart.sku ? { ...p, ...data } : p
+        p.sku === selectedPart.sku ? data : p
       );
       setInventory(updatedInventory);
       toast({
@@ -92,15 +102,6 @@ export default function InventoryPage() {
       });
     } else {
       // Create new part
-      // Check if SKU already exists
-      if (inventory.some(p => p.sku === data.sku)) {
-        toast({
-            variant: "destructive",
-            title: "Error",
-            description: "El SKU ya existe. Por favor, use uno diferente.",
-        });
-        return;
-      }
       setInventory([...inventory, data]);
       toast({
         title: "Repuesto Creado",
@@ -150,6 +151,8 @@ export default function InventoryPage() {
                   <TableHead>Nombre del Producto</TableHead>
                   <TableHead>Stock Actual</TableHead>
                   <TableHead>Ubicación</TableHead>
+                  <TableHead>Costo Unitario</TableHead>
+                  <TableHead>Precio Venta</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
@@ -166,6 +169,8 @@ export default function InventoryPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>{item.location}</TableCell>
+                    <TableCell>${item.cost.toLocaleString('es-CL')}</TableCell>
+                    <TableCell>${item.price.toLocaleString('es-CL')}</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
