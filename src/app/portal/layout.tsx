@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import {
@@ -24,22 +25,17 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { clients } from "@/lib/data";
+import { useAuth } from "@/context/auth-context";
+import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Simulamos que el cliente logueado es 'C001'
-const LOGGED_IN_CLIENT_ID = 'C001';
 
 function ClientSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-  const client = clients.find(c => c.id === LOGGED_IN_CLIENT_ID);
+  const { user, logout } = useAuth();
 
   const isActive = (path: string) => {
     return pathname === path || pathname.startsWith(`${path}/`);
-  };
-  
-  const handleLogout = () => {
-    router.push("/");
   };
 
   return (
@@ -100,18 +96,18 @@ function ClientSidebar() {
             <SidebarMenuButton tooltip="Perfil">
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://placehold.co/100x100.png" alt="Usuario" />
-                    <AvatarFallback>{client?.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                    <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col text-left">
-                    <span className="text-sm font-medium text-sidebar-foreground">{client?.name}</span>
-                    <span className="text-xs text-sidebar-foreground/70">Cliente</span>
+                    <span className="text-sm font-medium text-sidebar-foreground">{user?.name}</span>
+                    <span className="text-xs text-sidebar-foreground/70 capitalize">{user?.role}</span>
                 </div>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
            <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Cerrar Sesión" onClick={handleLogout}>
+            <SidebarMenuButton tooltip="Cerrar Sesión" onClick={logout}>
               <LogOut />
               <span>Cerrar Sesión</span>
             </SidebarMenuButton>
@@ -128,6 +124,26 @@ export default function ClientPortalLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <Skeleton className="w-64 h-8" />
+        </div>
+    );
+  }
+
+   // Se podría añadir una comprobación de rol aquí
+  // if (user.role !== 'client') { router.push('/'); return null; }
+
   return (
     <SidebarProvider>
       <ClientSidebar />

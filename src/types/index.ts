@@ -1,5 +1,6 @@
 
 
+
 export type Vehicle = {
   id: string;
   licensePlate: string;
@@ -162,4 +163,14 @@ export type Technician = {
     extraHourRate: number;
     extraHoursThisMonth: number;
     maxExtraHours: number;
+};
+
+export type UserRole = 'admin' | 'mechanic' | 'client';
+
+export type User = {
+    uid: string;
+    email: string | null;
+    name: string | null;
+    avatarUrl?: string;
+    role: UserRole;
 };

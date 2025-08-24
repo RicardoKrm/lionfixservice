@@ -1,107 +1,108 @@
 
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShieldCheck, User, HardHat, Building } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ShieldCheck } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
+import { useAuth } from "@/context/auth-context";
+import { Separator } from "@/components/ui/separator";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { toast } = useToast();
   const router = useRouter();
+  const { login } = useAuth();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+      toast({
+        title: "Inicio de Sesión Exitoso",
+        description: "Redirigiendo a tu panel...",
+      });
+      // La redirección se maneja en el AuthProvider
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error de Autenticación",
+        description: (error as Error).message,
+      });
+    }
+  };
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-background p-4">
-      <Card className="w-full max-w-6xl mx-auto shadow-2xl bg-card border-border">
+      <Card className="w-full max-w-md mx-auto shadow-2xl bg-card border-border">
         <CardHeader className="text-center pb-8 pt-10">
-            <div className="flex justify-center items-center mb-4">
-                 <div className="bg-primary text-primary-foreground p-3 rounded-lg shadow-lg">
-                     <ShieldCheck className="h-10 w-10" />
-                 </div>
+          <div className="flex justify-center items-center mb-4">
+            <div className="bg-primary text-primary-foreground p-3 rounded-lg shadow-lg">
+              <ShieldCheck className="h-10 w-10" />
             </div>
-          <CardTitle className="text-4xl font-bold text-primary">Bienvenido a LionFix Cloud ERP</CardTitle>
+          </div>
+          <CardTitle className="text-4xl font-bold text-primary">LionFix Cloud ERP</CardTitle>
           <CardDescription className="text-xl text-muted-foreground mt-2">
-              Seleccione un rol para explorar la vista correspondiente del sistema.
+            Inicia sesión para continuar
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-3 gap-8 text-center p-8">
-            
-            {/* Vista Administrador */}
-            <div className="flex flex-col">
-                 <Card className="flex-grow flex flex-col bg-card/50 border-primary border-2 shadow-lg hover:shadow-primary/20 transition-shadow duration-300">
-                    <CardHeader>
-                        <User className="mx-auto h-12 w-12 text-primary mb-2"/>
-                        <CardTitle className="text-2xl">Administrador</CardTitle>
-                        <CardDescription>Acceso completo al sistema</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow text-left space-y-2 text-muted-foreground">
-                        <p><strong>Módulos Visibles:</strong></p>
-                        <ul className="list-disc list-inside text-sm">
-                            <li>Panel de Control (KPIs)</li>
-                            <li>Órdenes de Trabajo (Todas)</li>
-                            <li>Calendario y Clientes (CRM)</li>
-                            <li>Inventario y Compras</li>
-                            <li>Finanzas (Cotizaciones, Reportes)</li>
-                            <li>Gestión (Checklists, Contratos)</li>
-                            <li>Configuración del Sistema</li>
-                        </ul>
-                    </CardContent>
-                    <CardFooter className="p-4">
-                        <Button onClick={() => router.push("/dashboard")} className="w-full" size="lg">
-                            Explorar Vista Administrador
-                        </Button>
-                    </CardFooter>
-                </Card>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
-            
-            {/* Vista Mecánico */}
-            <div className="flex flex-col">
-                <Card className="flex-grow flex flex-col bg-card/50 hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300">
-                    <CardHeader>
-                        <HardHat className="mx-auto h-12 w-12 text-accent mb-2"/>
-                        <CardTitle className="text-2xl">Mecánico</CardTitle>
-                         <CardDescription>Enfocado en la productividad</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow text-left space-y-2 text-muted-foreground">
-                        <p><strong>Módulos Visibles:</strong></p>
-                        <ul className="list-disc list-inside text-sm">
-                            <li>Mis Tareas (OTs Asignadas)</li>
-                            <li>Calendario del Taller</li>
-                            <li>Checklists de Vehículos</li>
-                        </ul>
-                    </CardContent>
-                     <CardFooter className="p-4">
-                         <Button onClick={() => router.push("/mechanic/dashboard")} className="w-full" size="lg" variant="secondary">
-                            Explorar Vista Mecánico
-                        </Button>
-                    </CardFooter>
-                </Card>
+            <div className="space-y-2">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
-
-            {/* Vista Cliente */}
-             <div className="flex flex-col">
-                <Card className="flex-grow flex flex-col bg-card/50 hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300">
-                    <CardHeader>
-                        <Building className="mx-auto h-12 w-12 text-accent mb-2"/>
-                        <CardTitle className="text-2xl">Cliente / Flota</CardTitle>
-                        <CardDescription>Portal de autogestión</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow text-left space-y-2 text-muted-foreground">
-                       <p><strong>Módulos Visibles:</strong></p>
-                        <ul className="list-disc list-inside text-sm">
-                            <li>Mis Vehículos</li>
-                            <li>Historial de Servicios</li>
-                            <li>Mis Cotizaciones</li>
-                            <li>Mis Contratos de Flota</li>
-                        </ul>
-                    </CardContent>
-                     <CardFooter className="p-4">
-                        <Button onClick={() => router.push("/portal/dashboard")} className="w-full" size="lg" variant="secondary">
-                            Explorar Vista Cliente
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
+            <Button type="submit" className="w-full" size="lg">
+              Iniciar Sesión
+            </Button>
+          </form>
         </CardContent>
+        <CardFooter className="flex flex-col gap-4 text-center text-sm">
+           <p className="text-muted-foreground">
+            ¿Aún no tienes una cuenta?{" "}
+            <Link href="/signup" className="text-primary hover:underline">
+              Regístrate aquí
+            </Link>
+          </p>
+          <Separator className="my-2"/>
+           <p className="text-muted-foreground">
+            O explora las vistas de demostración:
+          </p>
+           <div className="flex gap-2">
+                 <Button onClick={() => router.push("/dashboard")} variant="secondary">
+                    Admin
+                </Button>
+                 <Button onClick={() => router.push("/mechanic/dashboard")} variant="secondary">
+                    Mecánico
+                </Button>
+                 <Button onClick={() => router.push("/portal/dashboard")} variant="secondary">
+                    Cliente
+                </Button>
+           </div>
+        </CardFooter>
       </Card>
     </main>
   );

@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import {
@@ -23,19 +24,16 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-const LOGGED_IN_MECHANIC = 'Ricardo Milos';
+import { useAuth } from "@/context/auth-context";
+import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function MechanicSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
+  const { user, logout } = useAuth();
 
   const isActive = (path: string) => {
     return pathname === path || pathname.startsWith(`${path}/`);
-  };
-  
-  const handleLogout = () => {
-    router.push("/");
   };
 
   return (
@@ -96,18 +94,18 @@ function MechanicSidebar() {
             <SidebarMenuButton tooltip="Perfil">
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://placehold.co/100x100.png" alt="Mecánico" />
-                    <AvatarFallback>RM</AvatarFallback>
+                    <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                    <AvatarFallback>{user?.name?.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col text-left">
-                    <span className="text-sm font-medium text-sidebar-foreground">{LOGGED_IN_MECHANIC}</span>
-                    <span className="text-xs text-sidebar-foreground/70">Mecánico</span>
+                    <span className="text-sm font-medium text-sidebar-foreground">{user?.name}</span>
+                    <span className="text-xs text-sidebar-foreground/70 capitalize">{user?.role}</span>
                 </div>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
            <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Cerrar Sesión" onClick={handleLogout}>
+            <SidebarMenuButton tooltip="Cerrar Sesión" onClick={logout}>
               <LogOut />
               <span>Cerrar Sesión</span>
             </SidebarMenuButton>
@@ -124,6 +122,26 @@ export default function MechanicPortalLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <Skeleton className="w-64 h-8" />
+        </div>
+    );
+  }
+
+  // Se podría añadir una comprobación de rol aquí
+  // if (user.role !== 'mechanic') { router.push('/'); return null; }
+
   return (
     <SidebarProvider>
       <MechanicSidebar />
