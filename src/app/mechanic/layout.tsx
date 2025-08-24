@@ -128,7 +128,7 @@ export default function MechanicPortalLayout({
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.push('/');
+        router.push('/login');
       } else if (user.role !== 'mechanic') {
         router.push('/');
       }

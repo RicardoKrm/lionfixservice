@@ -130,7 +130,7 @@ export default function ClientPortalLayout({
   useEffect(() => {
      if (!loading) {
       if (!user) {
-        router.push('/');
+        router.push('/login');
       } else if (user.role !== 'client') {
         router.push('/');
       }

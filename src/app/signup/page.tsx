@@ -31,7 +31,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [role, setRole] = useState<UserRole>("mechanic");
+  const [role, setRole] = useState<UserRole>("client");
   const { toast } = useToast();
   const router = useRouter();
   const { signup } = useAuth();
@@ -52,7 +52,7 @@ export default function SignupPage() {
         title: "Registro Exitoso",
         description: "Ahora puedes iniciar sesión con tu nueva cuenta.",
       });
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -131,7 +131,7 @@ export default function SignupPage() {
         <CardFooter className="flex-col text-center text-sm">
           <p className="text-muted-foreground">
             ¿Ya tienes una cuenta?{" "}
-            <Link href="/" className="text-primary hover:underline">
+            <Link href="/login" className="text-primary hover:underline">
               Inicia sesión aquí
             </Link>
           </p>

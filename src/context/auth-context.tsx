@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               router.push('/portal/dashboard');
               break;
           default:
-              router.push('/');
+              router.push('/login');
       }
 
     } else {
