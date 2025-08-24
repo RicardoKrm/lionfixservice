@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { notFound, useRouter } from "next/navigation";
@@ -295,7 +294,7 @@ export default function WorkOrderDetailPage({
                                         <TableCell colSpan={3} className="text-center text-muted-foreground h-24">No se registraron repuestos para esta orden.</TableCell>
                                     </TableRow>
                                 )}
-                            </TableBody>
+                            </Body>
                         </Table>
                     </CardContent>
                 </Card>
