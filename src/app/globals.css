@@ -4,87 +4,95 @@
 
 @layer base {
   :root {
-    --background: 204 45% 96%; /* #EBF5FB - Light Blue */
-    --foreground: 210 10% 23%; /* Dark Gray for text */
+    --background: 220 13% 10%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 210 10% 23%;
+    --card: 220 13% 14%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 10% 23%;
+    --popover: 220 13% 10%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 206 60% 47%; /* #2E86C1 - Strong Blue */
-    --primary-foreground: 0 0% 100%; /* White text on blue buttons */
+    --primary: 42 96% 51%; /* #F3B712 - Gold/Yellow */
+    --primary-foreground: 220 13% 10%; /* Dark text on yellow buttons */
 
-    --secondary: 210 40% 96.1%; /* Lighter gray/blue for secondary elements */
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 13% 25%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 92%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 13% 20%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 36 96% 51%; /* #F39C12 - Contrasting Yellow/Orange */
-    --accent-foreground: 0 0% 100%;
+    --accent: 42 96% 51%; /* #F3B712 - Gold/Yellow */
+    --accent-foreground: 220 13% 10%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 50.6%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 206 60% 47%; /* Ring color matches primary blue */
+    --border: 220 13% 20%;
+    --input: 220 13% 20%;
+    --ring: 42 96% 51%;
 
-    --chart-1: 206 60% 47%; /* Primary Blue */
-    --chart-2: 36 96% 51%;  /* Accent Yellow */
+    --chart-1: 42 96% 51%; /* Accent Yellow */
+    --chart-2: 210 40% 98%; /* White/Light Gray */
     --chart-3: 173 58% 39%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
     --radius: 0.5rem;
     
-    --sidebar-background: 212 35% 22%; /* Dark Blue for Sidebar */
+    --sidebar-background: 220 13% 8%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 36 96% 51%; /* Yellow Accent for active items */
-    --sidebar-primary-foreground: 212 35% 15%;
-    --sidebar-accent: 212 35% 30%;
+    --sidebar-primary: 42 96% 51%; /* Yellow Accent for active items */
+    --sidebar-primary-foreground: 220 13% 10%;
+    --sidebar-accent: 220 13% 18%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 212 35% 30%;
-    --sidebar-ring: 36 96% 51%;
+    --sidebar-border: 220 13% 18%;
+    --sidebar-ring: 42 96% 51%;
   }
 
   .dark {
-    --background: 220 13% 10%;
+     --background: 220 13% 10%;
     --foreground: 210 40% 98%;
+
     --card: 220 13% 14%;
     --card-foreground: 210 40% 98%;
+
     --popover: 220 13% 10%;
     --popover-foreground: 210 40% 98%;
-    --primary: 206 60% 55%; /* Brighter Blue for dark mode */
-    --primary-foreground: 0 0% 100%;
+
+    --primary: 42 96% 51%; /* #F3B712 - Gold/Yellow */
+    --primary-foreground: 220 13% 10%; /* Dark text on yellow buttons */
+
     --secondary: 220 13% 25%;
     --secondary-foreground: 210 40% 98%;
+
     --muted: 220 13% 20%;
     --muted-foreground: 215 20% 65%;
-    --accent: 36 96% 51%; /* #F39C12 */
+
+    --accent: 42 96% 51%; /* #F3B712 - Gold/Yellow */
     --accent-foreground: 220 13% 10%;
+
     --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 0 0% 100%;
+
     --border: 220 13% 20%;
     --input: 220 13% 20%;
-    --ring: 206 60% 55%;
+    --ring: 42 96% 51%;
     
-    --chart-1: 206 60% 55%;
-    --chart-2: 36 96% 51%;
+    --chart-1: 42 96% 51%;
+    --chart-2: 210 40% 98%;
     --chart-3: 173 58% 39%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     
     --sidebar-background: 220 13% 8%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 36 96% 51%;
+    --sidebar-primary: 42 96% 51%;
     --sidebar-primary-foreground: 220 13% 10%;
     --sidebar-accent: 220 13% 18%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 220 13% 18%;
-    --sidebar-ring: 36 96% 51%;
+    --sidebar-ring: 42 96% 51%;
   }
 }
 

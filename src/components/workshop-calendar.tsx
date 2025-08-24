@@ -57,14 +57,14 @@ export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps
 
           {/* Workstation Columns */}
           {WORKSTATIONS.map(ws => (
-            <div key={ws} className="relative border-l border-dashed">
-              <div className="sticky top-0 z-10 bg-card/80 backdrop-blur-sm py-2 text-center font-semibold text-primary border-b -mt-6 mb-2">
+            <div key={ws} className="relative border-l border-dashed border-border/50">
+              <div className="sticky top-0 z-10 bg-card/80 backdrop-blur-sm py-2 text-center font-semibold text-foreground border-b -mt-6 mb-2">
                 Puesto {ws}
               </div>
               <div className="relative h-full">
                 {/* Grid Lines */}
                 {TIME_SLOTS.slice(1).map(time => (
-                  <div key={`${ws}-${time}`} className="h-16 border-t border-dashed"></div>
+                  <div key={`${ws}-${time}`} className="h-16 border-t border-dashed border-border/50"></div>
                 ))}
                 
                 {/* Events */}
@@ -74,8 +74,8 @@ export function WorkshopCalendar({ events, onEventClick }: WorkshopCalendarProps
                     <div
                       key={event.id}
                       className={cn(
-                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer shadow-md transition-all hover:ring-2 hover:ring-primary",
-                        "bg-primary/80 text-primary-foreground"
+                        "absolute left-1 right-1 p-2 rounded-lg text-xs flex flex-col overflow-hidden cursor-pointer shadow-md transition-all hover:ring-2 hover:ring-ring",
+                        "bg-accent/90 text-accent-foreground"
                       )}
                       style={{ top, height }}
                       title={`${event.title} - ${event.vehicle}`}
