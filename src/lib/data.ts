@@ -49,7 +49,8 @@ export const workOrders: WorkOrder[] = [
       { name: 'Filtro de Aceite Toyota Corolla \'19+', sku: 'FIL-TOY-COR-01', quantity: 1 },
     ],
     satisfactionRating: 5,
-    satisfactionComment: "¡Excelente servicio, muy rápido y profesional!"
+    satisfactionComment: "¡Excelente servicio, muy rápido y profesional!",
+    finalReport: "Se realizó la mantención de 10.000km según pauta del fabricante. Se cambió aceite de motor y filtro. Se revisaron y rellenaron todos los niveles. No se encontraron otras fallas o puntos de atención. Se recomienda próxima mantención en 10.000km o 1 año."
   },
   {
     id: 'OT-2024-002',
@@ -115,7 +116,8 @@ export const workOrders: WorkOrder[] = [
     serviceLog: [
       { timestamp: '2024-07-28T11:05:00Z', technician: 'Pedro Pascal', entry: 'Revisión inicial, mantención básica de 5.000km.' },
     ],
-    parts: []
+    parts: [],
+    finalReport: "Se realizó chequeo básico de 5.000km. No se observan fugas ni fallas. Niveles y presiones correctos. El vehículo se encuentra en óptimas condiciones."
   },
 ];
 

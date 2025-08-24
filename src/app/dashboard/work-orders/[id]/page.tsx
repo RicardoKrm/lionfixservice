@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock, FileCheck, Upload, Download, FileText, Trash2 } from "lucide-react";
+import { User, Car, Wrench, Calendar, StickyNote, Package, Edit, Pencil, MessageSquarePlus, Clock, FileCheck, Upload, Download, FileText, Trash2, FileSignature } from "lucide-react";
 import { getStatusVariant } from "@/lib/utils";
 import {
   Table,
@@ -232,11 +232,11 @@ export default function WorkOrderDetailPage({
             <div className="lg:col-span-2 space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center"><StickyNote className="mr-2"/> Bitácora de Diagnóstico y Servicio</CardTitle>
-                        <CardDescription>Registro cronológico de todas las acciones y observaciones.</CardDescription>
+                        <CardTitle className="flex items-center"><StickyNote className="mr-2"/> Bitácora de Servicio (Interna)</CardTitle>
+                        <CardDescription>Registro cronológico de todas las acciones y observaciones técnicas.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4">
+                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 -mr-4">
                             {workOrder.serviceLog.map((log, index) => (
                                 <div key={index} className="flex gap-3">
                                     <div className="flex flex-col items-center">
@@ -269,6 +269,21 @@ export default function WorkOrderDetailPage({
                         </div>
                     </CardContent>
                 </Card>
+
+                 {workOrder.finalReport && (
+                     <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center"><FileSignature className="mr-2"/> Informe Final para Cliente</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="prose prose-sm text-muted-foreground whitespace-pre-wrap">
+                               {workOrder.finalReport}
+                            </div>
+                        </CardContent>
+                    </Card>
+                 )}
+
+
                  <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center"><Package className="mr-2"/> Repuestos y Materiales</CardTitle>
@@ -294,7 +309,7 @@ export default function WorkOrderDetailPage({
                                         <TableCell colSpan={3} className="text-center text-muted-foreground h-24">No se registraron repuestos para esta orden.</TableCell>
                                     </TableRow>
                                 )}
-                            </Body>
+                            </TableBody>
                         </Table>
                     </CardContent>
                 </Card>

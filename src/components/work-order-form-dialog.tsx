@@ -50,6 +50,7 @@ const workOrderSchema = z.object({
   technician: z.string().min(1, "Debe seleccionar un técnico."),
   status: z.custom<WorkOrderStatus>().optional(),
   parts: z.array(partItemSchema).optional(),
+  finalReport: z.string().optional(),
 });
 
 type WorkOrderFormData = z.infer<typeof workOrderSchema>;
@@ -76,6 +77,7 @@ export function WorkOrderFormDialog({
       type: "Mantención Correctiva",
       technician: "",
       parts: [],
+      finalReport: "",
     },
   });
 
@@ -98,6 +100,7 @@ export function WorkOrderFormDialog({
       if (workOrder) {
         form.reset({
           ...workOrder,
+          finalReport: workOrder.finalReport || '',
         });
       } else {
         form.reset({
@@ -107,6 +110,7 @@ export function WorkOrderFormDialog({
           type: "Mantención Correctiva",
           technician: "",
           parts: [],
+          finalReport: "",
         });
       }
     }
@@ -137,7 +141,7 @@ export function WorkOrderFormDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>
             {workOrder ? "Editar Orden de Trabajo" : "Nueva Orden de Trabajo"}
@@ -147,7 +151,7 @@ export function WorkOrderFormDialog({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4 overflow-y-auto pr-6 -mr-6">
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -331,8 +335,28 @@ export function WorkOrderFormDialog({
                 Añadir Repuesto
               </Button>
             </div>
+            
+            <Separator />
 
-            <DialogFooter>
+             <FormField
+              control={form.control}
+              name="finalReport"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Informe Final para el Cliente</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Resumen del trabajo realizado, recomendaciones y próximos pasos. Este texto será visible para el cliente."
+                      rows={4}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <DialogFooter className="sticky bottom-0 bg-background pt-4 pb-0 -mb-6">
               <Button
                 type="button"
                 variant="ghost"

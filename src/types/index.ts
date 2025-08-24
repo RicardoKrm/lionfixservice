@@ -49,6 +49,7 @@ export type WorkOrder = {
   parts: { name: string; sku: string; quantity: number }[];
   satisfactionRating?: number;
   satisfactionComment?: string;
+  finalReport?: string;
 };
 
 export type EnrichedWorkOrder = WorkOrder & {
