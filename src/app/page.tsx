@@ -5,6 +5,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, Wrench, Cpu, Users, BadgeCheck, Clock, MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
 
 // Custom icons for heavy vehicles
 const BusIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -37,6 +40,12 @@ const SprinterIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
+const heroImages = [
+    { src: "https://placehold.co/1920x1080.png", hint: "mechanic garage truck dark" },
+    { src: "https://placehold.co/1920x1080.png", hint: "bus mechanic garage" },
+    { src: "https://placehold.co/1920x1080.png", hint: "engine repair" },
+]
+
 
 export default function LandingPage() {
   return (
@@ -67,17 +76,25 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-grow">
-        {/* Hero Section */}
+        {/* Hero Section with Carousel */}
         <section className="relative flex flex-col items-center justify-center text-center h-[90vh] min-h-[650px] py-20 px-4 text-white overflow-hidden">
              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent z-10"/>
-             <Image 
-                src="https://placehold.co/1920x1080.png" 
-                alt="Taller mecánico profesional para camiones en Iquique" 
-                fill
-                priority
-                className="object-cover z-0"
-                data-ai-hint="mechanic garage truck dark"
-              />
+             <Carousel className="absolute inset-0 z-0" opts={{ loop: true }}>
+                <CarouselContent>
+                    {heroImages.map((img, index) => (
+                         <CarouselItem key={index}>
+                            <Image 
+                                src={img.src}
+                                alt={`Taller mecánico profesional para camiones en Iquique ${index + 1}`}
+                                fill
+                                priority={index === 0}
+                                className="object-cover"
+                                data-ai-hint={img.hint}
+                            />
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+             </Carousel>
             <div className="z-20 flex flex-col items-center max-w-4xl">
                  <Image src="/logo.png" alt="LionFix Logo" width={160} height={160} className="mb-6 drop-shadow-lg" />
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-primary drop-shadow-md">
@@ -114,11 +131,21 @@ export default function LandingPage() {
         </section>
         
         {/* Why Choose Us Section */}
-        <section id="about" className="py-16 sm:py-24">
-            <div className="container mx-auto px-4">
+        <section id="about" className="relative py-16 sm:py-24 text-white">
+            <div className="absolute inset-0 z-0">
+                 <Image 
+                    src="https://placehold.co/1920x1080.png" 
+                    alt="Técnico trabajando en motor de camión" 
+                    fill
+                    className="object-cover"
+                    data-ai-hint="mechanic working engine"
+                />
+                <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+            </div>
+            <div className="container mx-auto px-4 relative z-10">
                  <div className="text-center mb-12">
                   <h2 className="text-4xl font-bold text-primary">La Confianza que Mueve tu Negocio</h2>
-                  <p className="mt-2 text-lg text-muted-foreground max-w-3xl mx-auto">Nuestra prioridad es tu tranquilidad y la continuidad de tu operación en Iquique.</p>
+                  <p className="mt-2 text-lg text-neutral-300 max-w-3xl mx-auto">Nuestra prioridad es tu tranquilidad y la continuidad de tu operación en Iquique.</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                     <Feature icon={Users} title="Técnicos Certificados" description="Nuestro equipo está en constante capacitación para dominar las últimas tecnologías en vehículos pesados y comerciales." />
@@ -186,7 +213,9 @@ function Feature({ icon: Icon, title, description }: { icon: React.ElementType, 
                 </div>
             </div>
             <h3 className="text-xl font-bold">{title}</h3>
-            <p className="mt-2 text-muted-foreground">{description}</p>
+            <p className="mt-2 text-neutral-300">{description}</p>
         </div>
     );
 }
+
+    
