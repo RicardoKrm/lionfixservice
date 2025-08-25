@@ -40,6 +40,12 @@ const SprinterIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
+const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M16.75 13.96c.25.13.43.2.5.33.07.13.07.5.03.66a.87.87 0 0 1-.53.53c-1.83.6-4-.2-5.8-1.4-2.2-1.5-3.3-3.6-3.4-3.8-.2-.3-.5-.7-.5-1.1s.3-.7.5-.9c.2-.2.4-.3.6-.3s.4.1.6.3c.2.2.3.4.4.6.1.2.2.5.2.7.1.2 0 .4-.1.6-.1.1-1.3 1.5-1.3 1.5-.1.1-.1.3 0 .4s.3.2.4.2c.1 0 1.2-.5 2.1-1.3.8-.7 1.4-1.5 1.6-1.8.2-.3.3-.5.5-.5h.1c.2 0 .4.1.5.2m4.18-11.3C18.9.6 15.6.0 12 .0 5.4.0.1 5.4.1 12c0 2.1.6 4.1 1.6 5.8L0 24l6.4-1.7c1.6.9 3.5 1.4 5.6 1.4h.1c6.6 0 11.9-5.4 11.9-12 .1-3.6-.9-7-2.9-9.7z"/>
+    </svg>
+);
+
 const heroImages = [
     { src: "https://placehold.co/1920x1080.png", hint: "mechanic garage truck dark" },
     { src: "https://placehold.co/1920x1080.png", hint: "bus mechanic garage" },
@@ -186,6 +192,8 @@ export default function LandingPage() {
             </div>
          </div>
       </footer>
+
+      <WhatsAppButton />
     </div>
   );
 }
@@ -218,4 +226,16 @@ function Feature({ icon: Icon, title, description }: { icon: React.ElementType, 
     );
 }
 
-    
+function WhatsAppButton() {
+    return (
+        <Link 
+            href="https://wa.me/56912345678" // Replace with your actual WhatsApp number
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white rounded-full p-4 shadow-lg flex items-center justify-center transform transition-transform hover:scale-110 animate-pulse"
+        >
+            <WhatsAppIcon className="h-8 w-8" />
+            <span className="sr-only">Contactar por WhatsApp</span>
+        </Link>
+    );
+}
