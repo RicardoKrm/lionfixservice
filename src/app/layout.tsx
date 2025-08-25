@@ -7,7 +7,7 @@ import { AuthProvider } from "@/context/auth-context";
 export const metadata: Metadata = {
   title: "Servicio Técnico de Camiones y Buses en Iquique | LionFix Service",
   description: "Taller mecánico en Iquique, especialista en mantención y reparación de flotas de camiones, buses y Mercedes-Benz Sprinter. Diagnóstico electrónico avanzado y servicio profesional garantizado.",
-  keywords: "taller mecánico Iquique, servicio técnico camiones, reparación buses, mantención flotas, mecánica vehículos pesados, Mercedes-Benz Sprinter, taller diesel iquique",
+  keywords: "taller mecánico Iquique, servicio técnico camiones, reparación buses, mantención flotas, mecánica vehículos pesados, Mercedes-Benz Sprinter, taller diesel iquique, ZOFRI",
   creator: "LionFix Service",
   publisher: "LionFix Service",
   openGraph: {
@@ -58,7 +58,7 @@ const jsonLd = {
   "image": "https://lionfix-erp-demo.web.app/logo.png", // Replace with actual domain
   "@id": "https://lionfix-erp-demo.web.app", // Replace with actual domain
   "url": "https://lionfix-erp-demo.web.app", // Replace with actual domain
-  "telephone": "+56-57-212-3456",
+  "telephone": "+56572123456",
   "priceRange": "$$",
   "address": {
     "@type": "PostalAddress",
